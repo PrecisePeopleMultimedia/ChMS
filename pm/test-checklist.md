@@ -54,7 +54,7 @@
       - [x] Session validation
       - [x] Session expiry
       - [x] Security headers
-- [ ] Attendance Components
+- [x] Attendance Components
   - [x] QRScanner
     - [x] Component rendering
     - [x] Camera access handling
@@ -102,12 +102,17 @@
     - [x] Offline Support
     - [x] Concurrent Updates
     - [x] Data Validation
-  - [ ] ProfileImageUpload
-    - [x] Image Upload
-    - [x] Preview
-    - [x] Error Handling
-    - [x] Loading States
-    - [x] Accessibility
+  - [ ] ProfileImageUpload *(future)*
+    - [ ] Image Upload *(future)*
+    - [ ] Preview *(future)*
+    - [ ] Error Handling *(future)*
+    - [ ] Loading States *(future)*
+    - [ ] Accessibility *(future)*
+  - [ ] FilteringSystem *(future)*
+    - [ ] Filtering logic *(future)*
+    - [ ] UI interactions *(future)*
+    - [ ] Error handling *(future)*
+    - [ ] Accessibility *(future)*
 
 ### P1 Components (Should Test - 80%+ coverage)
 
@@ -117,9 +122,10 @@
   - [x] ErrorBoundary
   - [x] SearchComponents
 - [x] Feature Components
-  - [x] FilteringSystem
   - [x] CRUDForms
   - [x] ListView
+  - [ ] Analytics Components *(future)*
+  - [ ] Visitor Management *(future)*
 
 ### Services
 
@@ -140,16 +146,33 @@
     - [x] Event cleanup
     - [x] Member status updates
     - [x] Error handling
-  - [x] ImageService
-    - [x] Image optimization
-    - [x] Format conversion
-    - [x] Storage operations
-    - [x] Retrieval operations
-    - [x] Error handling
+  - [x] ImageService *(future)*
+    - [x] Image optimization *(future)*
+    - [x] Format conversion *(future)*
+    - [x] Storage operations *(future)*
+    - [x] Retrieval operations *(future)*
+    - [x] Error handling *(future)*
 - [x] Support Services (P1)
   - [x] SearchService
   - [x] FilterService
   - [x] NotificationService
+
+- [ ] AI-Native Features (MVP)
+  - [ ] Flowise Agent Onboarding
+    - [ ] Conversational onboarding flow
+    - [ ] Data capture and validation
+    - [ ] Error handling
+    - [ ] Accessibility
+  - [ ] n8n Automation
+    - [ ] Event-based triggers
+    - [ ] Automated reminders
+    - [ ] Admin alerts (e.g., low attendance)
+    - [ ] Error handling
+  - [ ] Offline-First Features
+    - [ ] SWR cache validation
+    - [ ] Local queue for mutations
+    - [ ] Background sync
+    - [ ] Error and conflict handling
 
 ## Integration Tests (Target: 75%)
 
@@ -167,11 +190,11 @@
 - [x] Member Management
   - [x] Create → Update
   - [x] Search → Basic Ops
-  - [x] Profile Image Management
-    - [x] Upload → Storage
-    - [x] Retrieval → Display
-    - [x] Validation
-    - [x] Error Handling
+  - [x] Profile Image Management *(future)*
+    - [x] Upload → Storage *(future)*
+    - [x] Retrieval → Display *(future)*
+    - [x] Validation *(future)*
+    - [x] Error Handling *(future)*
 
 ### API Integration (P1)
 
@@ -198,16 +221,16 @@
   - [x] Manual Check-in
   - [x] Basic Report Generation
 - [x] Full Authentication Flow
-  - [x] Login
-  - [x] Session Management
-  - [x] Protected Routes
-  - [x] Logout
 
-### Supporting Flows (P1)
+### AI-Native and Offline-First Journeys (MVP)
+- [ ] Flowise Agent Onboarding *(MVP)*
+- [ ] n8n Automation *(MVP)*
+- [ ] Offline Data Sync *(MVP)*
 
-- [x] Member Management
-- [x] Basic CRUD Operations
-- [x] Search and Filter
+### Advanced Features *(future)*
+- [ ] Analytics Dashboards *(future)*
+- [ ] Visitor Management *(future)*
+- [ ] Advanced Reporting *(future)*
 
 ## Performance Testing
 

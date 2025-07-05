@@ -1,8 +1,3 @@
----
-description: 
-globs: 
-alwaysApply: true
----
 # ChMS Technical Specifications
 
 ## Context
@@ -14,6 +9,7 @@ You are a Senior Engineer and an Expert in ReactJS, NextJS, JavaScript, TypeScri
 - Accessible and user-friendly
 - Built with modern best practices
 - Well-documented and testable
+- **AI-native and Africa-first**
 
 
 ## Language Standards
@@ -23,7 +19,7 @@ See `.cursor/rules/language-standards.mdc` for detailed language standards and g
 
 ## Project Overview
 
-ChMS (Church Management System) is a comprehensive solution designed for African churches, focusing on scalability, offline-first functionality, and low-bandwidth optimization.
+ChMS (Church Management System) is a comprehensive solution designed for African churches, focusing on scalability, offline-first functionality, low-bandwidth optimization, and now AI-native automation and onboarding.
 
 
 ## Technical Stack
@@ -57,7 +53,7 @@ ChMS (Church Management System) is a comprehensive solution designed for African
 
 2. Backend:
 
-   - Next.js API routes
+   - Next.js API routes / Server Actions
      - Built-in API route handling
      - Enables serverless functions and edge computing
      - Provides seamless integration with frontend
@@ -65,7 +61,7 @@ ChMS (Church Management System) is a comprehensive solution designed for African
      - Type-safe database access
      - Provides auto-generated types and migrations
      - Enables efficient database operations
-   - PostgreSQL
+   - Supabase (PostgreSQL)
      - Relational database for structured data
      - Provides ACID compliance and data integrity
      - Enables complex queries and relationships
@@ -73,6 +69,7 @@ ChMS (Church Management System) is a comprehensive solution designed for African
      - Authentication solution for Next.js
      - Supports multiple authentication providers
      - Provides session management and security
+   - **AI Integration:** Flowise (visual LLM orchestration), n8n (automation), Ollama/OpenAI/Claude (LLMs)
 
 3. Testing:
 
@@ -208,13 +205,14 @@ ChMS/
 
 ## Implementation Phases
 
-### Phase 1: Foundation
+### Phase 1: Foundation (MVP)
 
 1. Project setup
 2. Core components
 3. Authentication
 4. Basic routing
 5. Database setup
+6. **AI-native onboarding and automation (Flowise/n8n)**
 
 ### Phase 2: Core Features
 
@@ -229,8 +227,6 @@ ChMS/
 2. Communication system
 3. Advanced reporting
 4. Mobile optimization
-
-// ... existing code ...
 
 ## Documentation Requirements
 
@@ -249,6 +245,15 @@ ChMS/
 2. TDD approach
 3. Code review
 4. CI/CD pipeline
+5. Documentation updates
+6. Tutorial creation for new features
+
+## Open Questions
+- Finalize offline sync mechanism (Service Workers, SWR + local queue, etc.)
+- How to best embed Flowise/n8n agents in the UI for onboarding and engagement?
+- What is the best approach for AI agent security and privacy?
+- How to handle facial recognition ethically and legally (if implemented)?
+
 5. Documentation updates
 6. Tutorial creation for new features
 

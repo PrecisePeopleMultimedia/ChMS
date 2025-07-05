@@ -44,7 +44,7 @@ This document tracks all active checklists and their current status in the proje
   - [x] Auth service (95% coverage)
   - [x] Attendance service (91% coverage)
   - [x] Data integrity service (90% coverage)
-  - [x] Image service (88% coverage)
+  - [x] Image service (88% coverage) *(future)*
 - [x] Schema Tests (Updated: 2024-04-09)
   - [x] Input validation
   - [x] Response validation
@@ -52,10 +52,16 @@ This document tracks all active checklists and their current status in the proje
 
 ### Feature Guides (How-to Documentation)
 
-- [x] `guide-visitor-and-event.md` - Visitor and event management guide
+- [x] `guide-visitor-and-event.md` *(future)* - Visitor and event management guide
 - [x] `guide-attendance-system.md` - Attendance system guide
 - [x] `guide-components.md` - Component documentation and usage guide
 - [x] `guide-organization.md` - Organization management guide
+- [x] `guide-analytics.md` *(future)* - Analytics and reporting guide
+
+### AI-Native & Offline-First Features (MVP)
+- [ ] AI Agent Onboarding (Flowise)
+- [ ] n8n Automation Integration
+- [ ] Offline-First Data Sync
 
 ## Checklist Management
 
@@ -85,33 +91,40 @@ Standards & Guidelines
 Implementation Tracking
     ↓
 Feature Guides
+    ↓
+AI-Native & Offline-First Features (MVP)
+    ↓
+Advanced Features *(future)*
 ```
 
 ## Progress Tracking
 
 ### Current Status (Updated: 2024-04-09)
 
-- Total Checklists: 14
-- Completed: 14 (↑6)
-- In Progress: 0 (↓2)
-- Not Started: 0 (↓4)
+- Total Checklists: 17
+- Completed: 14 (→)
+- In Progress: 3 (AI/Offline-first)
+- Not Started: 0
+- Future: 3 (Analytics, Visitor/Event, Image Service)
 
 ### Priority Levels
 
 - High: Standards & Core Implementation ✅
 - Medium: Feature Guides & Documentation ✅
-- Low: Nice-to-have Features ✅
+- Medium: AI-Native & Offline-First Features (MVP) ⏳
+- Low: Advanced Features *(future)*
 
 ### Timeline
 
 - Phase 1: Standards & Guidelines ✅ (Completed)
 - Phase 2: Core Implementation ✅ (Completed)
 - Phase 3: Feature Guides ✅ (Completed)
-- Phase 4: Documentation ✅ (Completed)
+- Phase 4: AI-Native & Offline-First Features (MVP) ⏳ (In Progress)
+- Phase 5: Advanced Features *(future)*
 
 ## Notes
 
-- All checklists completed as of 2024-04-09
-- Test coverage meets or exceeds targets
-- Documentation fully updated
+- All core checklists completed as of 2024-04-09
+- AI-native and offline-first features now in progress
+- Advanced features and guides marked as future
 - Regular maintenance and updates scheduled
