@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createUser, validateSession } from '@/services/auth';
 import { prismaMock } from '@/tests/mocks/prisma';
-import { hash } from 'bcryptjs';
+import { hash } from '@node-rs/argon2';
 import { Role } from '@prisma/client';
 
-vi.mock('bcryptjs', () => ({
+vi.mock('@node-rs/argon2', () => ({
   hash: vi.fn().mockImplementation((str) => Promise.resolve(`hashed_${str}`)),
 }));
 
@@ -35,7 +35,7 @@ describe('Auth Utilities', () => {
 
       const result = await createUser(mockUserData);
 
-      expect(hash).toHaveBeenCalledWith(mockUserData.password, 12);
+      expect(hash).toHaveBeenCalledWith(mockUserData.password);
       expect(result.email).toBe(mockUserData.email);
       expect(result.password).toBe('hashed_StrongPass123!');
     });

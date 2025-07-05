@@ -1,0 +1,43 @@
+Title,Status,Milestone,Labels,Notes
+Implement facial recognition attendance check-in,To Do,AI Attendance Management,"ai,frontend,backend,mvp",Facial recognition for check-in
+Add manual QR code fallback for check-in,To Do,AI Attendance Management,"frontend,backend,mvp,low-bandwidth",QR fallback for low-connectivity
+Design event attendance view (list + stats),To Do,AI Attendance Management,"frontend,design,mvp",Attendance list and stats UI
+Auto-tag absentees using AI predictions,To Do,AI Attendance Management,"ai,backend,nice-to-have",Predict absenteeism
+Offline attendance queue and sync on reconnection,To Do,AI Attendance Management,"backend,low-bandwidth,africa-priority,mvp",Offline queue and sync
+Build attendance confirmation flow (admin/member),To Do,AI Attendance Management,"frontend,backend,mvp",Confirmation for check-in
+Org-based sign-up/login (NextAuth),To Do,Authentication & Identity,"backend,auth,mvp",Org-based authentication
+Implement roles: admin, leader, member,To Do,Authentication & Identity,"backend,auth,mvp",Role-based access
+Add biometric face capture at registration,To Do,Authentication & Identity,"ai,frontend,backend,nice-to-have",Face capture for registration
+Add password reset & email verification,To Do,Authentication & Identity,"backend,auth,mvp",Password reset and email verification
+Enable social login or guest access (optional),To Do,Authentication & Identity,"backend,auth,nice-to-have",Social/guest login
+Allow admin to create church & branches,To Do,Church & Group Setup,"frontend,backend,mvp",Church/branch creation
+Enable service & group scheduling,To Do,Church & Group Setup,"backend,frontend,mvp",Service/group scheduling
+Build group segmentation UI (youth, choir, ushers),To Do,Church & Group Setup,"frontend,design,mvp",Group segmentation UI
+Create member import tool (CSV, manual),To Do,Church & Group Setup,"backend,frontend,mvp",Member import
+Add tagging & custom fields to members,To Do,Church & Group Setup,"frontend,backend,nice-to-have",Custom fields for members
+Design mobile-first admin dashboard,To Do,Smart Dashboards,"frontend,design,mvp,low-bandwidth",Mobile-first dashboard
+Implement attendance trend charts,To Do,Smart Dashboards,"frontend,backend,mvp",Trend charts
+Predict low-attendance weeks using AI,To Do,Smart Dashboards,"ai,backend,nice-to-have",AI trend prediction
+Show personal attendance history for members,To Do,Smart Dashboards,"frontend,mvp",Member attendance history
+Auto-generate reminder messages before events,To Do,Automated Engagement,"ai,backend,mvp,integration",Event reminders
+Re-engagement messages for low-attendance members,To Do,Automated Engagement,"ai,backend,mvp",Re-engagement
+Integrate Twilio or email provider,To Do,Automated Engagement,"backend,integration,nice-to-have",Twilio/email integration
+Allow toggling between WhatsApp, SMS, in-app,To Do,Automated Engagement,"backend,nice-to-have,africa-priority",Comms channel toggle
+Design attendance + member data model (Prisma),To Do,AI-Ready Data & Insights,"backend,db,mvp",Data model design
+Set up Supabase + pgvector for embedding support,To Do,AI-Ready Data & Insights,"backend,ai,db,mvp",Supabase/pgvector setup
+Expose attendance data to Flowise via API,To Do,AI-Ready Data & Insights,"backend,api,ai,mvp",API for Flowise
+Create reusable AI prompt schema,To Do,AI-Ready Data & Insights,"ai,docs,mvp",Prompt schema
+Enable AI agents to fetch reports (Flowise),To Do,AI-Ready Data & Insights,"ai,backend,nice-to-have",AI agent report fetch
+AI chatbot: "Who missed 3 Sundays?",To Do,Experimental Features,"ai,frontend,backend,nice-to-have",AI chatbot
+Natural language event creation,To Do,Experimental Features,"ai,frontend,backend,nice-to-have",NL event creation
+Smart search with LLM support,To Do,Experimental Features,"ai,frontend,backend,nice-to-have",LLM search
+Build voice input prototype for attendance,To Do,Experimental Features,"ai,frontend,experimental",Voice input prototype
+Set up Docker Compose: Supabase + Ollama + frontend,To Do,Infrastructure & DevOps,"devops,docker,mvp",Docker Compose setup
+Configure GitHub Actions CI/CD,To Do,Infrastructure & DevOps,"devops,mvp",CI/CD setup
+Secure environment variables with secrets manager,To Do,Infrastructure & DevOps,"devops,security,mvp",Secrets management
+Add tests: unit, E2E, AI agent logic (Cypress/Playwright),To Do,Infrastructure & DevOps,"testing,mvp",Testing setup
+Implement local-first service worker caching,To Do,Infrastructure & DevOps,"frontend,low-bandwidth,offline,mvp",Service worker caching
+Update technical-architecture.md,Done,Infrastructure & DevOps,"docs,mvp",Align docs with new PRD
+Update test-checklist.md,Done,Infrastructure & DevOps,"docs,mvp",Mark future features, add AI/offline
+Update checklist-tracker.md,Done,Infrastructure & DevOps,"docs,mvp",Track new MVP and future features
+Update file-relationship.md,Done,Infrastructure & DevOps,"docs,mvp",Document new MVP structure 

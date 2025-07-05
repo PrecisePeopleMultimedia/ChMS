@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { axe, toHaveNoViolations } from 'jest-axe';
+import { axe, toHaveNoViolations } from "jest-axe";
 import { AttendanceForm } from '@/components/attendance/AttendanceForm';
 
 expect.extend(toHaveNoViolations);

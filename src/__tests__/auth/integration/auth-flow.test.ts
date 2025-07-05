@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { PrismaClient } from '@prisma/client';
-import { hash } from 'bcryptjs';
+import { hash } from '@node-rs/argon2';
 import { Role } from '@/types/auth';
 
 const prisma = new PrismaClient();
@@ -15,7 +15,7 @@ describe('Authentication Flow', () => {
 
   beforeAll(async () => {
     // Create test user
-    const hashedPassword = await hash(testUser.password, 12);
+    const hashedPassword = await hash(testUser.password);
     await prisma.user.create({
       data: {
         email: testUser.email,

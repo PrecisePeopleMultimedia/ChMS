@@ -53,7 +53,7 @@ Security standards specifically tailored for our Church Management System (ChMS)
 
 1. Secure Login
 
-   - Use bcryptjs for password hashing (12 rounds)
+   - Use @node-rs/argon2 for password hashing
    - Rate limit login attempts (100 requests/15 minutes)
    - Implement reCAPTCHA protection
    - Validate environment variables at startup

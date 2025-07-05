@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './auth-options';
-import { hash } from 'bcryptjs';
+import { hash } from '@node-rs/argon2';
 import { Role } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import { logger } from '@/lib/logger';
@@ -22,7 +22,7 @@ export async function createUser(data: CreateUserData) {
     throw new Error('Email already exists');
   }
 
-  const hashedPassword = await hash(data.password, 12);
+  const hashedPassword = await hash(data.password);
 
   return prisma.user.create({
     data: {

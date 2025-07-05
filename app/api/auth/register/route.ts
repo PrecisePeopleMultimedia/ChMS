@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { hash } from "bcryptjs"
+import { hash } from "@node-rs/argon2"
 import { prisma } from "@/lib/prisma"
 import { rateLimiter } from '@/services/auth/rate-limit';
 import { sanitizeInput } from '@/services/security/input-sanitizer';
@@ -61,7 +61,7 @@ export async function POST(req: Request) {
       data: {
         name: sanitizedData.name,
         email: sanitizedData.email,
-        password: await hash(sanitizedData.password, 12),
+        password: await hash(sanitizedData.password),
         verificationToken,
         emailVerified: null,
         dateOfBirth: sanitizedData.dateOfBirth,

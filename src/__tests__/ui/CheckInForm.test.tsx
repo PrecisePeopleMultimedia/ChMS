@@ -13,7 +13,7 @@ const mockLocations = [
   { id: '2', name: 'Youth Room', capacity: 50 },
 ];
 
-const mockOnSubmit = jest.fn();
+const mockOnSubmit = vi.fn();
 
 describe('CheckInForm', () => {
   beforeEach(() => {

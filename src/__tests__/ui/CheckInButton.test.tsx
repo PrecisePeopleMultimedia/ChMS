@@ -3,7 +3,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import CheckInButton from '../../components/attendance/CheckInButton/CheckInButton';
 
 describe('CheckInButton', () => {
-  const mockOnCheckIn = jest.fn();
+  const mockOnCheckIn = vi.fn();
 
   beforeEach(() => {
     mockOnCheckIn.mockReset();
