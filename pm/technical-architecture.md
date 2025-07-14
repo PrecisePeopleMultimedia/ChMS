@@ -1,98 +1,64 @@
-# Technical Architecture - ChMS
+# Technical Architecture - ChMS (MVP)
 
-> **Related Documents:**
->
-> - [Product Requirements Document](./prd.md)
-> - [User Stories](./user-stories.md)
-> - [Security Policy](./security-policy.md)
-> - [Deployment Manual](./deployment-manual.md)
-> - [Development Standards](../docs/standards/development-standards.md)
+## Overview
+ChMS is a minimalist, offline-first church management system for Africa. The architecture is designed for reliability, speed, and practical core features, with a focus on:
+- Organization management
+- Member management
+- Attendance (QR code, search/autocomplete, offline queue)
+- Minimal reporting
 
-## 1. Overview
+## Core Principles
+- **Africa-first:** Mobile-first, Android-priority, low-bandwidth optimized
+- **Offline-first:** All core flows work offline and sync when online
+- **Minimalism:** Only essential features in MVP
+- **Test-driven:** TDD/BDD hybrid, all features tracked in GitHub Projects
 
-This document outlines the high-level technical architecture for the ChMS application, now updated to reflect the AI-native, Africa-first, and MVP-focused direction. It details the technology stack, system components, data flow, and key architectural decisions.
+## System Components
 
-**Goals:** Scalability, maintainability, offline-first capability, low-bandwidth optimization, security, testability, and AI-native automation.
+### 1. Frontend
+- Next.js 15 (React 18, TypeScript)
+- Chakra UI v3 (UI components, theme)
+- SWR (data fetching, caching, offline support)
+- React Hook Form + Zod (forms, validation)
 
-## 2. Technology Stack
+### 2. Backend/API
+- Next.js API routes (serverless functions)
+- Prisma ORM (type-safe DB access)
+- Supabase (PostgreSQL)
+- NextAuth.js (authentication, RBAC)
 
-- **Frontend Framework:** Next.js 15 (React 19+)
-- **Language:** TypeScript 5+
-- **UI Library:** Chakra UI (v3+)
-- **State Management / Data Fetching:** SWR
-- **Form Handling:** React Hook Form
-- **Schema Validation:** Zod
-- **Backend:** Next.js API Routes / Server Components / Server Actions
-- **Database ORM:** Prisma
-- **Database:** Supabase (PostgreSQL)
-- **Authentication:** NextAuth.js
-- **AI Integration:** Flowise (visual LLM orchestration), n8n (automation), Ollama/OpenAI/Claude (LLMs)
-- **Testing:** Vitest, React Testing Library, MSW, Cypress / Playwright
-- **CI/CD:** GitHub Actions
-- **Containerization:** Docker
+### 3. Data Flows
+- Member and attendance data stored in PostgreSQL
+- Attendance can be recorded via QR code or search/autocomplete
+- Offline queue for attendance, syncs when online
+- Minimal reporting (attendance summaries)
 
-## 3. System Components
+### 4. Security
+- Role-based access control (RBAC)
+- Data encryption at rest and in transit
+- Input validation (Zod)
+- Standard web security practices
 
-- **Web Application (Next.js):** Handles UI rendering (SSR, SSG, Client Components), routing, API requests, and serves static assets.
-- **API Layer (Next.js API Routes/Actions):** Provides backend logic, interacts with the database via Prisma, handles authentication/authorization, and integrates with AI agents.
-- **Database (Supabase/PostgreSQL):** Stores application data (members, attendance, configuration, etc.). Managed via Prisma migrations.
-- **Authentication Service (NextAuth.js):** Manages user sessions, login flows, and security tokens.
-- **Data Caching Layer (SWR):** Manages client-side data fetching, caching, revalidation, and supports offline access patterns.
-- **AI Agent Layer (Flowise/n8n):** Orchestrates onboarding, automation, and smart engagement via LLMs and workflow automation.
-- **(Potentially) Background Job Processor:** For tasks like sending notifications or data processing (future phase).
+### 5. Testing
+- Vitest (unit/integration)
+- React Testing Library (component tests)
+- MSW (API mocking)
+- Cypress/Playwright (E2E)
 
-## 4. Data Flow
+## Excluded from MVP (Future)
+- AI/agent onboarding and automation
+- WhatsApp/USSD fallback
+- Payments and financial tracking
+- Advanced analytics and dashboards
+- Communication (SMS, email, WhatsApp)
+- Multi-language support
+- Media integration, voice input
 
-- **Read Operations:** Client requests data via SWR → SWR checks cache/revalidates → Hits Next.js API Route/Server Action → Prisma queries Supabase/PostgreSQL → Data returned → SWR updates UI.
-- **Write Operations:** User interaction triggers form submission → React Hook Form validates → Data sent to Next.js API Route/Server Action → Prisma performs mutation on Supabase/PostgreSQL → Response returned → SWR potentially revalidates related data / optimistic update.
-- **Offline Sync:** SWR cache provides data offline. Mutations queued locally. Background sync when online (strategy to be finalized).
-- **AI Agent Flows:** User triggers onboarding or engagement flow → Flowise agent orchestrates LLMs and n8n automations → Results/actions returned to user or system.
+## Diagram
+```
+[User] --(Web/Mobile)--> [Next.js/Chakra UI] --(API)--> [Next.js API Routes] --(Prisma)--> [Supabase/PostgreSQL]
+```
 
-## 5. Key Architectural Decisions
-
-- **Monorepo:** Single repository structure for all code and docs.
-- **Serverless Approach:** Leveraging Next.js API Routes/Server Actions for backend logic.
-- **Offline Strategy:** Utilizing SWR's caching and local queue for offline-first experience. (Detailed design in progress.)
-- **AI-Native:** Flowise and n8n are core to onboarding, automation, and engagement from MVP.
-- **UI Library:** Chakra UI for accessibility and theming.
-- **ORM:** Prisma for type safety and migrations.
-
-## 6. Scalability & Performance Considerations
-
-- Database indexing and query optimization.
-- Efficient data fetching patterns with SWR.
-- Code splitting via Next.js.
-- Use of Server Components for reduced client-side JS.
-- CDN for static assets.
-- Load testing strategy (via Cypress/Playwright).
-
-## 7. Security Considerations
-
-- Authentication via NextAuth.js.
-- Role-Based Access Control (RBAC) in API layer.
-- Input validation using Zod.
-- Standard security headers, CSRF protection.
-- Data encryption at rest and in transit.
-
-## 8. Deployment Strategy
-
-- CI/CD via GitHub Actions.
-- Deployment target (Vercel, Docker container on cloud provider, etc. - TBD).
-- Environment management (dev, staging, prod).
-- Database migration strategy.
-
-## 9. Open Questions
-
-- Finalize offline sync mechanism (Service Workers, SWR + local queue, etc.)
-- How to best embed Flowise/n8n agents in the UI for onboarding and engagement?
-- What is the best approach for AI agent security and privacy?
-- How to handle facial recognition ethically and legally (if implemented)?
-
----
-
-### Version History
-
-#### 2.0.0 - [Current Date]
-- Updated for AI-native, Africa-first, and MVP focus
-- Clarified stack, AI integration, and offline-first strategy
-- Marked open questions for future work
+## Roadmap
+- v0.1: MVP (Org, Members, Attendance, minimal reporting)
+- v0.2+: Add dashboards, reminders, sync improvements, then future features

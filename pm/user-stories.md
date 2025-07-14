@@ -1,30 +1,31 @@
-# User Stories - ChMS
+# User Stories - ChMS MVP
 
-This document outlines user stories for the ChMS project, describing features from the perspective of end-users.
+## Organization Management
+- As a church admin, I want to create and update my organization so I can manage church data.
+- As a church admin, I want to view organization details so I can verify information.
 
-## Core Functionality
+## Member Management
+- As a church admin, I want to add new members so I can keep accurate records.
+- As a church admin, I want to update member profiles so information stays current.
+- As a church admin, I want to link family units so I can track families in the church.
+- As a user, I want to search for a member by name so I can quickly find and check them in.
+- As a user, I want to view member details so I can confirm their information.
 
-**1. Member Management**
+## Attendance
+- As a user, I want to check in using a QR code so attendance is fast and easy.
+- As a user, I want to check in by searching my name so I can be marked present even without a QR code.
+- As a user, I want a confirmation prompt before sign-in so I don’t make mistakes.
+- As a user, I want to see animated feedback (checkbox) when I’m signed in so I know it worked.
+- As a user, I want attendance to work offline and sync when online so I can check in anywhere.
 
-- **As a Church Administrator, I want to add a new member profile** including their name, contact information, and join date, **so that** I can maintain an accurate church directory.
-- **As a Church Administrator, I want to view and update member details** (e.g., address, phone number), **so that** the directory information remains current.
-- **As a Church Administrator, I want to group members into family units,** **so that** I can understand household connections and manage related communications.
-- **As a Church Administrator, I want to access member profiles even when my internet connection is unstable,** **so that** I can perform essential tasks reliably.
+## Reporting
+- As a church admin, I want to see a summary of attendance so I can track participation.
 
-**2. Attendance Tracking**
-
-- **As a Service Leader, I want to quickly record attendance for a church service,** possibly using a QR code scanner or manual check-in, **so that** we have accurate attendance records.
-- **As a Church Administrator, I want to view attendance reports for past services or events,** **so that** I can track engagement and trends.
-
-**3. Authentication & Access**
-
-- **As a Church Administrator, I want to securely log in to the system** using my credentials, **so that** only authorized personnel can access church data.
-- **As a User, I want the system to remember my login session** for a reasonable period, **so that** I don't have to log in repeatedly.
-
-## Potential Future Features
-
-- **As an Event Coordinator, I want to create and manage church events,** including details like date, time, location, and description, **so that** members can be informed.
-- **As a Church Administrator, I want to record information about first-time visitors,** **so that** we can follow up and welcome them properly.
-- **As a Group Leader, I want to manage members within my specific ministry group,** **so that** I can track participation and communicate effectively.
-
-_(This list will be expanded as features are further defined.)_
+## Excluded (Future)
+- AI/agent onboarding
+- WhatsApp/USSD fallback
+- Payments
+- Advanced analytics
+- Communication features
+- Multi-language support
+- Media integration
