@@ -2,6 +2,10 @@
 
 A minimalist, offline-first church management system for Africa. Built for reliability, speed, and practical core features.
 
+## Security
+Use this for security base:
+https://x.com/neer_Y1/status/1948787479210783151?t=_iEQSj3mqqKKSSYGBgwWGw&s=19
+
 ## MVP Scope
 - Organization Management
 - Member Management
