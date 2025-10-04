@@ -19,7 +19,7 @@ See `.cursor/rules/language-standards.mdc` for detailed language standards and g
 
 ## Project Overview
 
-ChMS (Church Management System) is a comprehensive solution designed for African churches, focusing on scalability, offline-first functionality, low-bandwidth optimization, and now AI-native automation and onboarding.
+ChurchAfrica is a comprehensive solution designed for African churches, focusing on scalability, offline-first functionality, low-bandwidth optimization, and enterprise readiness.
 
 
 ## Technical Stack
@@ -105,25 +105,29 @@ ChMS (Church Management System) is a comprehensive solution designed for African
 ## Project Structure
 
 ```
-ChMS/
-├── src/
-│   ├── components/         # React components
-│   │   └── ComponentName/
-│   │       ├── index.ts
-│   │       ├── ComponentName.tsx
-│   │       ├── ComponentName.test.tsx
-│   │       └── types.ts
-│   ├── hooks/             # Custom React hooks
-│   ├── pages/             # Next.js pages
-│   ├── services/          # External service integrations
-│   ├── store/             # State management
-│   ├── styles/            # Global styles
-│   ├── types/            # TypeScript types
-│   └── utils/            # Utility functions
-├── docs/                 # Documentation
-├── prisma/              # Database schema
-├── public/              # Static assets
-└── tests/              # Test utilities and setup
+ChurchAfrica/
+├── .specify/                    # Spec-driven development files
+├── backend/                     # Laravel API backend
+│   ├── app/
+│   │   ├── Http/Controllers/Api/
+│   │   ├── Models/
+│   │   ├── Services/
+│   │   └── Repositories/
+│   ├── database/
+│   │   ├── migrations/
+│   │   └── seeders/
+│   └── tests/
+├── frontend/                    # Vue 3 + Quasar frontend
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── composables/
+│   │   ├── stores/
+│   │   ├── services/
+│   │   └── utils/
+│   └── tests/
+├── scripts/                     # Development scripts
+└── docs/                       # Documentation
 ```
 
 ## Development Standards
@@ -139,7 +143,7 @@ ChMS/
 
 2. Component Structure:
 
-   - Use the 'function' keyword for components
+   - Use Composition API for Vue components
    - Implement error boundaries for critical features
    - Add loading states for async operations
    - Include offline fallbacks
@@ -152,10 +156,10 @@ ChMS/
    - Favor named exports for components and utilities
 
 4. Styling:
-   - Use Chakra UI for components
-   - Implement responsive design
-   - Follow organization theme settings
-   - Support dark mode by default
+   - Use Quasar Framework components
+   - Implement responsive design with mobile-first approach
+   - Follow Material Design principles
+   - Support dark mode
 
 ### Performance Requirements
 
@@ -169,14 +173,14 @@ ChMS/
 
 2. Optimization Strategies:
 
-   - Use React Server Components where possible
-   - Implement proper data caching strategies
+   - Use Vue 3 Composition API for better tree-shaking
+   - Implement proper caching strategies
    - Optimize for low-bandwidth environments
    - Support offline-first functionality
-   - Use dynamic imports for large features
+   - Use dynamic imports for code splitting
 
 3. Data Fetching:
-   - Use SWR for client-side data fetching
+   - Use Pinia stores for state management
    - Implement optimistic updates
    - Add proper error handling and retry logic
    - Cache responses appropriately
