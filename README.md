@@ -1,6 +1,6 @@
-# ChMS - Personal Church Management System
+# ChurchAfrica - Personal Church Management System
 
-A personal project building an Africa-first, offline-capable church management system using Vue 3, Laravel, and Supabase.
+A personal project building an Africa-first, offline-capable church management system using Vue 3, Laravel, and Supabase. The project is currently named **ChurchAfrica** (with plans to potentially acquire the domain church.africa in the future).
 
 ## 🎯 Project Goals
 
