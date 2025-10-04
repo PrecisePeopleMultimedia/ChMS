@@ -1,0 +1,95 @@
+# Product Requirements Document (PRD)
+
+## Project Overview
+ChMS (Church Management System) - A comprehensive church management solution built with Next.js, Prisma, and Supabase.
+
+## Product Vision
+To create a modern, user-friendly church management system that helps churches efficiently manage their members, events, attendance, and communications.
+
+## Target Users
+- Church administrators
+- Church staff
+- Ministry leaders
+- Church members
+
+## Core Features
+
+### 1. Member Management
+- Member registration and profiles
+- Family unit management
+- Member directory
+- Contact information management
+- Member roles and permissions
+
+### 2. Attendance Tracking
+- QR code-based check-in system
+- Manual attendance recording
+- Attendance reports and analytics
+- Service and event attendance tracking
+
+### 3. Event Management
+- Event creation and scheduling
+- Event registration
+- Event check-in
+- Event communication
+
+### 4. Communication System
+- Email notifications
+- SMS messaging (future)
+- Announcement system
+- Newsletter management
+
+### 5. Reporting & Analytics
+- Attendance reports
+- Member growth analytics
+- Event participation metrics
+- Financial reporting (future)
+
+### 6. User Management
+- Role-based access control
+- User authentication
+- Permission management
+- Admin dashboard
+
+## Technical Requirements
+
+### Frontend
+- Next.js 15 with App Router
+- React 18+ with TypeScript
+- Chakra UI for component library
+- Responsive design for mobile and desktop
+
+### Backend
+- Next.js API routes
+- Prisma ORM for database operations
+- NextAuth.js for authentication
+- Server actions for form handling
+
+### Database
+- Supabase (PostgreSQL)
+- Real-time subscriptions
+- Row Level Security (RLS)
+
+### Authentication
+- NextAuth.js with multiple providers
+- Google OAuth integration
+- Email/password authentication
+- Role-based permissions
+
+## Success Metrics
+- User adoption rate
+- Feature usage analytics
+- System performance metrics
+- User satisfaction scores
+
+## Timeline
+- Phase 1: Core member and attendance management (4-6 weeks)
+- Phase 2: Event management and communication (3-4 weeks)
+- Phase 3: Advanced reporting and analytics (2-3 weeks)
+- Phase 4: Mobile optimization and PWA features (2-3 weeks)
+
+## Risks and Mitigation
+- Data security: Implement proper authentication and authorization
+- Scalability: Design for growth with efficient database queries
+- User adoption: Focus on intuitive UI/UX design
+- Performance: Optimize for fast loading and responsive interactions

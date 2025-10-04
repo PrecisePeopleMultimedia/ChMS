@@ -1,0 +1,61 @@
+# Vue 3 Frontend
+
+This directory will contain the Vue 3 frontend PWA for ChMS.
+
+## Setup Instructions
+
+1. Create Vue 3 project with Vite:
+```bash
+cd frontend
+npm create vue@latest . -- --typescript --pwa --router --pinia --vitest --eslint
+```
+
+2. Install additional dependencies:
+```bash
+npm install @supabase/supabase-js
+npm install @vueuse/core
+npm install tailwindcss @tailwindcss/forms
+```
+
+3. Configure environment:
+```bash
+cp .env.example .env.local
+```
+
+Add to .env.local:
+```env
+VITE_API_URL=http://localhost:8000/api
+VITE_SUPABASE_URL=your-supabase-url
+VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
+```
+
+4. Start development server:
+```bash
+npm run dev
+```
+
+## Project Structure
+
+```
+frontend/
+├── src/
+│   ├── components/     # Reusable Vue components
+│   ├── views/         # Page components
+│   ├── composables/   # Vue 3 composables
+│   ├── stores/        # Pinia stores
+│   ├── services/      # API services
+│   ├── utils/         # Utility functions
+│   └── assets/        # Static assets
+├── public/            # Public assets
+└── tests/             # Test files
+```
+
+## Key Features
+
+- Vue 3 with Composition API
+- Progressive Web App (PWA)
+- Offline-first architecture
+- Mobile-responsive design
+- TypeScript support
+- Tailwind CSS for styling
+- Vitest for testing

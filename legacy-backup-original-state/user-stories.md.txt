@@ -1,0 +1,122 @@
+# User Stories
+
+## Epic: Member Management
+
+### As a Church Administrator
+- **US-001**: As a church administrator, I want to add new members to the system so that I can maintain an accurate member database.
+- **US-002**: As a church administrator, I want to edit member information so that I can keep member records up to date.
+- **US-003**: As a church administrator, I want to search for members by name, email, or phone so that I can quickly find specific members.
+- **US-004**: As a church administrator, I want to organize members into families so that I can manage family units effectively.
+- **US-005**: As a church administrator, I want to assign roles to members so that I can manage permissions and responsibilities.
+- **US-006**: As a church administrator, I want to view member profiles so that I can see comprehensive member information.
+- **US-007**: As a church administrator, I want to export member data so that I can create reports and backups.
+
+### As a Church Staff Member
+- **US-008**: As a church staff member, I want to view member information so that I can assist with member-related tasks.
+- **US-009**: As a church staff member, I want to update member contact information so that I can maintain accurate records.
+- **US-010**: As a church staff member, I want to add notes to member profiles so that I can track important information.
+
+## Epic: Attendance Management
+
+### As a Church Greeter
+- **US-011**: As a church greeter, I want to check in members using QR codes so that attendance recording is fast and efficient.
+- **US-012**: As a church greeter, I want to manually search and check in members so that I can handle members without QR codes.
+- **US-013**: As a church greeter, I want to register visitors so that I can track new attendees.
+- **US-014**: As a church greeter, I want to see real-time attendance numbers so that I can monitor service attendance.
+
+### As a Church Administrator
+- **US-015**: As a church administrator, I want to generate attendance reports so that I can analyze church attendance patterns.
+- **US-016**: As a church administrator, I want to view attendance statistics so that I can track member engagement.
+- **US-017**: As a church administrator, I want to export attendance data so that I can create custom reports.
+- **US-018**: As a church administrator, I want to set up different service types so that I can track attendance for various events.
+
+## Epic: Event Management
+
+### As an Event Organizer
+- **US-019**: As an event organizer, I want to create events so that I can organize church activities.
+- **US-020**: As an event organizer, I want to set event capacity limits so that I can manage event size.
+- **US-021**: As an event organizer, I want to enable event registration so that members can sign up for events.
+- **US-022**: As an event organizer, I want to check in event attendees so that I can track event participation.
+- **US-023**: As an event organizer, I want to send event reminders so that registered members are notified.
+
+### As a Church Member
+- **US-024**: As a church member, I want to view upcoming events so that I can see what activities are available.
+- **US-025**: As a church member, I want to register for events so that I can participate in church activities.
+- **US-026**: As a church member, I want to cancel my event registration so that I can manage my commitments.
+
+## Epic: Communication System
+
+### As a Church Administrator
+- **US-027**: As a church administrator, I want to send announcements to all members so that I can communicate important information.
+- **US-028**: As a church administrator, I want to create email templates so that I can standardize communications.
+- **US-029**: As a church administrator, I want to segment members for targeted communications so that I can send relevant messages.
+- **US-030**: As a church administrator, I want to schedule communications so that messages are sent at optimal times.
+- **US-031**: As a church administrator, I want to track communication delivery so that I can ensure messages are received.
+
+### As a Church Member
+- **US-032**: As a church member, I want to receive church announcements so that I stay informed about church activities.
+- **US-033**: As a church member, I want to manage my communication preferences so that I control what messages I receive.
+
+## Epic: User Management & Authentication
+
+### As a System Administrator
+- **US-034**: As a system administrator, I want to create user accounts so that staff can access the system.
+- **US-035**: As a system administrator, I want to assign user roles so that I can control system access.
+- **US-036**: As a system administrator, I want to deactivate user accounts so that I can manage system security.
+- **US-037**: As a system administrator, I want to reset user passwords so that I can help users regain access.
+- **US-038**: As a system administrator, I want to audit user activity so that I can monitor system usage.
+
+### As a System User
+- **US-039**: As a system user, I want to log in securely so that I can access the system.
+- **US-040**: As a system user, I want to change my password so that I can maintain account security.
+- **US-041**: As a system user, I want to update my profile information so that my details are current.
+- **US-042**: As a system user, I want to log out so that I can secure my session.
+
+## Epic: Reporting & Analytics
+
+### As a Church Administrator
+- **US-043**: As a church administrator, I want to view attendance trends so that I can understand member engagement patterns.
+- **US-044**: As a church administrator, I want to generate member growth reports so that I can track church growth.
+- **US-045**: As a church administrator, I want to create custom reports so that I can analyze specific metrics.
+- **US-046**: As a church administrator, I want to export reports to PDF so that I can share them with leadership.
+- **US-047**: As a church administrator, I want to schedule automated reports so that I receive regular updates.
+
+### As a Church Leader
+- **US-048**: As a church leader, I want to view dashboard metrics so that I can quickly assess church health.
+- **US-049**: As a church leader, I want to compare attendance across different time periods so that I can identify trends.
+
+## Epic: Organization Setup
+
+### As a Church Administrator
+- **US-050**: As a church administrator, I want to set up my organization profile so that the system reflects our church information.
+- **US-051**: As a church administrator, I want to configure service times so that attendance tracking matches our schedule.
+- **US-052**: As a church administrator, I want to customize system settings so that the system works for our specific needs.
+- **US-053**: As a church administrator, I want to upload our church logo so that the system reflects our branding.
+
+## Epic: Mobile Experience
+
+### As a Mobile User
+- **US-054**: As a mobile user, I want the system to work on my phone so that I can access it anywhere.
+- **US-055**: As a mobile user, I want to scan QR codes with my phone camera so that check-in is convenient.
+- **US-056**: As a mobile user, I want the interface to be touch-friendly so that it's easy to use on mobile.
+- **US-057**: As a mobile user, I want the system to work offline so that I can use it without internet connection.
+
+## Acceptance Criteria Template
+
+Each user story should include:
+- **Given**: Initial conditions
+- **When**: User action or trigger
+- **Then**: Expected outcome
+- **And**: Additional conditions or outcomes
+
+## Definition of Done
+
+A user story is considered complete when:
+- [ ] Acceptance criteria are met
+- [ ] Unit tests are written and passing
+- [ ] Integration tests are written and passing
+- [ ] Code review is completed
+- [ ] Documentation is updated
+- [ ] Feature is tested on mobile devices
+- [ ] Accessibility requirements are met
+- [ ] Performance requirements are met

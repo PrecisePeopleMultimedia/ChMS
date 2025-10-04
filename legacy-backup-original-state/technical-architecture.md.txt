@@ -1,0 +1,227 @@
+# Technical Architecture
+
+## System Overview
+ChMS is built as a modern full-stack web application using Next.js with a focus on performance, scalability, and maintainability. The architecture follows a component-based approach with clear separation of concerns.
+
+## Architecture Layers
+
+### Presentation Layer (Frontend)
+- **Next.js App Router**: Modern routing with server and client components
+- **React Components**: Modular, reusable UI components
+- **Chakra UI**: Consistent design system and component library
+- **TypeScript**: Type-safe development with compile-time error checking
+
+### Application Layer (API)
+- **Next.js API Routes**: RESTful API endpoints
+- **Server Actions**: Form handling and server-side operations
+- **Middleware**: Authentication, logging, and request processing
+- **Validation**: Input validation using Zod schemas
+
+### Data Layer
+- **Prisma ORM**: Type-safe database operations
+- **Supabase**: PostgreSQL database with real-time features
+- **Caching**: Redis for session and data caching
+- **File Storage**: Supabase storage for file uploads
+
+## Database Design
+
+### Core Entities
+```sql
+-- Organizations (Churches)
+CREATE TABLE organizations (
+  id UUID PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  address TEXT,
+  phone VARCHAR(50),
+  email VARCHAR(255),
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Users (Church staff and members)
+CREATE TABLE users (
+  id UUID PRIMARY KEY,
+  organization_id UUID REFERENCES organizations(id),
+  email VARCHAR(255) UNIQUE NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  role VARCHAR(50) NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Members
+CREATE TABLE members (
+  id UUID PRIMARY KEY,
+  organization_id UUID REFERENCES organizations(id),
+  first_name VARCHAR(100) NOT NULL,
+  last_name VARCHAR(100) NOT NULL,
+  email VARCHAR(255),
+  phone VARCHAR(50),
+  date_of_birth DATE,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Attendance Records
+CREATE TABLE attendance (
+  id UUID PRIMARY KEY,
+  member_id UUID REFERENCES members(id),
+  service_id UUID REFERENCES services(id),
+  check_in_time TIMESTAMP NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+### Relationships
+- Organizations have many Users and Members
+- Members belong to Organizations
+- Attendance records link Members to Services
+- Events can have multiple Attendees
+
+## Authentication & Authorization
+
+### Authentication Flow
+1. User initiates login via NextAuth.js
+2. Provider authentication (Google OAuth, Email/Password)
+3. User session creation and JWT token generation
+4. Session persistence in secure cookies
+5. Automatic token refresh and validation
+
+### Authorization Model
+- **Role-Based Access Control (RBAC)**
+- **Roles**: Admin, Staff, Member, Visitor
+- **Permissions**: Create, Read, Update, Delete operations
+- **Resource-Level Security**: Organization-scoped data access
+
+### Security Measures
+- HTTPS enforcement
+- CSRF protection
+- Input validation and sanitization
+- SQL injection prevention
+- XSS protection
+- Rate limiting on API endpoints
+
+## API Design
+
+### RESTful Endpoints
+```
+GET    /api/members          # List members
+POST   /api/members          # Create member
+GET    /api/members/:id      # Get member details
+PUT    /api/members/:id      # Update member
+DELETE /api/members/:id      # Delete member
+
+GET    /api/attendance       # List attendance records
+POST   /api/attendance       # Record attendance
+GET    /api/attendance/stats # Attendance statistics
+
+GET    /api/events           # List events
+POST   /api/events           # Create event
+GET    /api/events/:id       # Get event details
+PUT    /api/events/:id       # Update event
+```
+
+### Response Format
+```json
+{
+  "success": true,
+  "data": {},
+  "message": "Operation completed successfully",
+  "timestamp": "2024-01-01T00:00:00Z"
+}
+```
+
+## Real-time Features
+
+### Supabase Real-time
+- Live attendance updates during services
+- Real-time member status changes
+- Event registration notifications
+- System-wide announcements
+
+### WebSocket Integration
+- Connection management for real-time features
+- Event broadcasting to connected clients
+- Automatic reconnection handling
+- Offline state management
+
+## Performance Optimization
+
+### Frontend Optimization
+- **Code Splitting**: Dynamic imports for route-based splitting
+- **Image Optimization**: Next.js Image component with lazy loading
+- **Caching**: Browser caching for static assets
+- **Bundle Analysis**: Regular bundle size monitoring
+
+### Backend Optimization
+- **Database Indexing**: Optimized queries with proper indexes
+- **Connection Pooling**: Efficient database connection management
+- **Caching Strategy**: Redis for frequently accessed data
+- **Query Optimization**: Prisma query optimization
+
+### Monitoring & Analytics
+- **Performance Monitoring**: Real-time performance metrics
+- **Error Tracking**: Comprehensive error logging and alerting
+- **Usage Analytics**: User behavior and feature usage tracking
+- **Database Monitoring**: Query performance and optimization
+
+## Deployment Architecture
+
+### Development Environment
+- Local Next.js development server
+- Local PostgreSQL database
+- Hot module replacement for fast development
+- Development-specific environment variables
+
+### Production Environment
+- **Frontend**: Vercel deployment with CDN
+- **Database**: Supabase managed PostgreSQL
+- **File Storage**: Supabase storage buckets
+- **Monitoring**: Vercel Analytics and logging
+
+### CI/CD Pipeline
+1. Code commit triggers GitHub Actions
+2. Automated testing (unit, integration, e2e)
+3. Build optimization and bundling
+4. Deployment to staging environment
+5. Production deployment after approval
+6. Post-deployment monitoring and alerts
+
+## Scalability Considerations
+
+### Horizontal Scaling
+- Stateless API design for easy scaling
+- Database read replicas for improved performance
+- CDN for global content distribution
+- Load balancing for high availability
+
+### Vertical Scaling
+- Database optimization and indexing
+- Efficient query patterns with Prisma
+- Memory management and garbage collection
+- Resource monitoring and auto-scaling
+
+## Security Architecture
+
+### Data Protection
+- Encryption at rest and in transit
+- Personal data anonymization
+- GDPR compliance measures
+- Regular security audits
+
+### Access Control
+- Multi-factor authentication support
+- Session management and timeout
+- API rate limiting and throttling
+- Audit logging for sensitive operations
+
+## Disaster Recovery
+
+### Backup Strategy
+- Automated daily database backups
+- Point-in-time recovery capabilities
+- File storage redundancy
+- Configuration backup and versioning
+
+### Recovery Procedures
+- Database restoration procedures
+- Application rollback strategies
+- Data integrity verification
+- Business continuity planning

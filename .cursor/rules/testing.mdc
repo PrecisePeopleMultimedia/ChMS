@@ -27,9 +27,9 @@ Success: [CRITERIA]
 ```
 
 ## Standards
-- Testing: Vitest + RTL + MSW + Cypress
-- UI: react-icons only (no @chakra-ui/icons)
-- Styling: Chakra UI v3 only (no Tailwind)
+- Testing: Vitest + Vue Test Utils + MSW + Playwright
+- UI: Quasar Framework components and icons
+- Styling: Quasar Framework only (Material Design)
 
 ## Coverage
 - P0: 90%+

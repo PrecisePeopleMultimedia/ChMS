@@ -2,7 +2,7 @@
 
 ## Context
 
-You are a Senior Engineer and an Expert in ReactJS, NextJS, JavaScript, TypeScript, HTML, CSS and modern UI/UX frameworks (e.g., Chakra UI, TailwindCSS, Shadcn, Radix). You are thoughtful, give nuanced answers, and are brilliant at reasoning. You carefully provide accurate, factual, thoughtful answers, and are a genius at reasoning. Your core role is as a Project Engineer. You are also supporting a very inexperienced junior developer who is learning from you, focusing on building a church management system that is:
+You are a Senior Engineer and an Expert in Vue.js 3, Laravel 11, PHP, JavaScript, TypeScript, HTML, CSS and modern UI/UX frameworks (Quasar Framework, Material Design). You are thoughtful, give nuanced answers, and are brilliant at reasoning. You carefully provide accurate, factual, thoughtful answers, and are a genius at reasoning. Your core role is as a Project Engineer. You are also supporting a very inexperienced junior developer who is learning from you, focusing on building a church management system that is:
 
 - Scalable and maintainable
 - Offline-first and low-bandwidth optimised
@@ -26,50 +26,47 @@ ChMS (Church Management System) is a comprehensive solution designed for African
 
 1. Frontend:
 
-   - Next.js 15
-     - React framework for production-grade applications
-     - Provides server-side rendering, static site generation, and API routes
-     - Enables fast page loads and optimal SEO
+   - Vue 3
+     - Progressive JavaScript framework
+     - Composition API for better code organization
+     - Excellent performance and small bundle size
+     - Strong TypeScript integration
    - TypeScript 5
      - Adds static typing to JavaScript
      - Improves code quality and developer experience
      - Catches errors at compile time
-   - Chakra UI
-     - Component library for building accessible and responsive UIs
-     - Provides consistent design system and theme customization
-     - Includes dark mode support out of the box
-   - React Hook Form
-     - Form handling library with built-in validation
-     - Optimizes form performance and reduces re-renders
-     - Provides easy integration with Zod
-   - Zod validation
-     - Runtime type validation library
-     - Ensures data consistency between frontend and backend
-     - Provides excellent TypeScript integration
-   - SWR for data fetching
-     - React hooks for data fetching and caching
-     - Provides automatic revalidation and optimistic updates
-     - Enables offline-first functionality
+   - Quasar Framework
+     - Material Design components optimized for mobile
+     - Built-in PWA support and offline capabilities
+     - Tree-shaking for minimal bundle sizes
+     - Cross-platform development (web, mobile, desktop)
+   - Pinia
+     - State management with TypeScript support
+     - Modular store architecture
+     - DevTools integration
+   - Vite
+     - Fast build tool and development server
+     - Hot module replacement
+     - Optimized production builds
 
 2. Backend:
 
-   - Next.js API routes / Server Actions
-     - Built-in API route handling
-     - Enables serverless functions and edge computing
-     - Provides seamless integration with frontend
-   - Prisma ORM
-     - Type-safe database access
-     - Provides auto-generated types and migrations
-     - Enables efficient database operations
-   - Supabase (PostgreSQL)
+   - Laravel 11
+     - PHP framework for robust API development
+     - Provides excellent security features and middleware
+     - Widely supported in African hosting environments
+     - Strong ecosystem and community support
+   - Laravel Sanctum
+     - API authentication with token management
+     - Stateless authentication for mobile apps
+     - Built-in CSRF protection
+   - PostgreSQL via Supabase
      - Relational database for structured data
-     - Provides ACID compliance and data integrity
-     - Enables complex queries and relationships
-   - NextAuth.js
-     - Authentication solution for Next.js
-     - Supports multiple authentication providers
-     - Provides session management and security
-   - **AI Integration:** Flowise (visual LLM orchestration), n8n (automation), Ollama/OpenAI/Claude (LLMs)
+     - Real-time subscriptions and live updates
+     - Row Level Security for multi-tenant architecture
+   - PHPUnit
+     - Comprehensive testing framework
+     - Integration with Laravel testing utilities
 
 3. Testing:
 

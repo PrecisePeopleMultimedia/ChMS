@@ -1,0 +1,59 @@
+# Laravel Backend
+
+This directory will contain the Laravel 11 backend API for ChMS.
+
+## Setup Instructions
+
+1. Install Laravel 11:
+```bash
+cd backend
+composer create-project laravel/laravel . "^11.0"
+```
+
+2. Configure environment:
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+3. Set up database connection in .env:
+```env
+DB_CONNECTION=pgsql
+DB_HOST=your-supabase-host
+DB_PORT=5432
+DB_DATABASE=your-database
+DB_USERNAME=your-username
+DB_PASSWORD=your-password
+```
+
+4. Install additional packages:
+```bash
+composer require laravel/sanctum
+php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
+```
+
+5. Run migrations:
+```bash
+php artisan migrate
+```
+
+6. Start development server:
+```bash
+php artisan serve
+```
+
+## API Structure
+
+The backend will provide RESTful APIs for:
+- Organization management
+- Member management  
+- Attendance system
+- Authentication and authorization
+
+## Key Features
+
+- Laravel Sanctum for API authentication
+- Supabase PostgreSQL integration
+- Offline-first API design
+- Mobile-optimized responses
+- Comprehensive error handling

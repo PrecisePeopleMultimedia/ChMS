@@ -1,0 +1,149 @@
+# ChMS Project Overview
+
+## Project Description
+ChMS (Church Management System) is a modern web application designed to help churches manage their members, track attendance, organize events, and facilitate communication. Built with cutting-edge technologies, it provides a comprehensive solution for church administration needs.
+
+## Technology Stack
+
+### Frontend
+- **Next.js 15**: React framework with App Router for modern web development
+- **React 18+**: Latest React features with TypeScript support
+- **Chakra UI**: Component library for consistent and accessible UI
+- **TypeScript**: Type-safe development for better code quality
+
+### Backend
+- **Next.js API Routes**: Server-side API endpoints
+- **Prisma ORM**: Type-safe database operations
+- **NextAuth.js**: Authentication and session management
+- **Server Actions**: Form handling and server-side operations
+
+### Database & Services
+- **Supabase**: PostgreSQL database with real-time features
+- **Real-time subscriptions**: Live data updates
+- **Row Level Security**: Built-in data protection
+
+### Development Tools
+- **ESLint & Prettier**: Code formatting and linting
+- **Husky**: Git hooks for code quality
+- **Jest & Testing Library**: Unit and integration testing
+- **Storybook**: Component development and documentation
+
+## Key Features
+
+### Member Management
+- Comprehensive member profiles
+- Family unit organization
+- Contact information management
+- Member directory with search
+- Role and permission management
+
+### Attendance System
+- QR code-based check-in
+- Manual attendance recording
+- Real-time attendance tracking
+- Comprehensive reporting
+
+### Event Management
+- Event creation and scheduling
+- Registration management
+- Check-in system
+- Event communication
+
+### Communication Tools
+- Email notifications
+- Announcement system
+- Newsletter management
+- Automated reminders
+
+### Reporting & Analytics
+- Attendance analytics
+- Member growth tracking
+- Event participation metrics
+- Custom report generation
+
+## Architecture Principles
+
+### Scalability
+- Modular component architecture
+- Efficient database queries with Prisma
+- Optimized API endpoints
+- Caching strategies for performance
+
+### Security
+- Authentication with NextAuth.js
+- Role-based access control
+- Data validation and sanitization
+- Secure API endpoints
+
+### User Experience
+- Responsive design for all devices
+- Intuitive navigation and workflows
+- Fast loading times
+- Accessibility compliance
+
+### Maintainability
+- TypeScript for type safety
+- Component-based architecture
+- Comprehensive testing coverage
+- Clear documentation
+
+## Development Workflow
+
+### Code Quality
+- TypeScript strict mode
+- ESLint and Prettier configuration
+- Pre-commit hooks with Husky
+- Code review process
+
+### Testing Strategy
+- Unit tests for components and utilities
+- Integration tests for API endpoints
+- End-to-end tests for critical workflows
+- Test coverage monitoring
+
+### Deployment
+- Vercel for frontend hosting
+- Supabase for database and backend services
+- Environment-based configuration
+- Continuous integration/deployment
+
+## Project Structure
+```
+src/
+├── app/                 # Next.js App Router pages
+├── components/          # Reusable React components
+├── lib/                # Utility functions and configurations
+├── hooks/              # Custom React hooks
+├── types/              # TypeScript type definitions
+├── styles/             # Global styles and themes
+└── __tests__/          # Test files
+```
+
+## Getting Started
+
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+- Supabase account
+- Git
+
+### Installation
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Set up environment variables
+4. Run database migrations
+5. Start development server: `npm run dev`
+
+## Contributing Guidelines
+- Follow TypeScript and React best practices
+- Write tests for new features
+- Update documentation for changes
+- Follow the established code style
+- Submit pull requests for review
+
+## Future Roadmap
+- Mobile app development
+- Advanced reporting features
+- Integration with external services
+- Multi-language support
+- Enhanced communication tools
