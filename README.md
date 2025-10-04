@@ -2,6 +2,15 @@
 
 A personal project building an Africa-first, offline-capable church management system using Vue 3, Laravel, and Supabase. The project is currently named **ChurchAfrica** (with plans to potentially acquire the domain church.africa in the future).
 
+## 🔐 Security
+Use this for security base:
+https://x.com/neer_Y1/status/1948787479210783151?t=_iEQSj3mqqKKSSYGBgwWGw&s=19
+
+## 📋 MVP Scope
+- Organization Management
+- Member Management
+- Attendance (QR code, search/autocomplete, offline, minimal reporting)
+
 ## 🎯 Project Goals
 
 This is my personal exploration of building a minimalist church management system optimized for African contexts:
