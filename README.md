@@ -1,7 +1,7 @@
 # ChurchAfrica - Church Management System
 
 ## Overview
-ChurchAfrica is a modern, mobile-first church management system designed specifically for African churches. Built with Vue 3, Laravel 11, and Supabase, it provides comprehensive tools for member management, attendance tracking, and church administration.
+ChurchAfrica is a modern, mobile-first church management system designed specifically for African churches. Built with Vue 3, Quasar Framework, Laravel 11, and Supabase, it provides comprehensive tools for member management, attendance tracking, and church administration.
 
 ## 🏗️ **Architecture Overview**
 

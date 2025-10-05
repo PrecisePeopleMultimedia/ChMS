@@ -21,7 +21,9 @@ export const useThemeStore = defineStore('theme', () => {
   // Methods
   const setTheme = (newTheme: 'light' | 'dark' | 'system') => {
     theme.value = newTheme
-    localStorage.setItem('theme', newTheme)
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('theme', newTheme)
+    }
     applyTheme()
   }
 
@@ -60,16 +62,18 @@ export const useThemeStore = defineStore('theme', () => {
 
   const initializeTheme = () => {
     // Load saved theme preference
-    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | 'system' | null
-    if (savedTheme && ['light', 'dark', 'system'].includes(savedTheme)) {
-      theme.value = savedTheme
+    if (typeof localStorage !== 'undefined') {
+      const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | 'system' | null
+      if (savedTheme && ['light', 'dark', 'system'].includes(savedTheme)) {
+        theme.value = savedTheme
+      }
     }
 
     // Detect system theme
     detectSystemTheme()
 
     // Listen for system theme changes
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && window.matchMedia) {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
       mediaQuery.addEventListener('change', detectSystemTheme)
     }

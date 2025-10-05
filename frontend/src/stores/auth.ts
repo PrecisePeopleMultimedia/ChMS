@@ -6,13 +6,15 @@ import type { User, LoginCredentials, RegisterCredentials, AuthResponse } from '
 const API_URL = import.meta.env.VITE_API_URL
 
 // Configure axios defaults
-axios.defaults.baseURL = API_URL
-axios.defaults.withCredentials = true
+if (axios.defaults) {
+  axios.defaults.baseURL = API_URL
+  axios.defaults.withCredentials = true
+}
 
 export const useAuthStore = defineStore('auth', () => {
   // State
   const user = ref<User | null>(null)
-  const token = ref<string | null>(localStorage.getItem('auth_token'))
+  const token = ref<string | null>(typeof localStorage !== 'undefined' ? localStorage.getItem('auth_token') : null)
   const isLoading = ref(false)
   const error = ref<string | null>(null)
 

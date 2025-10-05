@@ -54,12 +54,23 @@ describe('Auth Store', () => {
   })
 
   describe('Computed Properties', () => {
-    it('isAuthenticated returns true when user and token exist', () => {
+    it('isAuthenticated returns true when user and token exist', async () => {
       const authStore = useAuthStore()
-      
+
       // Set user and token
-      authStore.user = { id: 1, name: 'Test User', email: 'test@example.com' }
-      authStore.token = 'test-token'
+      // Use the login method to properly set user and token
+      const mockResponse = {
+        data: {
+          user: { id: 1, name: 'Test User', email: 'test@example.com' },
+          token: 'test-token'
+        }
+      }
+      mockedAxios.post.mockResolvedValueOnce(mockResponse)
+
+      await authStore.login({
+        email: 'test@example.com',
+        password: 'password123'
+      })
 
       expect(authStore.isAuthenticated).toBe(true)
     })
@@ -77,26 +88,72 @@ describe('Auth Store', () => {
       expect(authStore.isAuthenticated).toBe(false)
     })
 
-    it('isAdmin returns true for admin users', () => {
+    it('isAdmin returns true for admin users', async () => {
       const authStore = useAuthStore()
-      
-      authStore.user = { id: 1, name: 'Admin', email: 'admin@example.com', role: 'admin' }
+
+      // Use the login method to properly set user with admin role
+      const mockResponse = {
+        data: {
+          user: { id: 1, name: 'Admin', email: 'admin@example.com', role: 'admin' },
+          token: 'admin-token'
+        }
+      }
+      mockedAxios.post.mockResolvedValueOnce(mockResponse)
+
+      await authStore.login({
+        email: 'admin@example.com',
+        password: 'password123'
+      })
+
       expect(authStore.isAdmin).toBe(true)
     })
 
-    it('isStaff returns true for admin and staff users', () => {
+    it('isStaff returns true for admin and staff users', async () => {
       const authStore = useAuthStore()
-      
-      // Admin user
-      authStore.user = { id: 1, name: 'Admin', email: 'admin@example.com', role: 'admin' }
+
+      // Test admin user
+      const adminResponse = {
+        data: {
+          user: { id: 1, name: 'Admin', email: 'admin@example.com', role: 'admin' },
+          token: 'admin-token'
+        }
+      }
+      mockedAxios.post.mockResolvedValueOnce(adminResponse)
+
+      await authStore.login({
+        email: 'admin@example.com',
+        password: 'password123'
+      })
       expect(authStore.isStaff).toBe(true)
 
-      // Staff user
-      authStore.user = { id: 2, name: 'Staff', email: 'staff@example.com', role: 'staff' }
+      // Test staff user
+      const staffResponse = {
+        data: {
+          user: { id: 2, name: 'Staff', email: 'staff@example.com', role: 'staff' },
+          token: 'staff-token'
+        }
+      }
+      mockedAxios.post.mockResolvedValueOnce(staffResponse)
+
+      await authStore.login({
+        email: 'staff@example.com',
+        password: 'password123'
+      })
       expect(authStore.isStaff).toBe(true)
 
-      // Regular member
-      authStore.user = { id: 3, name: 'Member', email: 'member@example.com', role: 'member' }
+      // Test regular member
+      const memberResponse = {
+        data: {
+          user: { id: 3, name: 'Member', email: 'member@example.com', role: 'member' },
+          token: 'member-token'
+        }
+      }
+      mockedAxios.post.mockResolvedValueOnce(memberResponse)
+
+      await authStore.login({
+        email: 'member@example.com',
+        password: 'password123'
+      })
       expect(authStore.isStaff).toBe(false)
     })
   })

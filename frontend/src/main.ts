@@ -13,7 +13,6 @@ import 'quasar/src/css/index.sass'
 
 // Import our modern styles
 import './styles/globals.css'
-import './styles/micro-interactions.css'
 
 import App from './App.vue'
 import router from './router'
