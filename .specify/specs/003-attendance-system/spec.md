@@ -216,6 +216,7 @@ CREATE TABLE member_qr_codes (
 2. **Phase 2:** QR code generation and scanning
 3. **Phase 3:** Visitor registration system
 4. **Phase 4:** Offline sync and reporting
+5. **Phase 5:** Basic reporting and export functionality
 
 ### Testing Phases
 1. **Unit/Integration Testing**
@@ -241,12 +242,40 @@ CREATE TABLE member_qr_codes (
 - Reduction in service start delays
 - Accuracy of attendance records
 
+## Basic Reporting and Export
+
+### Reporting Features
+- **Attendance Summary**: Daily, weekly, monthly attendance reports
+- **Member Attendance**: Individual member attendance history
+- **Service Analytics**: Service-specific attendance trends
+- **Visitor Reports**: Visitor attendance and follow-up tracking
+
+### Export Capabilities
+- **CSV Export**: Attendance data in spreadsheet format
+- **PDF Reports**: Formatted attendance reports for printing
+- **Excel Export**: Advanced spreadsheet analysis
+- **JSON Export**: API-friendly data format
+
+### Report Types
+- **Daily Reports**: Today's attendance summary
+- **Weekly Reports**: Weekly attendance trends
+- **Monthly Reports**: Monthly attendance analytics
+- **Custom Reports**: Date range and filter-based reports
+
+### Offline Reporting
+- **Cached Reports**: Reports available offline
+- **Export Queuing**: Export requests queued when offline
+- **Sync on Connection**: Reports sync when online
+- **Local Storage**: Reports stored locally for offline access
+
 ## Future Enhancements
 
 ### Potential Improvements
 - Self-service check-in kiosks
 - Family group check-in
 - Integration with member communication
+- Advanced analytics and insights
+- Automated report scheduling
 - Advanced attendance analytics
 - Check-out functionality for events
 

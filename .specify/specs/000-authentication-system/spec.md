@@ -4,12 +4,24 @@
 **Feature Name:** Core Authentication System
 **Epic:** Foundation
 **Priority:** P0
+**Port:** 1811 (local development)
+**Theme:** Garnet Night (hsl(330, 40%, 10%) with radial gradients)
 **Africa-First Considerations:** Offline authentication caching, simple login process, works on basic mobile devices
+
+### Google OAuth Configuration
+- **Client ID:** 152986125739-rb2apvoumolapm5fnaksh7tv5jabgsl4.apps.googleusercontent.com
+- **Callback URLs:**
+  - http://localhost:1811/auth/callback/google
+  - http://localhost:1811/api/auth/callback/google
+
+### Supabase Configuration
+- **Project ID:** qqaddmalbzzxxtryekaq
+- **Organization:** jerryagenyi (dlaicfecftgsaaqamqip)
 
 ## User Stories
 
 ### Primary User Stories
-- **As a** church administrator, **I want** to log in securely **so that** I can access the ChMS system
+- **As a** church administrator, **I want** to log in securely **so that** I can access the ChurchAfrica system
 - **As a** church staff member, **I want** to have appropriate permissions **so that** I can perform my duties
 - **As a** system user, **I want** to stay logged in **so that** I don't have to re-authenticate frequently
 - **As a** church administrator, **I want** to manage user roles **so that** I can control access to features

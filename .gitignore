@@ -1,0 +1,45 @@
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# MCP Server configurations (sensitive)
+.mcp-config.json
+mcp-config.json
+
+# IDE and Editor files
+.vscode/mcp.json
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Laravel Herd installer
+herd-installer.exe
+
+# Node modules (covered by frontend/.gitignore but adding for safety)
+node_modules/
+
+# Build outputs
+dist/
+build/

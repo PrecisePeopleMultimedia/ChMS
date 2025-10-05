@@ -5,6 +5,10 @@
 **Specification:** [spec.md](./spec.md)
 **Estimated Effort:** 3-4 days
 **Priority:** P0
+**Port:** 1811 (local development)
+**Theme:** Garnet Night
+**Google OAuth:** Configured with provided credentials
+**Supabase:** Project ID qqaddmalbzzxxtryekaq
 
 ## Technical Architecture
 
