@@ -111,7 +111,9 @@
         </ModernButton>
 
         <!-- Test API Button -->
+        <!-- Test API Button - Hidden by default, shown only in development -->
         <ModernButton
+          v-if="isDevelopment"
           variant="outline"
           size="sm"
           :loading="isTestingApi"
@@ -209,6 +211,11 @@ const passwordRules = [
 ]
 
 // Computed
+const isDevelopment = computed(() => {
+  // Only show test components when explicitly enabled via environment variable
+  return import.meta.env.VITE_SHOW_TEST_COMPONENTS === 'true'
+})
+
 const isFormValid = computed(() => {
   return form.value.email && 
          form.value.password && 

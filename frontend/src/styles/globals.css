@@ -325,3 +325,23 @@
 .modern-button:hover::before {
   @apply scale-x-100;
 }
+
+/* Test Components Toggle */
+.test-component {
+  @apply hidden;
+}
+
+/* Show test components when in development mode */
+.dev-mode .test-component {
+  @apply block;
+}
+
+/* Environment-based visibility */
+.test-only {
+  @apply hidden;
+}
+
+/* Show test elements only in development */
+body[data-env="development"] .test-only {
+  @apply block;
+}

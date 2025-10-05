@@ -28,7 +28,7 @@ app.use(Quasar, {
     Notify
   },
   config: {
-    dark: false, // Will be controlled by theme store
+    dark: true, // Default to dark theme - controlled by theme store
     brand: {
       primary: '#8B1538',
       secondary: '#4A1A2C',
