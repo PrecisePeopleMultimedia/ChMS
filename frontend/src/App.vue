@@ -45,15 +45,13 @@ html, body
   min-height: 100vh
   transition: background 0.3s ease
 
-  // Light mode - Clean and professional
+  // Light mode - Clean Quasar style
   &:not(.dark)
-    background: hsl(0, 0%, 98%)
-    background-image: radial-gradient(at 0% 0%, hsl(330, 30%, 95%) 0px, transparent 50%), radial-gradient(at 100% 100%, hsl(330, 20%, 92%) 0px, transparent 50%)
+    background: #fafafa
 
-  // Dark mode - Original Garnet Night theme
+  // Dark mode - Clean Quasar style
   &.dark
-    background: hsl(330, 40%, 8%)
-    background-image: radial-gradient(at 0% 0%, hsl(340, 70%, 35%) 0px, transparent 50%), radial-gradient(at 100% 100%, hsl(290, 50%, 30%) 0px, transparent 50%)
+    background: #1d1d1d
 
 // Custom scrollbar - adaptive to theme
 ::-webkit-scrollbar
@@ -61,67 +59,54 @@ html, body
   height: 8px
 
 ::-webkit-scrollbar-track
-  background: rgba(0, 0, 0, 0.1)
+  background: rgba(0, 0, 0, 0.05)
 
 .dark ::-webkit-scrollbar-track
-  background: rgba(26, 10, 15, 0.5)
+  background: rgba(255, 255, 255, 0.05)
 
 ::-webkit-scrollbar-thumb
-  background: rgba(184, 51, 106, 0.3)
+  background: rgba(0, 0, 0, 0.2)
   border-radius: 4px
 
 .dark ::-webkit-scrollbar-thumb
-  background: rgba(184, 51, 106, 0.5)
+  background: rgba(255, 255, 255, 0.2)
 
 ::-webkit-scrollbar-thumb:hover
-  background: rgba(184, 51, 106, 0.5)
+  background: rgba(0, 0, 0, 0.3)
 
 .dark ::-webkit-scrollbar-thumb:hover
-  background: rgba(184, 51, 106, 0.7)
+  background: rgba(255, 255, 255, 0.3)
 
-// Selection colors - adaptive to theme
+// Selection colors - clean theme
 ::selection
-  background: rgba(184, 51, 106, 0.2)
+  background: rgba(25, 118, 210, 0.2)
   color: inherit
 
 .dark ::selection
-  background: rgba(184, 51, 106, 0.3)
+  background: rgba(25, 118, 210, 0.3)
   color: white
 
 ::-moz-selection
-  background: rgba(184, 51, 106, 0.2)
+  background: rgba(25, 118, 210, 0.2)
   color: inherit
 
 .dark ::-moz-selection
-  background: rgba(184, 51, 106, 0.3)
+  background: rgba(25, 118, 210, 0.3)
   color: white
 
 // Focus outline for accessibility
 *:focus
-  outline: 2px solid rgba(184, 51, 106, 0.5)
+  outline: 2px solid rgba(25, 118, 210, 0.5)
   outline-offset: 2px
 
 // Link styles
 a
-  color: #B8336A
+  color: #1976d2
   text-decoration: none
 
   &:hover
-    color: #D4477A
+    color: #1565c0
     text-decoration: underline
-
-// Utility classes
-.text-garnet
-  color: #B8336A !important
-
-.bg-garnet
-  background-color: #B8336A !important
-
-.border-garnet
-  border-color: #B8336A !important
-
-.garnet-gradient
-  background: linear-gradient(135deg, #8B1538 0%, #B8336A 100%) !important
 
 // Animation classes
 .fade-in

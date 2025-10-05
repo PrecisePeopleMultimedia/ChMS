@@ -9,6 +9,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Socialite\Facades\Socialite;
@@ -209,7 +211,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Forgot password (placeholder for now)
+     * Forgot password - Send reset email
      */
     public function forgotPassword(Request $request): JsonResponse
     {
@@ -224,21 +226,103 @@ class AuthController extends Controller
             ], 422);
         }
 
-        // TODO: Implement password reset email functionality
-        return response()->json([
-            'message' => 'Password reset email sent (placeholder - not implemented yet)'
-        ]);
+        $user = User::where('email', $request->email)->first();
+        
+        // Generate reset token
+        $token = Str::random(64);
+        
+        // Store reset token in database
+        DB::table('password_reset_tokens')->updateOrInsert(
+            ['email' => $request->email],
+            [
+                'email' => $request->email,
+                'token' => Hash::make($token),
+                'created_at' => now()
+            ]
+        );
+
+        // Send reset email
+        try {
+            Mail::send('emails.password-reset', [
+                'user' => $user,
+                'token' => $token,
+                'resetUrl' => config('app.frontend_url') . '/reset-password?token=' . $token . '&email=' . urlencode($request->email)
+            ], function ($message) use ($user) {
+                $message->to($user->email, $user->name)
+                        ->subject('Reset Your Password - ChurchAfrica');
+            });
+
+            return response()->json([
+                'message' => 'Password reset email sent successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to send password reset email. Please try again later.'
+            ], 500);
+        }
     }
 
     /**
-     * Reset password (placeholder for now)
+     * Reset password with token
      */
     public function resetPassword(Request $request): JsonResponse
     {
-        // TODO: Implement password reset functionality
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email',
+            'token' => 'required|string',
+            'password' => 'required|string|min:8|confirmed'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        // Check if reset token exists and is valid
+        $resetToken = DB::table('password_reset_tokens')
+            ->where('email', $request->email)
+            ->first();
+
+        if (!$resetToken) {
+            return response()->json([
+                'message' => 'Invalid or expired reset token'
+            ], 400);
+        }
+
+        // Check if token is valid (within 1 hour)
+        if (now()->diffInMinutes($resetToken->created_at) > 60) {
+            // Delete expired token
+            DB::table('password_reset_tokens')->where('email', $request->email)->delete();
+            
+            return response()->json([
+                'message' => 'Reset token has expired. Please request a new one.'
+            ], 400);
+        }
+
+        // Verify token
+        if (!Hash::check($request->token, $resetToken->token)) {
+            return response()->json([
+                'message' => 'Invalid reset token'
+            ], 400);
+        }
+
+        // Update user password
+        $user = User::where('email', $request->email)->first();
+        $user->update([
+            'password' => Hash::make($request->password)
+        ]);
+
+        // Delete used reset token
+        DB::table('password_reset_tokens')->where('email', $request->email)->delete();
+
+        // Revoke all existing tokens for security
+        $user->tokens()->delete();
+
         return response()->json([
-            'message' => 'Password reset functionality not implemented yet'
-        ], 501);
+            'message' => 'Password reset successfully. Please login with your new password.'
+        ]);
     }
 
     /**

@@ -1,0 +1,207 @@
+@import './variables.scss';
+
+// === QUASAR ADMIN THEME STYLES ===
+
+// Apply theme when active
+html[data-theme="quasar-admin"] {
+  font-family: var(--qa-font-family);
+  font-size: var(--qa-font-size-base);
+
+  body {
+    background-color: var(--qa-background);
+    color: var(--qa-text-primary);
+  }
+
+  // === LAYOUT COMPONENTS ===
+  .qa-toolbar {
+    height: $qa-toolbar-height;
+    background-color: var(--qa-primary);
+    color: white;
+  }
+
+  .qa-drawer {
+    width: $qa-drawer-width;
+    background-color: var(--qa-primary);
+    color: white;
+
+    &.mini {
+      width: $qa-drawer-mini-width;
+    }
+  }
+
+  // === CARD COMPONENTS ===
+  .qa-card,
+  .q-card {
+    background-color: var(--qa-surface);
+    border-radius: $qa-card-border-radius;
+    padding: $qa-card-padding;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    &:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      transition: box-shadow 0.3s ease;
+    }
+  }
+
+  .qa-card-title {
+    color: var(--qa-text-primary);
+    font-weight: 600;
+    font-size: 1.125rem;
+    margin-bottom: $qa-spacing-md;
+  }
+
+  .qa-card-section {
+    padding: $qa-spacing-md;
+  }
+
+  // === BUTTON COMPONENTS ===
+  .qa-btn,
+  .q-btn {
+    height: $qa-button-height;
+    border-radius: $qa-button-border-radius;
+    padding: 0 $qa-spacing-md;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    &.qa-btn-primary {
+      background-color: var(--qa-primary);
+      color: white;
+
+      &:hover {
+        filter: brightness(1.1);
+      }
+    }
+
+    &.qa-btn-secondary {
+      background-color: var(--qa-secondary);
+      color: white;
+
+      &:hover {
+        filter: brightness(1.1);
+      }
+    }
+
+    &.qa-btn-accent {
+      background-color: var(--qa-accent);
+      color: white;
+
+      &:hover {
+        filter: brightness(1.1);
+      }
+    }
+  }
+
+  // === INPUT COMPONENTS ===
+  .qa-input,
+  .q-field {
+    .q-field__control {
+      background-color: var(--qa-surface);
+      border: 1px solid var(--qa-border);
+      border-radius: $qa-button-border-radius;
+      height: 40px;
+
+      &:hover {
+        border-color: var(--qa-primary);
+      }
+
+      &:focus-within {
+        border-color: var(--qa-primary);
+        box-shadow: 0 0 0 2px rgba(54, 54, 54, 0.2);
+      }
+    }
+  }
+
+  // === TABLE COMPONENTS ===
+  .qa-table,
+  .q-table {
+    background-color: var(--qa-surface);
+
+    thead {
+      background-color: var(--qa-primary);
+      color: white;
+
+      th {
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.875rem;
+        letter-spacing: 0.5px;
+      }
+    }
+
+    tbody {
+      tr {
+        &:hover {
+          background-color: rgba(54, 54, 54, 0.05);
+        }
+
+        &:nth-child(even) {
+          background-color: rgba(54, 54, 54, 0.02);
+        }
+      }
+
+      td {
+        border-bottom: 1px solid var(--qa-border);
+      }
+    }
+  }
+
+  // === DASHBOARD SPECIFIC ===
+  .qa-dashboard-card {
+    .metric-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--qa-primary);
+    }
+
+    .metric-label {
+      font-size: 0.875rem;
+      color: var(--qa-text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .metric-change {
+      font-size: 0.875rem;
+      font-weight: 500;
+
+      &.positive {
+        color: var(--qa-positive);
+      }
+
+      &.negative {
+        color: var(--qa-negative);
+      }
+    }
+  }
+
+  // === SIDEBAR/NAVIGATION ===
+  .qa-sidebar {
+    .q-item {
+      border-radius: 0;
+      margin: 2px 0;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      &.q-router-link--active {
+        background-color: rgba(255, 255, 255, 0.15);
+        border-left: 4px solid var(--qa-accent);
+      }
+    }
+
+    .q-expansion-item {
+      .q-item {
+        padding-left: calc($qa-spacing-md + $qa-spacing-lg);
+      }
+    }
+  }
+
+  // === UTILITY CLASSES ===
+  .qa-text-primary { color: var(--qa-text-primary); }
+  .qa-text-secondary { color: var(--qa-text-secondary); }
+  .qa-bg-primary { background-color: var(--qa-primary); }
+  .qa-bg-secondary { background-color: var(--qa-secondary); }
+  .qa-bg-surface { background-color: var(--qa-surface); }
+}

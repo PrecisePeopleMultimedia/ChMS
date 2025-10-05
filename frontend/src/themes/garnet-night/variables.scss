@@ -1,0 +1,101 @@
+// Garnet Night Theme Variables
+// ChurchAfrica's signature dark theme
+
+// === PRIMARY COLORS ===
+$gn-primary: #8B1538 !default;        // Burgundy
+$gn-secondary: #B8336A !default;      // Garnet Pink
+$gn-accent: #C93D74 !default;         // Bright Pink
+$gn-dark: #1a0a0f !default;
+
+// === SEMANTIC COLORS ===
+$gn-positive: #2ECC71 !default;       // Emerald Green
+$gn-negative: #E74C3C !default;       // Alizarin Red
+$gn-info: #3498DB !default;           // Peter River Blue
+$gn-warning: #F39C12 !default;        // Orange
+
+// === TYPOGRAPHY ===
+$gn-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !default;
+$gn-font-size-base: 16px !default;
+$gn-line-height-base: 1.6 !default;
+
+// === SPACING ===
+$gn-spacing-xs: 4px !default;
+$gn-spacing-sm: 8px !default;
+$gn-spacing-md: 16px !default;
+$gn-spacing-lg: 24px !default;
+$gn-spacing-xl: 32px !default;
+
+// === COMPONENT SPECIFIC ===
+$gn-toolbar-height: 64px !default;
+$gn-drawer-width: 280px !default;
+$gn-drawer-mini-width: 64px !default;
+
+$gn-card-border-radius: 12px !default;
+$gn-card-padding: 20px !default;
+
+$gn-button-height: 44px !default;
+$gn-button-border-radius: 8px !default;
+
+// === LIGHT MODE ===
+$gn-light-background: #FFFFFF !default;
+$gn-light-surface: #F8F4F6 !default;
+$gn-light-text-primary: rgba(0, 0, 0, 0.87) !default;
+$gn-light-text-secondary: rgba(0, 0, 0, 0.60) !default;
+$gn-light-border: rgba(139, 21, 56, 0.15) !default;
+
+// === DARK MODE ===
+$gn-dark-background: hsl(330, 40%, 10%) !default;    // Deep burgundy black
+$gn-dark-surface: #2D1B24 !default;                   // Dark plum
+$gn-dark-text-primary: rgba(255, 255, 255, 0.95) !default;
+$gn-dark-text-secondary: rgba(255, 255, 255, 0.70) !default;
+$gn-dark-border: rgba(184, 51, 106, 0.20) !default;
+
+// === GRADIENTS ===
+$gn-gradient-primary: linear-gradient(135deg, #8B1538 0%, #B8336A 100%) !default;
+$gn-gradient-hover: linear-gradient(135deg, #A01B42 0%, #C93D74 100%) !default;
+$gn-surface-gradient: radial-gradient(at 0% 0%, hsl(340, 70%, 35%) 0px, transparent 50%), radial-gradient(at 100% 100%, hsl(290, 50%, 30%) 0px, transparent 50%) !default;
+
+// === CSS CUSTOM PROPERTIES ===
+:root {
+  // Colors
+  --gn-primary: #{$gn-primary};
+  --gn-secondary: #{$gn-secondary};
+  --gn-accent: #{$gn-accent};
+  --gn-positive: #{$gn-positive};
+  --gn-negative: #{$gn-negative};
+  --gn-info: #{$gn-info};
+  --gn-warning: #{$gn-warning};
+
+  // Light mode (default)
+  --gn-background: #{$gn-light-background};
+  --gn-surface: #{$gn-light-surface};
+  --gn-text-primary: #{$gn-light-text-primary};
+  --gn-text-secondary: #{$gn-light-text-secondary};
+  --gn-border: #{$gn-light-border};
+
+  // Typography
+  --gn-font-family: #{$gn-font-family};
+  --gn-font-size-base: #{$gn-font-size-base};
+
+  // Spacing
+  --gn-spacing-xs: #{$gn-spacing-xs};
+  --gn-spacing-sm: #{$gn-spacing-sm};
+  --gn-spacing-md: #{$gn-spacing-md};
+  --gn-spacing-lg: #{$gn-spacing-lg};
+  --gn-spacing-xl: #{$gn-spacing-xl};
+
+  // Gradients
+  --gn-gradient-primary: #{$gn-gradient-primary};
+  --gn-gradient-hover: #{$gn-gradient-hover};
+  --gn-surface-gradient: #{$gn-surface-gradient};
+}
+
+// Dark mode overrides
+html.dark,
+html[data-theme="garnet-night"].dark {
+  --gn-background: #{$gn-dark-background};
+  --gn-surface: #{$gn-dark-surface};
+  --gn-text-primary: #{$gn-dark-text-primary};
+  --gn-text-secondary: #{$gn-dark-text-secondary};
+  --gn-border: #{$gn-dark-border};
+}

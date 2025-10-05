@@ -83,6 +83,7 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
+import axios from 'axios'
 
 const router = useRouter()
 const $q = useQuasar()
@@ -104,20 +105,32 @@ const handleForgotPassword = async () => {
   try {
     isLoading.value = true
     
-    // Simulate password reset request (backend not ready yet)
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    // Call the backend API
+    const response = await axios.post('/api/auth/forgot-password', {
+      email: email.value
+    })
     
     $q.notify({
       type: 'positive',
-      message: 'Password reset instructions sent to your email!',
+      message: response.data.message || 'Password reset instructions sent to your email!',
       position: 'top'
     })
     
     router.push('/login')
-  } catch (error) {
+  } catch (error: any) {
+    console.error('Password reset error:', error)
+    
+    let errorMessage = 'Failed to send reset instructions. Please try again.'
+    
+    if (error.response?.data?.message) {
+      errorMessage = error.response.data.message
+    } else if (error.response?.data?.errors?.email) {
+      errorMessage = error.response.data.errors.email[0]
+    }
+    
     $q.notify({
       type: 'negative',
-      message: 'Failed to send reset instructions. Please try again.',
+      message: errorMessage,
       position: 'top'
     })
   } finally {

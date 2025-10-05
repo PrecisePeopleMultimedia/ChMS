@@ -1,0 +1,92 @@
+// Quasar Admin Theme Variables
+// Extracted from quasar-admin-master
+
+// === PRIMARY COLORS ===
+$qa-primary: #363636 !default;
+$qa-secondary: #26A69A !default;
+$qa-accent: #dd4b39 !default;
+$qa-dark: #1D1D1D !default;
+
+// === SEMANTIC COLORS ===
+$qa-positive: #21BA45 !default;
+$qa-negative: #C10015 !default;
+$qa-info: #31CCEC !default;
+$qa-warning: #F2C037 !default;
+
+// === TYPOGRAPHY ===
+$qa-font-family: 'Roboto', -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif !default;
+$qa-font-size-base: 14px !default;
+$qa-line-height-base: 1.5 !default;
+
+// === SPACING ===
+$qa-spacing-xs: 4px !default;
+$qa-spacing-sm: 8px !default;
+$qa-spacing-md: 16px !default;
+$qa-spacing-lg: 24px !default;
+$qa-spacing-xl: 32px !default;
+
+// === COMPONENT SPECIFIC ===
+$qa-toolbar-height: 50px !default;
+$qa-drawer-width: 260px !default;
+$qa-drawer-mini-width: 58px !default;
+
+$qa-card-border-radius: 4px !default;
+$qa-card-padding: 16px !default;
+
+$qa-button-height: 36px !default;
+$qa-button-border-radius: 4px !default;
+
+// === LIGHT MODE ===
+$qa-light-background: #FFFFFF !default;
+$qa-light-surface: #F5F5F5 !default;
+$qa-light-text-primary: rgba(0, 0, 0, 0.87) !default;
+$qa-light-text-secondary: rgba(0, 0, 0, 0.60) !default;
+$qa-light-border: rgba(0, 0, 0, 0.12) !default;
+
+// === DARK MODE ===
+$qa-dark-background: #121212 !default;
+$qa-dark-surface: #1E1E1E !default;
+$qa-dark-text-primary: rgba(255, 255, 255, 0.87) !default;
+$qa-dark-text-secondary: rgba(255, 255, 255, 0.60) !default;
+$qa-dark-border: rgba(255, 255, 255, 0.12) !default;
+
+// === CSS CUSTOM PROPERTIES ===
+// These will be dynamically set based on light/dark mode
+:root {
+  // Colors
+  --qa-primary: #{$qa-primary};
+  --qa-secondary: #{$qa-secondary};
+  --qa-accent: #{$qa-accent};
+  --qa-positive: #{$qa-positive};
+  --qa-negative: #{$qa-negative};
+  --qa-info: #{$qa-info};
+  --qa-warning: #{$qa-warning};
+
+  // Light mode (default)
+  --qa-background: #{$qa-light-background};
+  --qa-surface: #{$qa-light-surface};
+  --qa-text-primary: #{$qa-light-text-primary};
+  --qa-text-secondary: #{$qa-light-text-secondary};
+  --qa-border: #{$qa-light-border};
+
+  // Typography
+  --qa-font-family: #{$qa-font-family};
+  --qa-font-size-base: #{$qa-font-size-base};
+
+  // Spacing
+  --qa-spacing-xs: #{$qa-spacing-xs};
+  --qa-spacing-sm: #{$qa-spacing-sm};
+  --qa-spacing-md: #{$qa-spacing-md};
+  --qa-spacing-lg: #{$qa-spacing-lg};
+  --qa-spacing-xl: #{$qa-spacing-xl};
+}
+
+// Dark mode overrides
+html.dark,
+html[data-theme="quasar-admin"].dark {
+  --qa-background: #{$qa-dark-background};
+  --qa-surface: #{$qa-dark-surface};
+  --qa-text-primary: #{$qa-dark-text-primary};
+  --qa-text-secondary: #{$qa-dark-text-secondary};
+  --qa-border: #{$qa-dark-border};
+}

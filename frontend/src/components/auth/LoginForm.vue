@@ -15,7 +15,7 @@
           </p>
         </div>
         <div class="col-auto">
-          <ThemeToggle />
+          <ThemeSwitcher />
         </div>
       </div>
     </template>
@@ -176,7 +176,7 @@ import BaseFormCard from '@/components/common/BaseFormCard.vue'
 import axios from 'axios'
 import ModernButton from '@/components/ui/ModernButton.vue'
 import ModernAlert from '@/components/ui/ModernAlert.vue'
-import ThemeToggle from '@/components/ui/ThemeToggle.vue'
+import ThemeSwitcher from '@/components/theme/ThemeSwitcher.vue'
 
 // Composables
 const router = useRouter()
@@ -194,7 +194,7 @@ const showPassword = ref(false)
 const isGoogleLoading = ref(false)
 const isTestingApi = ref(false)
 const fieldErrors = ref<Record<string, string>>({})
-const debugInfo = ref(true) // Show debug info
+const debugInfo = ref(false) // Hide debug info in production
 
 // API URL for debugging
 const apiUrl = import.meta.env.VITE_API_URL

@@ -1,25 +1,19 @@
 import { test, expect, devices } from '@playwright/test'
 
-// Africa-first mobile testing - focusing on common devices in African markets
-const mobileDevices = [
-  devices['Pixel 5'], // Mid-range Android
-  devices['Galaxy S5'], // Lower-end Android (still common in Africa)
-  devices['iPhone 12'], // iOS testing
-]
-
 // Test data
 const testUser = {
   email: 'john@example.com',
   password: 'password123'
 }
 
-mobileDevices.forEach(device => {
-  test.describe(`Mobile Authentication - ${device.name}`, () => {
-    test.use({ ...device })
+// Africa-first mobile testing - focusing on common devices in African markets
+// Pixel 5 Tests
+test.describe('Mobile Authentication - Pixel 5', () => {
+  test.use(devices['Pixel 5'])
 
-    test.beforeEach(async ({ page }) => {
-      await page.goto('/')
-    })
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/')
+  })
 
     test('should display mobile-optimized login form', async ({ page }) => {
       await page.goto('/login')

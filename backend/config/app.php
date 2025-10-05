@@ -56,6 +56,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Frontend URL
+    |--------------------------------------------------------------------------
+    |
+    | This URL is used for generating frontend links in emails and other
+    | communications. Set this to your frontend application URL.
+    |
+    */
+
+    'frontend_url' => env('FRONTEND_URL', 'http://localhost:1811'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |

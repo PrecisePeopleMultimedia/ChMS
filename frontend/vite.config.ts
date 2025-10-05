@@ -15,7 +15,7 @@ export default defineConfig({
     vueJsx(),
     vueDevTools(),
     quasar({
-      sassVariables: false // Disable sass variables for now to avoid import issues
+      // Using custom theme system instead of sassVariables
     })
   ],
   resolve: {
@@ -23,9 +23,19 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `
+          @import "@/themes/quasar-admin/variables.scss";
+          @import "@/themes/garnet-night/variables.scss";
+        `
+      }
+    }
+  },
   server: {
     port: 1811,
     host: true,
-    strictPort: true
+    strictPort: false
   }
 })

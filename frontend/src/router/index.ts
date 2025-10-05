@@ -42,6 +42,15 @@ const router = createRouter({
             requiresGuest: true,
             title: 'Forgot Password - ChurchAfrica'
           }
+        },
+        {
+          path: 'reset-password',
+          name: 'ResetPassword',
+          component: () => import('@/views/ResetPasswordView.vue'),
+          meta: {
+            requiresGuest: true,
+            title: 'Reset Password - ChurchAfrica'
+          }
         }
       ]
     },
@@ -59,22 +68,36 @@ const router = createRouter({
       redirect: '/auth/forgot-password'
     },
     {
-      path: '/dashboard',
-      name: 'Dashboard',
-      component: () => import('@/views/DashboardView.vue'),
-      meta: {
-        requiresAuth: true,
-        title: 'Dashboard - ChurchAfrica'
-      }
+      path: '/reset-password',
+      redirect: '/auth/reset-password'
     },
+    // Dashboard routes with Quasar Prime layout
     {
-      path: '/profile',
-      name: 'Profile',
-      component: () => import('@/views/ProfileView.vue'),
+      path: '/dashboard',
+      component: () => import('@/layouts/QuasarPrimeLayout.vue'),
       meta: {
-        requiresAuth: true,
-        title: 'Profile - ChurchAfrica'
-      }
+        requiresAuth: true
+      },
+      children: [
+        {
+          path: '',
+          name: 'Dashboard',
+          component: () => import('@/views/QuasarPrimeDashboard.vue'),
+          meta: {
+            requiresAuth: true,
+            title: 'Dashboard - ChurchAfrica'
+          }
+        },
+        {
+          path: '/profile',
+          name: 'Profile',
+          component: () => import('@/views/ProfileView.vue'),
+          meta: {
+            requiresAuth: true,
+            title: 'Profile - ChurchAfrica'
+          }
+        }
+      ]
     },
     // Catch-all route for 404
     {
