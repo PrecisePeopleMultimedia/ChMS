@@ -29,10 +29,12 @@ main (production)
 
 ### **1. Feature Development Process**
 
+**ChMS follows: `main → feature → dev → main` workflow**
+
 ```bash
-# 1. Start from dev branch
-git checkout dev
-git pull origin dev
+# 1. Start from main branch (always start from stable code)
+git checkout main
+git pull origin main
 
 # 2. Create feature branch
 git checkout -b feature/member-search-offline
@@ -44,9 +46,17 @@ git commit -m "feat: add offline member search functionality"
 # 4. Push feature branch
 git push origin feature/member-search-offline
 
-# 5. Create Pull Request: feature/member-search-offline → dev
-# 6. After review and CI passes, merge to dev
-# 7. Deploy to staging automatically
+# 5. Integrate to dev branch for testing
+git checkout dev
+git pull origin dev
+git merge feature/member-search-offline
+git push origin dev
+
+# 6. After testing in dev, merge to main for production
+git checkout main
+git pull origin main
+git merge dev
+git push origin main
 
 # 8. Create Pull Request: dev → main (for production release)
 # 9. After review and CI passes, merge to main
@@ -244,12 +254,31 @@ git push origin hotfix/auth-token-expiry
 4. **Verify**: Health checks and functionality verification
 5. **Communicate**: Immediate stakeholder notification
 
+## 📊 **Current Branch Status**
+
+### **As of Latest Deployment**
+
+| Branch | Status | Purpose | Last Updated |
+|--------|--------|---------|--------------|
+| `main` | ✅ **Stable** | Production-ready authentication system | Latest commit |
+| `dev` | ✅ **Deployed** | Staging environment with all features | Pushed to origin/dev |
+| `feature/dashboard-system` | ✅ **Merged** | Dashboard components (merged to main) | Completed |
+| `feature/authentication-system` | ✅ **Merged** | Auth system (merged to main) | Completed |
+
+### **Current Stable Features**
+- ✅ **Authentication System** - Login, registration, password reset
+- ✅ **Garnet Night Theme** - Dark/light theme switching
+- ✅ **Mobile-First UI** - Responsive design with Quasar Framework
+- ✅ **API Integration** - Laravel Sanctum + Vue 3 working
+- ✅ **Testing Framework** - Vitest + Playwright configured
+- ✅ **CI/CD Pipeline** - GitHub Actions ready
+
 ## 📚 **Resources**
 
 - **GitHub Repository**: https://github.com/JerryAgenyiInc/ChMS
 - **CI/CD Dashboard**: GitHub Actions
-- **Staging Environment**: https://chms-staging.vercel.app
-- **Production Environment**: https://chms.vercel.app
+- **Local Development**: http://localhost:1811 (frontend)
+- **Backend API**: http://backend.test/api (Laravel Herd)
 - **Documentation**: `/docs` directory
 - **Issue Tracking**: GitHub Issues with labels
 
