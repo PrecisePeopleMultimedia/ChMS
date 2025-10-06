@@ -1,0 +1,59 @@
+# Spec-Kit Workflow Rule
+
+## ALWAYS FOLLOW THE SPEC-KIT WAY
+
+This project uses GitHub Spec-Kit for specification-driven development. **ALWAYS** follow the proper Spec-Kit workflow sequence:
+
+### Required Workflow Sequence
+
+1. **`/specify`** - Define what to build (requirements and user stories)
+   - Creates `specs/XXX-feature-name/spec.md`
+   - Focus on WHAT and WHY, not HOW
+   - No technical implementation details
+
+2. **`/clarify`** - Clarify underspecified areas 
+   - **MUST be run before `/plan` unless explicitly skipped**
+   - Interactive Q&A to resolve ambiguities
+   - Updates spec.md with clarifications
+
+3. **`/plan`** - Create technical implementation plans
+   - Creates `specs/XXX-feature-name/plan.md`
+   - Define tech stack, architecture, structure
+   - High-level implementation approach
+
+4. **`/tasks`** - Generate actionable task lists
+   - Creates `specs/XXX-feature-name/tasks.md`
+   - Break plan into executable tasks
+   - Include dependencies and parallel execution
+
+5. **`/analyze`** - Cross-artifact consistency & coverage analysis
+   - Run after `/tasks`, before `/implement`
+   - Validate consistency across specs, plans, tasks
+
+6. **`/implement`** - Execute all tasks to build the feature
+   - Follow the tasks.md step by step
+   - Update task checkboxes as work is completed
+
+### Critical Rules
+
+- **NEVER skip the `/plan` step** - it's required before `/tasks`
+- **NEVER go straight to implementation** without completing the workflow
+- **ALWAYS create plan.md before tasks.md**
+- **ALWAYS update task checkboxes** in tasks.md as work progresses
+- **ALWAYS follow the proper file structure**: `specs/XXX-feature-name/`
+
+### File Structure
+
+```
+.specify/
+└── specs/
+    └── XXX-feature-name/
+        ├── spec.md          # Created by /specify
+        ├── plan.md          # Created by /plan
+        ├── tasks.md         # Created by /tasks
+        └── implementation-details/  # Optional detailed docs
+```
+
+### Reminder Message
+
+**USE THE SPEC-KIT WAY** - Always follow the proper workflow sequence. Don't skip steps or go straight to implementation.
