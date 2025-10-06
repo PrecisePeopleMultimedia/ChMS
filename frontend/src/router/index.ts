@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useOrganizationStore } from '@/stores/organization'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -71,6 +72,16 @@ const router = createRouter({
       path: '/reset-password',
       redirect: '/auth/reset-password'
     },
+    // Organization setup route
+    {
+      path: '/setup',
+      name: 'OrganizationSetup',
+      component: () => import('@/views/OrganizationSetupView.vue'),
+      meta: {
+        requiresAuth: true,
+        title: 'Church Setup - ChurchAfrica'
+      }
+    },
     // Dashboard routes with Quasar Prime layout
     {
       path: '/dashboard',
@@ -114,6 +125,7 @@ const router = createRouter({
 // Navigation guards
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
+  const organizationStore = useOrganizationStore()
 
   // Set page title
   if (to.meta.title) {
@@ -137,8 +149,37 @@ router.beforeEach(async (to, from, next) => {
 
   // Redirect authenticated users away from guest-only pages
   if (to.meta.requiresGuest && authStore.isAuthenticated) {
-    next({ name: 'Dashboard' })
+    // Check if organization setup is needed
+    if (!organizationStore.isSetupComplete) {
+      try {
+        await organizationStore.fetchOrganization()
+      } catch (error) {
+        console.warn('Failed to check organization setup:', error)
+      }
+    }
+
+    if (!organizationStore.isSetupComplete) {
+      next({ name: 'OrganizationSetup' })
+    } else {
+      next({ name: 'Dashboard' })
+    }
     return
+  }
+
+  // Check organization setup for authenticated users (except setup page)
+  if (to.meta.requiresAuth && authStore.isAuthenticated && to.name !== 'OrganizationSetup') {
+    if (!organizationStore.isSetupComplete) {
+      try {
+        await organizationStore.fetchOrganization()
+      } catch (error) {
+        console.warn('Failed to check organization setup:', error)
+      }
+    }
+
+    if (!organizationStore.isSetupComplete) {
+      next({ name: 'OrganizationSetup' })
+      return
+    }
   }
 
   // Check role requirements
