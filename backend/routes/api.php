@@ -3,6 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\OrganizationController;
+use App\Http\Controllers\Api\OrganizationSettingsController;
+use App\Http\Controllers\Api\ServiceScheduleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,6 +55,21 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/', [AuthController::class, 'updateProfile']);
         Route::post('/change-password', [AuthController::class, 'changePassword']);
     });
+
+    // Organization routes
+    Route::apiResource('organizations', OrganizationController::class);
+
+    // Organization settings routes
+    Route::prefix('organizations/{organization}')->group(function () {
+        Route::get('/settings', [OrganizationSettingsController::class, 'index']);
+        Route::put('/settings', [OrganizationSettingsController::class, 'update']);
+        Route::post('/settings', [OrganizationSettingsController::class, 'store']);
+        Route::get('/settings/{key}', [OrganizationSettingsController::class, 'show']);
+        Route::delete('/settings/{key}', [OrganizationSettingsController::class, 'destroy']);
+    });
+
+    // Service schedule routes
+    Route::apiResource('service-schedules', ServiceScheduleController::class);
 });
 
 // Health check route
