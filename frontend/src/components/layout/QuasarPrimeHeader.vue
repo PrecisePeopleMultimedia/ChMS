@@ -64,8 +64,7 @@
           class="header-btn"
         />
 
-        <!-- Theme Switcher -->
-        <ThemeSwitcher />
+        <!-- Theme switcher removed - using dark mode only -->
 
         <!-- User Avatar -->
         <q-btn
@@ -86,7 +85,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import ThemeSwitcher from '@/components/theme/ThemeSwitcher.vue'
+// ThemeSwitcher removed - using dark mode only
 
 const searchQuery = ref('')
 
@@ -126,36 +125,17 @@ const emit = defineEmits<{
     background: var(--hover-bg)
     transform: scale(1.05)
 
-.theme-toggle-btn
-  color: var(--header-text)
-  background: var(--theme-toggle-bg)
-  transition: all 0.3s ease
-  
-  &:hover
-    background: var(--theme-toggle-hover)
-    transform: scale(1.1)
+// Theme toggle styles removed - using dark mode only
 
 .user-avatar
   .q-avatar
     border: 2px solid var(--border)
 
-/* Light mode variables */
+/* Dark mode only variables */
 :root
-  --header-bg: #ffffff
-  --header-text: #1a1a1a
-  --input-bg: #f8f9fa
-  --hover-bg: rgba(0, 0, 0, 0.05)
-  --theme-toggle-bg: #f8f9fa
-  --theme-toggle-hover: #e9ecef
-  --border: #e9ecef
-
-/* Dark mode variables */
-.dark
   --header-bg: #1a1a1a
   --header-text: #ffffff
   --input-bg: #2d2d2d
   --hover-bg: rgba(255, 255, 255, 0.1)
-  --theme-toggle-bg: #2d2d2d
-  --theme-toggle-hover: #3d3d3d
   --border: #3d3d3d
 </style>

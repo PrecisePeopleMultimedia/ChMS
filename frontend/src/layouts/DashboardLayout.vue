@@ -49,13 +49,7 @@
               <img :src="user?.avatar || 'https://cdn.quasar.dev/img/boy-avatar.png'" />
             </q-avatar>
           </q-btn>
-          <q-btn
-            class="q-mr-xs"
-            flat
-            round
-            @click="$q.dark.toggle()"
-            :icon="$q.dark.isActive ? 'nights_stay' : 'wb_sunny'"
-          />
+          <!-- Theme toggle removed - using dark mode only -->
         </div>
       </q-toolbar>
     </q-header>

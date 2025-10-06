@@ -43,54 +43,29 @@ html, body
 
 #q-app
   min-height: 100vh
-  transition: background 0.3s ease
+  background: #1d1d1d  // Always dark mode
 
-  // Light mode - Clean Quasar style
-  &:not(.dark)
-    background: #fafafa
-
-  // Dark mode - Clean Quasar style
-  &.dark
-    background: #1d1d1d
-
-// Custom scrollbar - adaptive to theme
+// Custom scrollbar - dark mode only
 ::-webkit-scrollbar
   width: 8px
   height: 8px
 
 ::-webkit-scrollbar-track
-  background: rgba(0, 0, 0, 0.05)
-
-.dark ::-webkit-scrollbar-track
   background: rgba(255, 255, 255, 0.05)
 
 ::-webkit-scrollbar-thumb
-  background: rgba(0, 0, 0, 0.2)
+  background: rgba(255, 255, 255, 0.2)
   border-radius: 4px
 
-.dark ::-webkit-scrollbar-thumb
-  background: rgba(255, 255, 255, 0.2)
-
 ::-webkit-scrollbar-thumb:hover
-  background: rgba(0, 0, 0, 0.3)
-
-.dark ::-webkit-scrollbar-thumb:hover
   background: rgba(255, 255, 255, 0.3)
 
-// Selection colors - clean theme
+// Selection colors - dark mode only
 ::selection
-  background: rgba(25, 118, 210, 0.2)
-  color: inherit
-
-.dark ::selection
   background: rgba(25, 118, 210, 0.3)
   color: white
 
 ::-moz-selection
-  background: rgba(25, 118, 210, 0.2)
-  color: inherit
-
-.dark ::-moz-selection
   background: rgba(25, 118, 210, 0.3)
   color: white
 

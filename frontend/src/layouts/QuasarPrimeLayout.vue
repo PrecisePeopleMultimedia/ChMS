@@ -34,13 +34,8 @@ const toggleLeftDrawer = () => {
   background: var(--main-bg)
   min-height: 100vh
 
-/* Light mode variables */
+/* Dark mode only variables */
 :root
-  --main-bg: #f8f9fa
-  --main-text: #1a1a1a
-
-/* Dark mode variables */
-.dark
   --main-bg: #0d1117
   --main-text: #ffffff
 </style>
