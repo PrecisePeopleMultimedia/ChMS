@@ -9,6 +9,8 @@ use App\Http\Controllers\Api\ServiceScheduleController;
 use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\QrCodeController;
+use App\Http\Controllers\Api\MemberController;
+use App\Http\Controllers\Api\FamilyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,6 +75,19 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Service schedule routes
     Route::apiResource('service-schedules', ServiceScheduleController::class);
+
+    // Member management routes
+    Route::prefix('members')->group(function () {
+        Route::get('/', [MemberController::class, 'index']);
+        Route::post('/', [MemberController::class, 'store']);
+        Route::get('/search', [MemberController::class, 'search']);
+        Route::get('/{member}', [MemberController::class, 'show']);
+        Route::put('/{member}', [MemberController::class, 'update']);
+        Route::delete('/{member}', [MemberController::class, 'destroy']);
+    });
+
+    // Family management routes
+    Route::apiResource('families', FamilyController::class);
 
     // Attendance system routes
     Route::prefix('attendance')->group(function () {
