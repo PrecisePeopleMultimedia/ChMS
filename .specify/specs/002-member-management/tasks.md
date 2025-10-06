@@ -28,6 +28,12 @@
   ```
   - **Estimated Time:** 15 minutes
 
+- [ ] **Task 1.4**: Create member_history table migration
+  ```bash
+  php artisan make:migration create_member_history_table
+  ```
+  - **Estimated Time:** 20 minutes
+
 #### **DEV-002: Laravel Models and Relationships**
 - [ ] **Task 2.1**: Create Member model
   ```bash
@@ -65,7 +71,17 @@
   - Pagination and filtering
   - **Estimated Time:** 35 minutes
 
-- [ ] **Task 3.4**: Define API routes
+- [ ] **Task 3.4**: Implement duplicate detection system
+  - Check for potential duplicates before member creation
+  - Fuzzy matching for names and contact info
+  - **Estimated Time:** 40 minutes
+
+- [ ] **Task 3.5**: Implement member history tracking
+  - Audit log for all member changes
+  - Track who made changes and when
+  - **Estimated Time:** 30 minutes
+
+- [ ] **Task 3.6**: Define API routes
   - Add routes to `routes/api.php`
   - **Estimated Time:** 15 minutes
 

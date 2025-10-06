@@ -6,6 +6,9 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\OrganizationController;
 use App\Http\Controllers\Api\OrganizationSettingsController;
 use App\Http\Controllers\Api\ServiceScheduleController;
+use App\Http\Controllers\Api\AttendanceController;
+use App\Http\Controllers\Api\ServiceController;
+use App\Http\Controllers\Api\QrCodeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,6 +73,43 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Service schedule routes
     Route::apiResource('service-schedules', ServiceScheduleController::class);
+
+    // Attendance system routes
+    Route::prefix('attendance')->group(function () {
+        Route::get('/', [AttendanceController::class, 'index']);
+        Route::post('/', [AttendanceController::class, 'store']);
+        Route::get('/summary', [AttendanceController::class, 'summary']);
+        Route::post('/checkin/qr', [AttendanceController::class, 'checkInQr']);
+        Route::get('/{attendance}', [AttendanceController::class, 'show']);
+        Route::put('/{attendance}', [AttendanceController::class, 'update']);
+        Route::delete('/{attendance}', [AttendanceController::class, 'destroy']);
+    });
+
+    // Service routes
+    Route::prefix('services')->group(function () {
+        Route::get('/', [ServiceController::class, 'index']);
+        Route::post('/', [ServiceController::class, 'store']);
+        Route::get('/today', [ServiceController::class, 'today']);
+        Route::get('/upcoming', [ServiceController::class, 'upcoming']);
+        Route::get('/types', [ServiceController::class, 'types']);
+        Route::post('/from-schedule', [ServiceController::class, 'createFromSchedule']);
+        Route::get('/{service}', [ServiceController::class, 'show']);
+        Route::put('/{service}', [ServiceController::class, 'update']);
+        Route::delete('/{service}', [ServiceController::class, 'destroy']);
+        Route::get('/{service}/stats', [ServiceController::class, 'stats']);
+    });
+
+    // QR Code routes
+    Route::prefix('qr-codes')->group(function () {
+        Route::post('/generate', [QrCodeController::class, 'generate']);
+        Route::post('/validate', [QrCodeController::class, 'validate']);
+        Route::get('/active', [QrCodeController::class, 'active']);
+        Route::get('/stats', [QrCodeController::class, 'stats']);
+        Route::post('/bulk-generate', [QrCodeController::class, 'bulkGenerate']);
+        Route::get('/member/{member}', [QrCodeController::class, 'forMember']);
+        Route::delete('/{qrCode}/deactivate', [QrCodeController::class, 'deactivate']);
+        Route::post('/{qrCode}/regenerate', [QrCodeController::class, 'regenerate']);
+    });
 });
 
 // Health check route

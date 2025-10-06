@@ -66,13 +66,18 @@ CREATE TABLE members (
     date_of_birth DATE,
     gender ENUM('male', 'female', 'other'),
     address TEXT,
-    member_type ENUM('adult', 'child', 'youth') DEFAULT 'adult',
+    member_type ENUM('adult', 'child', 'youth', 'visitor') DEFAULT 'adult',
     join_date DATE DEFAULT CURRENT_DATE,
     is_active BOOLEAN DEFAULT TRUE,
     notes TEXT,
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
-    
+
+    -- Duplicate detection fields
+    duplicate_check_hash VARCHAR(64) GENERATED ALWAYS AS (
+        SHA2(CONCAT(LOWER(first_name), LOWER(last_name), COALESCE(email, ''), COALESCE(phone, '')), 256)
+    ) STORED,
+
     FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE CASCADE,
     FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE SET NULL,
     
@@ -119,6 +124,24 @@ CREATE TABLE member_relationships (
     FOREIGN KEY (related_member_id) REFERENCES members(id) ON DELETE CASCADE,
     
     UNIQUE KEY unique_relationship (member_id, related_member_id, relationship_type)
+);
+
+-- Member history/audit log table
+CREATE TABLE member_history (
+    id BIGINT PRIMARY KEY,
+    member_id BIGINT NOT NULL,
+    changed_by_user_id BIGINT NOT NULL,
+    change_type ENUM('created', 'updated', 'deleted', 'restored') NOT NULL,
+    field_changes JSON, -- Store what fields changed
+    old_values JSON,    -- Store previous values
+    new_values JSON,    -- Store new values
+    created_at TIMESTAMP,
+
+    FOREIGN KEY (member_id) REFERENCES members(id) ON DELETE CASCADE,
+    FOREIGN KEY (changed_by_user_id) REFERENCES users(id),
+
+    INDEX idx_member_history (member_id, created_at),
+    INDEX idx_history_user (changed_by_user_id)
 );
 ```
 
