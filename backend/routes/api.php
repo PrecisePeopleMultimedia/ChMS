@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\OrganizationController;
 use App\Http\Controllers\Api\OrganizationSettingsController;
 use App\Http\Controllers\Api\ServiceScheduleController;
+use App\Http\Controllers\Api\MemberController;
+use App\Http\Controllers\Api\MemberAttributeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,6 +72,17 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Service schedule routes
     Route::apiResource('service-schedules', ServiceScheduleController::class);
+
+    // Member routes
+    Route::apiResource('members', MemberController::class);
+    Route::get('/members/options', [MemberController::class, 'options']);
+    Route::post('/members/bulk-update', [MemberController::class, 'bulkUpdate']);
+
+    // Member attributes routes
+    Route::apiResource('member-attributes', MemberAttributeController::class);
+    Route::get('/member-attributes-categories', [MemberAttributeController::class, 'categories']);
+    Route::get('/member-attributes-field-types', [MemberAttributeController::class, 'fieldTypes']);
+    Route::post('/member-attributes/update-order', [MemberAttributeController::class, 'updateOrder']);
 });
 
 // Health check route

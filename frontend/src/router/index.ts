@@ -107,6 +107,15 @@ const router = createRouter({
             requiresAuth: true,
             title: 'Profile - ChurchAfrica'
           }
+        },
+        {
+          path: '/members/attributes',
+          name: 'MemberAttributes',
+          component: () => import('@/components/members/AttributeManager.vue'),
+          meta: {
+            requiresAuth: true,
+            title: 'Custom Attributes - ChurchAfrica'
+          }
         }
       ]
     },
