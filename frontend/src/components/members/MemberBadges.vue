@@ -270,12 +270,12 @@ const autoAssignBadges = async () => {
   }
 }
 
-const editBadge = (badge) => {
+const editBadge = (badge: any) => {
   selectedBadge.value = badge
   showEditDialog.value = true
 }
 
-const confirmRemoveBadge = (badge) => {
+const confirmRemoveBadge = (badge: any) => {
   badgeToRemove.value = badge
   showRemoveDialog.value = true
 }

@@ -75,7 +75,7 @@ export const useMembersStore = defineStore('members', () => {
       if (!grouped[member.member_type]) {
         grouped[member.member_type] = []
       }
-      grouped[member.member_type].push(member)
+      grouped[member.member_type]?.push(member)
     })
 
     return grouped

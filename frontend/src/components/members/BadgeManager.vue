@@ -301,12 +301,12 @@ const createDefaults = async () => {
   }
 }
 
-const editBadgeType = (badgeType) => {
+const editBadgeType = (badgeType: any) => {
   selectedBadgeType.value = { ...badgeType }
   showCreateDialog.value = true
 }
 
-const confirmDelete = (badgeType) => {
+const confirmDelete = (badgeType: any) => {
   badgeTypeToDelete.value = badgeType
   showDeleteDialog.value = true
 }
@@ -323,7 +323,7 @@ const deleteBadgeType = async () => {
     })
     showDeleteDialog.value = false
     badgeTypeToDelete.value = null
-  } catch (error) {
+  } catch (error: any) {
     $q.notify({
       type: 'negative',
       message: error.response?.data?.message || 'Failed to delete badge type'
@@ -333,7 +333,7 @@ const deleteBadgeType = async () => {
   }
 }
 
-const toggleActive = async (badgeType) => {
+const toggleActive = async (badgeType: any) => {
   badgeType.updating = true
   try {
     await badgesStore.updateBadgeType(badgeType.id, {

@@ -89,41 +89,41 @@ const columns = [
     name: 'member',
     required: true,
     label: 'Member',
-    align: 'left',
+    align: 'left' as const,
     field: 'name',
     sortable: true
   },
   {
     name: 'lastVisit',
-    align: 'center',
+    align: 'center' as const,
     label: 'Last Visit',
     field: 'lastVisit',
     sortable: true
   },
   {
     name: 'attendance',
-    align: 'center',
+    align: 'center' as const,
     label: 'Attendance Rate',
     field: 'attendanceRate',
     sortable: true
   },
   {
     name: 'status',
-    align: 'center',
+    align: 'center' as const,
     label: 'Status',
     field: 'status',
     sortable: true
   },
   {
     name: 'joinDate',
-    align: 'center',
+    align: 'center' as const,
     label: 'Member Since',
     field: 'joinDate',
     sortable: true
   },
   {
     name: 'actions',
-    align: 'center',
+    align: 'center' as const,
     label: 'Actions',
     field: 'actions'
   }

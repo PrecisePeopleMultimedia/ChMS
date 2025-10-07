@@ -2,17 +2,23 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import type { Theme } from '@/themes/types'
 
-// Import dark theme only
+// Import available themes
 import { quasarAdminTheme } from '@/themes/quasar-admin'
+import { garnetNightTheme } from '@/themes/garnet-night'
 
 export const useThemeStore = defineStore('theme', () => {
   // === STATE ===
-  // Fixed to quasar-admin dark theme only
   const currentThemeId = ref<string>('quasar-admin')
-  const mode = ref<'dark'>('dark')  // Always dark mode
-  const isDark = ref<boolean>(true)  // Always true
+  const mode = ref<'dark' | 'light' | 'system'>('dark')
+  const isDark = ref<boolean>(true)
 
-  // Single theme registry - only dark theme
+  // Available themes registry
+  const availableThemes = ref<Theme[]>([
+    quasarAdminTheme,
+    garnetNightTheme
+  ])
+
+  // Current theme
   const currentTheme = ref<Theme>(quasarAdminTheme)
 
   // === COMPUTED ===
@@ -109,7 +115,33 @@ export const useThemeStore = defineStore('theme', () => {
   }
 
   const getThemeIcon = () => {
-    return 'dark_mode'  // Always dark mode icon
+    return mode.value === 'dark' ? 'dark_mode' : 'light_mode'
+  }
+
+  const setTheme = (themeId: string) => {
+    const theme = availableThemes.value.find(t => t.id === themeId)
+    if (theme) {
+      currentThemeId.value = themeId
+      currentTheme.value = theme
+      applyTheme()
+    }
+  }
+
+  const setMode = (newMode: 'dark' | 'light' | 'system') => {
+    mode.value = newMode
+
+    if (newMode === 'system') {
+      isDark.value = window.matchMedia('(prefers-color-scheme: dark)').matches
+    } else {
+      isDark.value = newMode === 'dark'
+    }
+
+    applyTheme()
+  }
+
+  const toggleMode = () => {
+    const newMode = isDark.value ? 'light' : 'dark'
+    setMode(newMode)
   }
 
   // === RETURN ===
@@ -119,6 +151,7 @@ export const useThemeStore = defineStore('theme', () => {
     mode,
     isDark,
     themeClass,
+    availableThemes,
 
     // Computed
     currentTheme,
@@ -128,5 +161,8 @@ export const useThemeStore = defineStore('theme', () => {
     applyTheme,
     initializeTheme,
     getThemeIcon,
+    setTheme,
+    setMode,
+    toggleMode,
   }
 })

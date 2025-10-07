@@ -313,7 +313,7 @@ const saveAttribute = async () => {
     }
 
     emit('saved')
-  } catch (error) {
+  } catch (error: any) {
     $q.notify({
       type: 'negative',
       message: error.response?.data?.message || 'Failed to save attribute'

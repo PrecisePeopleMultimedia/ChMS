@@ -94,17 +94,17 @@ const {
 } = widgetsStore
 
 const gridStyle = computed(() => {
-  if (!currentLayout.value) return {}
-  
-  const { columns, rows } = currentLayout.value.layoutConfig
+  if (!currentLayout) return {}
+
+  const { columns, rows } = currentLayout.layoutConfig
   
   return {
-    display: 'grid',
+    display: 'grid' as const,
     gridTemplateColumns: `repeat(${columns}, 1fr)`,
     gridTemplateRows: `repeat(${rows}, ${props.gridSize}px)`,
     gap: `${props.gap}px`,
     minHeight: `${rows * props.gridSize + (rows - 1) * props.gap}px`,
-    position: 'relative'
+    position: 'relative' as const
   }
 })
 
@@ -112,7 +112,7 @@ const gridBackgroundStyle = computed(() => {
   if (!props.isEditMode) return { display: 'none' }
   
   return {
-    position: 'absolute',
+    position: 'absolute' as const,
     top: 0,
     left: 0,
     right: 0,
@@ -122,7 +122,7 @@ const gridBackgroundStyle = computed(() => {
       linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px)
     `,
     backgroundSize: `${props.gridSize + props.gap}px ${props.gridSize + props.gap}px`,
-    pointerEvents: 'none',
+    pointerEvents: 'none' as const,
     zIndex: 0
   }
 })
@@ -133,7 +133,7 @@ const dropZoneStyle = computed(() => {
   const { x, y, width, height } = dropZone.value
   
   return {
-    position: 'absolute',
+    position: 'absolute' as const,
     gridColumnStart: x + 1,
     gridColumnEnd: x + width + 1,
     gridRowStart: y + 1,
@@ -142,7 +142,7 @@ const dropZoneStyle = computed(() => {
     border: '2px dashed #1976d2',
     borderRadius: '8px',
     zIndex: 1000,
-    pointerEvents: 'none'
+    pointerEvents: 'none' as const
   }
 })
 
@@ -184,20 +184,20 @@ const handleStopDrag = () => {
 const handleDrop = async (event: DragEvent) => {
   event.preventDefault()
   
-  if (!draggedWidget.value || !dropZone.value) return
-  
+  if (!draggedWidget || !dropZone.value) return
+
   try {
     // If it's an existing widget being moved
-    if (visibleWidgets.value.find(w => w.id === draggedWidget.value!.id)) {
-      await handleWidgetPositionUpdate(draggedWidget.value.id, dropZone.value)
+    if (visibleWidgets.find((w: any) => w.id === draggedWidget!.id)) {
+      await handleWidgetPositionUpdate(draggedWidget.id, dropZone.value)
     } else {
       // If it's a new widget being added from the library
       await widgetsStore.addWidgetToLayout(
-        draggedWidget.value.widgetId,
+        draggedWidget.widgetId,
         dropZone.value,
-        draggedWidget.value.config
+        draggedWidget.config
       )
-      emit('widget-added', draggedWidget.value)
+      emit('widget-added', draggedWidget as WidgetInstance)
     }
   } catch (error) {
     console.error('Failed to handle drop:', error)
@@ -207,13 +207,13 @@ const handleDrop = async (event: DragEvent) => {
 }
 
 const calculateDropZone = (event: DragEvent): WidgetPosition | null => {
-  if (!currentLayout.value) return null
-  
+  if (!currentLayout) return null
+
   const rect = (event.currentTarget as HTMLElement).getBoundingClientRect()
   const x = event.clientX - rect.left
   const y = event.clientY - rect.top
-  
-  const { columns, rows } = currentLayout.value.layoutConfig
+
+  const { columns, rows } = currentLayout.layoutConfig
   const cellWidth = (rect.width - (columns - 1) * props.gap) / columns
   const cellHeight = props.gridSize
   
@@ -238,12 +238,12 @@ const calculateDropZone = (event: DragEvent): WidgetPosition | null => {
   }
 }
 
-const handleDragOver = (event: DragEvent) => {
+const handleDragOver = (event: Event) => {
   event.preventDefault()
-  
-  if (!isDragging.value) return
-  
-  dropZone.value = calculateDropZone(event)
+
+  if (!isDragging) return
+
+  dropZone.value = calculateDropZone(event as DragEvent)
 }
 
 // Lifecycle

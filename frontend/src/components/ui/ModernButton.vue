@@ -2,6 +2,10 @@
   <button
     :class="[
       'modern-button',
+      'inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium',
+      'ring-offset-background transition-all duration-200',
+      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+      'disabled:pointer-events-none',
       variantClasses,
       sizeClasses,
       {
@@ -86,10 +90,6 @@ const sizeClasses = computed(() => {
 </script>
 
 <style scoped>
-.modern-button {
-  @apply inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none;
-}
-
 .modern-button:hover {
   transform: translateY(-1px);
 }

@@ -63,7 +63,7 @@
               class="col-12 col-sm-6 col-md-4"
             >
               <WidgetLibraryCard
-                :widget="widget"
+                :widget="widget as Widget"
                 :is-selected="selectedWidgets.includes(widget.id)"
                 @select="toggleWidgetSelection"
                 @preview="previewWidget"
@@ -169,27 +169,27 @@ const categoryOptions = [
 ]
 
 const filteredWidgets = computed(() => {
-  let widgets = availableWidgets.value
+  let widgets = availableWidgets
 
   // Filter by tab
   switch (activeTab.value) {
     case 'system':
-      widgets = systemWidgets.value
+      widgets = systemWidgets
       break
     case 'custom':
-      widgets = customWidgets.value
+      widgets = customWidgets
       break
     case 'metrics':
-      widgets = widgets.filter(w => w.type === 'metric')
+      widgets = widgets.filter((w: any) => w.type === 'metric')
       break
     case 'charts':
-      widgets = widgets.filter(w => w.type === 'chart')
+      widgets = widgets.filter((w: any) => w.type === 'chart')
       break
     case 'lists':
-      widgets = widgets.filter(w => w.type === 'list')
+      widgets = widgets.filter((w: any) => w.type === 'list')
       break
     case 'actions':
-      widgets = widgets.filter(w => w.type === 'action')
+      widgets = widgets.filter((w: any) => w.type === 'action')
       break
     default:
       // All widgets
@@ -198,7 +198,7 @@ const filteredWidgets = computed(() => {
 
   // Filter by category
   if (selectedCategory.value) {
-    widgets = widgets.filter(w => {
+    widgets = widgets.filter((w: any) => {
       switch (selectedCategory.value) {
         case 'system':
           return w.isSystemWidget
@@ -213,14 +213,14 @@ const filteredWidgets = computed(() => {
   // Filter by search query
   if (searchQuery.value) {
     const query = searchQuery.value.toLowerCase()
-    widgets = widgets.filter(w =>
+    widgets = widgets.filter((w: any) =>
       w.name.toLowerCase().includes(query) ||
       w.description.toLowerCase().includes(query) ||
       w.type.toLowerCase().includes(query)
     )
   }
 
-  return widgets.filter(w => w.isActive)
+  return widgets.filter((w: any) => w.isActive)
 })
 
 // Methods
@@ -253,7 +253,7 @@ const addSelectedWidgets = async () => {
   try {
     isAdding.value = true
     const widgets = selectedWidgets.value
-      .map(id => availableWidgets.value.find(w => w.id === id))
+      .map(id => availableWidgets.find((w: any) => w.id === id))
       .filter(Boolean) as Widget[]
     
     emit('add-widgets', widgets)
@@ -267,7 +267,7 @@ const addSelectedWidgets = async () => {
 // Lifecycle
 onMounted(async () => {
   // Ensure widgets are loaded
-  if (!availableWidgets.value.length) {
+  if (!availableWidgets.length) {
     await widgetsStore.fetchAvailableWidgets()
   }
 })

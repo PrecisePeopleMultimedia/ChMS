@@ -240,49 +240,49 @@ const columns = [
     name: 'name',
     label: 'Name',
     field: 'name',
-    align: 'left',
+    align: 'left' as const,
     sortable: true
   },
   {
     name: 'key',
     label: 'Key',
     field: 'key',
-    align: 'left',
+    align: 'left' as const,
     sortable: true
   },
   {
     name: 'field_type',
     label: 'Type',
     field: 'field_type',
-    align: 'center',
+    align: 'center' as const,
     sortable: true
   },
   {
     name: 'category',
     label: 'Category',
     field: 'category',
-    align: 'center',
+    align: 'center' as const,
     sortable: true
   },
   {
     name: 'is_required',
     label: 'Required',
     field: 'is_required',
-    align: 'center',
+    align: 'center' as const,
     sortable: true
   },
   {
     name: 'is_active',
     label: 'Active',
     field: 'is_active',
-    align: 'center',
+    align: 'center' as const,
     sortable: true
   },
   {
     name: 'actions',
     label: 'Actions',
     field: 'actions',
-    align: 'center'
+    align: 'center' as const
   }
 ]
 
@@ -301,12 +301,12 @@ const loadAttributes = async () => {
   }
 }
 
-const editAttribute = (attribute) => {
+const editAttribute = (attribute: any) => {
   selectedAttribute.value = { ...attribute }
   showCreateDialog.value = true
 }
 
-const confirmDelete = (attribute) => {
+const confirmDelete = (attribute: any) => {
   attributeToDelete.value = attribute
   showDeleteDialog.value = true
 }
@@ -323,7 +323,7 @@ const deleteAttribute = async () => {
     })
     showDeleteDialog.value = false
     attributeToDelete.value = null
-  } catch (error) {
+  } catch (error: any) {
     $q.notify({
       type: 'negative',
       message: error.response?.data?.message || 'Failed to delete attribute'
@@ -333,7 +333,7 @@ const deleteAttribute = async () => {
   }
 }
 
-const toggleActive = async (attribute) => {
+const toggleActive = async (attribute: any) => {
   attribute.updating = true
   try {
     await attributesStore.updateAttribute(attribute.id, {

@@ -17,7 +17,25 @@ vi.mock('axios', () => ({
 vi.mock('quasar', () => ({
   useQuasar: () => ({
     notify: vi.fn()
-  })
+  }),
+  QForm: {
+    name: 'QForm',
+    template: '<form @submit.prevent="$emit(\'submit\', $event)"><slot /></form>',
+    props: ['modelValue'],
+    emits: ['submit'],
+  },
+  QInput: {
+    name: 'QInput',
+    template: '<input v-bind="$attrs" :type="type || \'text\'" :value="modelValue" :placeholder="placeholder" @input="$emit(\'update:modelValue\', $event.target.value)" />',
+    props: ['modelValue', 'label', 'placeholder', 'type', 'rules', 'error', 'outlined', 'filled', 'dense'],
+    emits: ['update:modelValue'],
+  },
+  QCheckbox: {
+    name: 'QCheckbox',
+    template: '<input type="checkbox" :checked="modelValue" @change="$emit(\'update:modelValue\', $event.target.checked)" />',
+    props: ['modelValue', 'label', 'color', 'dark'],
+    emits: ['update:modelValue'],
+  }
 }))
 
 // Mock router
@@ -44,6 +62,7 @@ describe('LoginForm', () => {
     const router = createRouter({
       history: createWebHistory(),
       routes: [
+        { path: '/', component: { template: '<div>Home</div>' } },
         { path: '/login', component: { template: '<div>Login</div>' } },
         { path: '/dashboard', component: { template: '<div>Dashboard</div>' } }
       ]

@@ -186,7 +186,7 @@ const saveAttributes = async () => {
     
     // Reload attributes to get updated display values
     await loadMemberAttributes()
-  } catch (error) {
+  } catch (error: any) {
     console.error('Failed to save attributes:', error)
     $q.notify({
       type: 'negative',

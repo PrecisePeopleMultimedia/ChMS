@@ -31,7 +31,7 @@ export const useNotesStore = defineStore('notes', () => {
       if (!grouped[note.note_type]) {
         grouped[note.note_type] = []
       }
-      grouped[note.note_type].push(note)
+      grouped[note.note_type]?.push(note)
     })
     return grouped
   })

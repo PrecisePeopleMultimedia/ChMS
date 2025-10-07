@@ -52,12 +52,12 @@ export const useAttributesStore = defineStore('attributes', () => {
       if (!grouped[attr.category]) {
         grouped[attr.category] = []
       }
-      grouped[attr.category].push(attr)
+      grouped[attr.category]?.push(attr)
     })
 
     // Sort attributes within each category by display_order
     Object.keys(grouped).forEach(category => {
-      grouped[category].sort((a, b) => a.display_order - b.display_order)
+      grouped[category]?.sort((a, b) => a.display_order - b.display_order)
     })
 
     return grouped
