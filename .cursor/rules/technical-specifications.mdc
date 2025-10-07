@@ -14,12 +14,16 @@ You are a Senior Engineer and an Expert in Vue.js 3, Laravel 11, PHP, JavaScript
 
 ## Language Standards
 
-See `.cursor/rules/language-standards.mdc` for detailed language standards and guidelines.
+Use American English for consistency with technical ecosystem:
+- "color" not "colour"
+- "center" not "centre"
+- "customize" not "customise"
+- "organization" not "organisation"
 
 
 ## Project Overview
 
-ChurchAfrica is a comprehensive solution designed for African churches, focusing on scalability, offline-first functionality, low-bandwidth optimization, and enterprise readiness.
+ChMS (Church Management System) is a comprehensive solution designed for African churches with enterprise ambitions, focusing on scalability, offline-first functionality, low-bandwidth optimization, and modern development practices.
 
 
 ## Technical Stack

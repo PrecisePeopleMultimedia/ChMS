@@ -1,0 +1,108 @@
+# Testing Rules
+
+## Core Requirements
+
+1. Use @pm/test-checklist.md as working document (focus P0 first)
+2. Reference @pm/testing-strategy.md and @docs/standards/testing-standards.md
+3. Track in @pm/test-checklist.md
+4. Follow @docs/tutorials/testing-strategy.md for implementation guidance
+
+## Database Handling
+- Database can be reset freely during tests (no production data)
+- Use test transactions where possible
+- Clean up test data after each test
+
+## Test Implementation Template
+```
+Component: [NAME]
+Priority: [P0/P1/P2]
+Goal: [GOAL]
+Success: [CRITERIA]
+```
+
+## Standards
+- Testing: Vitest + Vue Test Utils + MSW + Playwright
+- UI: Quasar Framework components and icons
+- Styling: Quasar Framework only (Material Design)
+
+## Coverage
+- P0: 90%+
+- P1: 80%+
+- P2: 60%+
+
+## Example Goals
+
+### P0 (Authentication)
+- Component: `LoginForm`
+- Goal: Secure auth with error handling
+- Success: Login flow, invalid handling, session verified
+
+### P0 (Integration)
+- Component: `AttendanceRecorder`
+- Goal: Complete attendance flow
+- Success: QR scan → validate → DB update
+
+### P1 (UI)
+- Component: `DataTable`
+- Goal: Table operations working
+- Success: Sort/filter/paginate verified
+
+## Testing Strategy
+
+### Unit Testing (Vitest)
+- Test individual components in isolation
+- Mock external dependencies
+- Focus on component logic and state management
+- Test edge cases and error conditions
+
+### Integration Testing
+- Test component interactions
+- Test API integrations with real endpoints
+- Test data flow between components
+- Test offline/online state transitions
+
+### E2E Testing (Playwright)
+- Test complete user workflows
+- Test cross-browser compatibility
+- Test mobile device functionality
+- Test offline functionality and sync
+
+### Performance Testing
+- Test load times and responsiveness
+- Test with large datasets
+- Test on low-end devices
+- Test network conditions (3G, offline)
+
+## Test Organization
+
+### File Structure
+```
+tests/
+├── unit/           # Unit tests
+├── integration/    # Integration tests
+├── e2e/           # End-to-end tests
+└── fixtures/      # Test data and mocks
+```
+
+### Naming Conventions
+- Unit tests: `ComponentName.test.ts`
+- Integration tests: `FeatureName.integration.test.ts`
+- E2E tests: `workflow-name.spec.ts`
+
+## Quality Gates
+
+### Before Merge
+- [ ] All tests pass
+- [ ] Coverage meets requirements
+- [ ] No console errors or warnings
+- [ ] Performance benchmarks met
+- [ ] Accessibility tests pass
+
+### Test Requirements by Priority
+- **P0 Features**: 90%+ coverage, comprehensive E2E tests
+- **P1 Features**: 80%+ coverage, key workflow E2E tests
+- **P2 Features**: 60%+ coverage, basic unit tests
+
+---
+
+**REMEMBER: Testing ensures quality and prevents regressions. Never skip testing for production features!**
