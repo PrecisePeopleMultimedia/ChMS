@@ -3,8 +3,8 @@
 ## Feature Overview
 **Feature Name:** Admin Settings System with Widget Dashboard
 **Epic:** System Administration
-**Priority:** P0 (CRITICAL - Enhanced for competitive parity)
-**Scope:** Comprehensive administrative settings, system configuration management, and customizable widget dashboard
+**Priority:** P1 (Enhanced Feature - Important)
+**Scope:** Administrative settings, system configuration management, and customizable widget dashboard
 
 **Africa-First Considerations:** Offline-capable settings management, mobile-optimized interface, low-bandwidth sync, intuitive navigation for varying technical skill levels
 

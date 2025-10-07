@@ -1,10 +1,10 @@
 # Financial Management System - Feature Specification
 
 ## Feature Overview
-**Feature Name:** Financial Management System  
-**Epic:** Church Financial Operations  
-**Priority:** P2 (Future Implementation)  
-**Scope:** Comprehensive donation processing, fund management, and financial reporting
+**Feature Name:** Financial Management System
+**Epic:** Church Financial Operations
+**Priority:** P2 (Future Implementation - Nice to Have)
+**Scope:** Advanced donation processing, fund management, and financial reporting for future implementation
 
 **Africa-First Considerations:** Mobile money integration (M-Pesa, Airtel Money), offline donation recording, low-bandwidth financial reporting, multi-currency support, cash-heavy environments
 

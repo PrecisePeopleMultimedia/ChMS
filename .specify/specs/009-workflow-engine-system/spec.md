@@ -1,16 +1,16 @@
 # Workflow Engine System - Feature Specification (RockRMS Competitive Parity)
 
 ## Feature Overview
-**Feature Name:** Workflow Engine System with Visual Designer  
-**Epic:** Process Automation  
-**Priority:** P1 (CRITICAL - Essential for competitive parity)  
-**Scope:** Comprehensive workflow automation engine with visual designer, custom actions, and integration capabilities
+**Feature Name:** Workflow Engine System with Visual Designer
+**Epic:** Process Automation
+**Priority:** P2 (Advanced Feature - Nice to Have - Future Implementation)
+**Scope:** Advanced workflow automation engine with visual designer, custom actions, and integration capabilities
 
 **Africa-First Considerations:** Offline-capable workflow execution, mobile-optimized workflow designer, low-bandwidth sync, intuitive visual interface for varying technical skill levels
 
-## 🚨 CRITICAL ENHANCEMENT FOR COMPETITIVE PARITY
-Based on comprehensive RockRMS competitive analysis, this specification addresses the most critical gap for long-term competitiveness:
-**Workflow Engine System** - Visual workflow designer with automation capabilities matching RockRMS's sophisticated workflow system while providing superior mobile experience and offline functionality.
+## 🔮 FUTURE ENHANCEMENT FOR COMPETITIVE PARITY
+Based on comprehensive RockRMS competitive analysis, this specification addresses an advanced feature for long-term competitiveness:
+**Workflow Engine System** - Visual workflow designer with automation capabilities for future implementation when core MVP features are complete. This provides competitive parity with RockRMS while maintaining focus on essential church needs first.
 
 ## User Stories
 

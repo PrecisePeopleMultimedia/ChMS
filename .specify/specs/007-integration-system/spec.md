@@ -1,7 +1,8 @@
 # Integration System Specification
 
 ## Overview
-The Integration System ensures seamless communication and data flow between all ChurchAfrica components. This system handles cross-feature integration, data synchronization, API management, and third-party integrations while maintaining data consistency and system reliability.
+**Priority:** P1 (Enhanced Feature - Important)
+The Integration System ensures seamless communication and data flow between all ChurchAfrica components. This system handles cross-feature integration, data synchronization, API management, and basic third-party integrations while maintaining data consistency and system reliability.
 
 ## User Stories
 

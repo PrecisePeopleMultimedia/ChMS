@@ -1,10 +1,10 @@
 # Communication System - Feature Specification
 
 ## Feature Overview
-**Feature Name:** Communication System  
-**Epic:** Church Communication and Engagement  
-**Priority:** P2 (Future Implementation)  
-**Scope:** Comprehensive communication platform for church announcements, member engagement, and community building
+**Feature Name:** Communication System
+**Epic:** Church Communication and Engagement
+**Priority:** P0 (MVP Essential - Need to Have)
+**Scope:** Essential communication platform for church announcements and member engagement
 
 **Africa-First Considerations:** SMS-first communication, WhatsApp integration, offline message queuing, low-bandwidth content delivery, multi-language support, community-focused features
 
