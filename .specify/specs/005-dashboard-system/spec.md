@@ -55,15 +55,43 @@ The Dashboard System provides church administrators with a comprehensive overvie
 - Swipe gestures work for navigation between dashboard sections
 - Dashboard works offline with cached data
 
+#### US-DASH-005: Customizable Dashboard
+**As a** church administrator  
+**I want to** customize my dashboard layout and components  
+**So that** I can focus on the information most relevant to my role
+
+**Acceptance Criteria:**
+- Dashboard components are draggable and reorderable
+- Admin can choose which widgets to display
+- Quick setup button for easy dashboard customization
+- Layout preferences are saved per user
+- Default layouts available for different roles
+
+#### US-DASH-006: Dashboard Widget Management
+**As a** church administrator  
+**I want to** add, remove, and configure dashboard widgets  
+**So that** I can create a personalized dashboard experience
+
+**Acceptance Criteria:**
+- Widget library with available dashboard components
+- Drag-and-drop interface for widget arrangement
+- Widget configuration options (size, data range, display options)
+- Widget state persistence across sessions
+- Role-based widget availability
+
 ## Functional Requirements
 
 ### Core Dashboard Components
 
-#### Dashboard Cards
-- **Member Statistics**: Total members, new members this month, active members
-- **Attendance Overview**: Today's attendance, weekly average, monthly trends
-- **Event Summary**: Upcoming events, recent events, event attendance
-- **System Status**: Sync status, offline capabilities, last backup
+#### Dashboard Widgets (Draggable & Customizable)
+- **Member Statistics Widget**: Total members, new members this month, active members
+- **Attendance Overview Widget**: Today's attendance, weekly average, monthly trends
+- **Event Summary Widget**: Upcoming events, recent events, event attendance
+- **System Status Widget**: Sync status, offline capabilities, last backup
+- **Financial Overview Widget**: Donations, expenses, budget status
+- **Ministry Activity Widget**: Ministry participation, volunteer hours
+- **Communication Widget**: Recent announcements, message center
+- **Quick Stats Widget**: Customizable key metrics display
 
 #### Quick Actions Panel
 - **Add Member**: Direct link to member registration
@@ -71,6 +99,7 @@ The Dashboard System provides church administrators with a comprehensive overvie
 - **Create Event**: Event creation form
 - **Generate Report**: Report generation tools
 - **Sync Data**: Manual sync trigger
+- **Customize Dashboard**: Quick setup for dashboard customization
 
 #### Activity Feed
 - **Recent Activities**: Chronological list of system activities
@@ -78,21 +107,37 @@ The Dashboard System provides church administrators with a comprehensive overvie
 - **System Events**: Automated system activities and notifications
 - **Filtering**: Filter by activity type, user, or date range
 
+#### Dashboard Customization Features
+- **Widget Library**: Available widgets for dashboard customization
+- **Drag & Drop Interface**: Reorder widgets by dragging
+- **Widget Configuration**: Size, data range, display options
+- **Layout Presets**: Pre-configured layouts for different roles
+- **Quick Setup**: One-click dashboard customization
+- **Role-based Widgets**: Different widgets available based on user role
+
 ### Dashboard Layout
 
-#### Desktop Layout
+#### Desktop Layout (Customizable)
 ```
 ┌─────────────────────────────────────────────────────────┐
 │ Header: Church Name, User Info, Theme Toggle, Logout   │
+│ [Customize Dashboard] [Quick Setup] [Layout Presets]   │
 ├─────────────────────────────────────────────────────────┤
 │ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────┐ │
 │ │   Members   │ │ Attendance  │ │   Events    │ │ ... │ │
 │ │   Stats     │ │   Overview  │ │   Summary   │ │     │ │
+│ │  [Drag]     │ │  [Drag]     │ │  [Drag]     │ │     │ │
+│ └─────────────┘ └─────────────┘ └─────────────┘ └─────┘ │
+│ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────┐ │
+│ │ Financial   │ │ Ministry    │ │ System      │ │ ... │ │
+│ │ Overview    │ │ Activity    │ │ Status      │ │     │ │
+│ │  [Drag]     │ │  [Drag]     │ │  [Drag]     │ │     │ │
 │ └─────────────┘ └─────────────┘ └─────────────┘ └─────┘ │
 ├─────────────────────────────────────────────────────────┤
 │ ┌─────────────────────────────────────────────────────┐ │
 │ │                Quick Actions                        │ │
 │ │ [Add Member] [Record Attendance] [Create Event]    │ │
+│ │ [Customize Dashboard] [Quick Setup] [Layout Presets]│ │
 │ └─────────────────────────────────────────────────────┘ │
 ├─────────────────────────────────────────────────────────┤
 │ ┌─────────────────────────────────────────────────────┐ │
@@ -214,8 +259,10 @@ The Dashboard System provides church administrators with a comprehensive overvie
 - Activity caching for offline access
 
 ### Phase 3: Advanced Features (Week 4)
-- Advanced dashboard customization
-- Dashboard widget system
+- Dashboard customization system
+- Draggable widget interface
+- Widget library and configuration
+- Quick setup and layout presets
 - Performance optimizations
 - Comprehensive testing
 
@@ -290,9 +337,11 @@ The Dashboard System provides church administrators with a comprehensive overvie
 
 ### Advanced Analytics
 - **Predictive Analytics**: Predict member engagement and attendance trends
-- **Custom Dashboards**: User-customizable dashboard layouts
+- **Custom Dashboards**: User-customizable dashboard layouts with drag-and-drop
 - **Advanced Reporting**: Comprehensive reporting and analytics
 - **Data Visualization**: Advanced charts and graphs
+- **Widget Marketplace**: Third-party widget integrations
+- **AI-Powered Insights**: Smart dashboard recommendations
 
 ### Integration Features
 - **Third-party Integrations**: Integration with external church management systems

@@ -274,13 +274,69 @@ This document outlines the implementation tasks for the Dashboard System, follow
   - **Testing**: Caching testing, performance testing, memory testing
   - **Files**: `frontend/src/services/cache.ts`
 
-### DASH-008: Testing and Quality Assurance
+### DASH-008: Dashboard Customization System
+**Priority**: P1 (Important)  
+**Estimated Effort**: 4-5 days  
+**Dependencies**: DASH-001, DASH-002, DASH-003
+
+#### Tasks
+- [ ] **DASH-008-01**: Widget library system
+  - **Description**: Create widget library with available dashboard components
+  - **Acceptance Criteria**:
+    - Widget library shows available widgets
+    - Widgets are categorized by type
+    - Widget descriptions and previews are shown
+    - Role-based widget availability
+  - **Testing**: Widget library testing, role-based testing
+  - **Files**: `frontend/src/components/dashboard/WidgetLibrary.vue`
+
+- [ ] **DASH-008-02**: Drag and drop interface
+  - **Description**: Implement drag-and-drop for widget arrangement
+  - **Acceptance Criteria**:
+    - Widgets can be dragged and dropped
+    - Drop zones are clearly indicated
+    - Widget positions are saved
+    - Smooth drag animations
+  - **Testing**: Drag and drop testing, animation testing
+  - **Files**: `frontend/src/components/dashboard/DashboardGrid.vue`
+
+- [ ] **DASH-008-03**: Widget configuration
+  - **Description**: Allow users to configure widget settings
+  - **Acceptance Criteria**:
+    - Widget settings panel is accessible
+    - Size, data range, display options can be configured
+    - Changes are applied immediately
+    - Settings are saved per user
+  - **Testing**: Configuration testing, persistence testing
+  - **Files**: `frontend/src/components/dashboard/WidgetConfig.vue`
+
+- [ ] **DASH-008-04**: Layout presets
+  - **Description**: Provide pre-configured layouts for different roles
+  - **Acceptance Criteria**:
+    - Admin, Pastor, Member layouts are available
+    - One-click layout application
+    - Custom layouts can be saved
+    - Layout switching is smooth
+  - **Testing**: Layout testing, role-based testing
+  - **Files**: `frontend/src/components/dashboard/LayoutPresets.vue`
+
+- [ ] **DASH-008-05**: Quick setup system
+  - **Description**: Implement quick setup for dashboard customization
+  - **Acceptance Criteria**:
+    - Quick setup button is prominent
+    - Setup wizard guides users through customization
+    - Default configurations are suggested
+    - Setup can be completed in under 2 minutes
+  - **Testing**: Setup flow testing, user experience testing
+  - **Files**: `frontend/src/components/dashboard/QuickSetup.vue`
+
+### DASH-009: Testing and Quality Assurance
 **Priority**: P0 (MVP Blocker)  
 **Estimated Effort**: 2-3 days  
 **Dependencies**: All previous tasks
 
 #### Tasks
-- [ ] **DASH-008-01**: Unit testing
+- [ ] **DASH-009-01**: Unit testing
   - **Description**: Implement comprehensive unit tests
   - **Acceptance Criteria**:
     - All components have unit tests
@@ -290,7 +346,7 @@ This document outlines the implementation tasks for the Dashboard System, follow
   - **Testing**: Unit testing, coverage testing
   - **Files**: `frontend/src/components/dashboard/__tests__/*.test.ts`, `frontend/src/stores/__tests__/dashboard.test.ts`
 
-- [ ] **DASH-008-02**: Integration testing
+- [ ] **DASH-009-02**: Integration testing
   - **Description**: Implement integration tests
   - **Acceptance Criteria**:
     - Dashboard integration tests pass
@@ -300,7 +356,7 @@ This document outlines the implementation tasks for the Dashboard System, follow
   - **Testing**: Integration testing, API testing, authentication testing
   - **Files**: `frontend/src/__tests__/dashboard.integration.test.ts`
 
-- [ ] **DASH-008-03**: End-to-end testing
+- [ ] **DASH-009-03**: End-to-end testing
   - **Description**: Implement E2E tests
   - **Acceptance Criteria**:
     - Dashboard E2E tests pass
@@ -310,7 +366,7 @@ This document outlines the implementation tasks for the Dashboard System, follow
   - **Testing**: E2E testing, mobile testing, offline testing, performance testing
   - **Files**: `frontend/e2e/dashboard.spec.ts`
 
-- [ ] **DASH-008-04**: Accessibility testing
+- [ ] **DASH-009-04**: Accessibility testing
   - **Description**: Ensure accessibility compliance
   - **Acceptance Criteria**:
     - WCAG 2.1 AA compliance
@@ -334,9 +390,13 @@ This document outlines the implementation tasks for the Dashboard System, follow
 - **Days 1-4**: DASH-004 (Activity Feed)
 - **Day 5**: DASH-006 (Offline Functionality)
 
-### Week 4: Optimization and Testing
+### Week 4: Customization and Testing
+- **Days 1-3**: DASH-008 (Dashboard Customization System)
+- **Days 4-5**: DASH-009 (Testing and Quality Assurance)
+
+### Week 5: Performance and Polish
 - **Days 1-2**: DASH-007 (Performance Optimization)
-- **Days 3-5**: DASH-008 (Testing and Quality Assurance)
+- **Days 3-5**: Final testing and polish
 
 ## Success Criteria
 
