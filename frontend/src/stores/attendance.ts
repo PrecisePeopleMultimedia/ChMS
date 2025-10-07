@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import axios from 'axios';
+import { offlineStorage } from '@/services/offlineStorage';
 import type { 
   Service, 
   AttendanceRecord, 
@@ -254,7 +255,7 @@ export const useAttendanceStore = defineStore('attendance', () => {
   };
 
   // Offline functionality
-  const saveOfflineAttendance = (attendanceData: Partial<AttendanceRecord>) => {
+  const saveOfflineAttendance = async (attendanceData: Partial<AttendanceRecord>) => {
     const offlineRecord: AttendanceRecord = {
       ...attendanceData,
       id: Date.now(), // Temporary ID for offline records
@@ -266,28 +267,26 @@ export const useAttendanceStore = defineStore('attendance', () => {
     attendanceRecords.value.unshift(offlineRecord);
     
     // Save to IndexedDB
-    saveToOfflineStorage(offlineRecord);
+    await saveToOfflineStorage(offlineRecord);
   };
 
   const syncOfflineAttendance = async () => {
-    if (pendingSync.value.length === 0) return;
-    
     isLoading.value = true;
     error.value = null;
     
     try {
-      for (const record of pendingSync.value) {
-        try {
-          await recordAttendance(record);
-          // Remove from pending sync
-          const index = pendingSync.value.findIndex(r => r.id === record.id);
-          if (index > -1) {
-            pendingSync.value.splice(index, 1);
-          }
-        } catch (err) {
-          console.error('Failed to sync offline record:', err);
-        }
+      // Use offline storage service to sync
+      await offlineStorage.syncPendingRecords();
+      
+      // Update pending sync list
+      const offlineRecords = await offlineStorage.getOfflineAttendanceRecords();
+      pendingSync.value = offlineRecords;
+      
+      // Refresh attendance records
+      if (currentService.value) {
+        await fetchAttendanceForService(currentService.value.id);
       }
+      
     } catch (err: any) {
       error.value = 'Failed to sync offline attendance';
       console.error('Offline sync error:', err);
@@ -296,16 +295,24 @@ export const useAttendanceStore = defineStore('attendance', () => {
     }
   };
 
-  const saveToOfflineStorage = (record: AttendanceRecord) => {
-    // Implementation for IndexedDB storage
-    // This will be implemented in the offline storage service
-    console.log('Saving to offline storage:', record);
+  const saveToOfflineStorage = async (record: AttendanceRecord) => {
+    try {
+      await offlineStorage.saveAttendanceRecord(record);
+    } catch (err) {
+      console.error('Failed to save to offline storage:', err);
+    }
   };
 
-  const loadFromOfflineStorage = () => {
-    // Implementation for loading from IndexedDB
-    // This will be implemented in the offline storage service
-    console.log('Loading from offline storage');
+  const loadFromOfflineStorage = async () => {
+    try {
+      const offlineRecords = await offlineStorage.getOfflineAttendanceRecords();
+      pendingSync.value = offlineRecords;
+      
+      // Update isOffline status
+      isOffline.value = !offlineStorage.getOnlineStatus();
+    } catch (err) {
+      console.error('Failed to load from offline storage:', err);
+    }
   };
 
   const clearError = () => {

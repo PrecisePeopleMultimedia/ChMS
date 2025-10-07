@@ -2,15 +2,26 @@
 import { onMounted, computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useThemeStore } from '@/stores/theme'
+import { useMembersStore } from '@/stores/members'
+import OfflineStatus from '@/components/common/OfflineStatus.vue'
 
 const authStore = useAuthStore()
 const themeStore = useThemeStore()
+const membersStore = useMembersStore()
 
 const themeClass = computed(() => themeStore.themeClass)
 
 onMounted(async () => {
   // Initialize theme first for immediate visual feedback
   themeStore.initializeTheme()
+
+  // Initialize offline functionality
+  try {
+    await membersStore.initializeOffline()
+    console.log('Offline functionality initialized')
+  } catch (error) {
+    console.warn('Failed to initialize offline functionality:', error)
+  }
 
   // Initialize authentication on app start with timeout
   try {
@@ -27,6 +38,7 @@ onMounted(async () => {
 
 <template>
   <div id="q-app" :class="themeClass">
+    <OfflineStatus />
     <router-view />
   </div>
 </template>
