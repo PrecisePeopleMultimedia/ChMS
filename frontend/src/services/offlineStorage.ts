@@ -149,32 +149,46 @@ class OfflineStorageService {
 
   // Services
   async saveService(service: Service): Promise<void> {
-    await this.db.services.add(service);
+    if (!this.db) await this.initializeDB();
+    
+    await this.db!.add('services', service);
     
     // Add to sync queue
     await this.addToSyncQueue('service', service.id, 'create', service);
   }
 
   async getServices(): Promise<Service[]> {
-    return await this.db.services.orderBy('service_date').reverse().toArray();
+    if (!this.db) await this.initializeDB();
+    
+    const services = await this.db!.getAll('services');
+    return services.sort((a, b) => 
+      new Date(b.service_date).getTime() - new Date(a.service_date).getTime()
+    );
   }
 
   async getService(id: number): Promise<Service | undefined> {
-    return await this.db.services.get(id);
+    if (!this.db) await this.initializeDB();
+    
+    return await this.db!.get('services', id);
   }
 
   async updateService(id: number, updates: Partial<Service>): Promise<void> {
-    await this.db.services.update(id, updates);
+    if (!this.db) await this.initializeDB();
     
-    // Add to sync queue
-    const service = await this.db.services.get(id);
+    const service = await this.db!.get('services', id);
     if (service) {
-      await this.addToSyncQueue('service', id, 'update', { ...service, ...updates });
+      const updatedService = { ...service, ...updates };
+      await this.db!.put('services', updatedService);
+      
+      // Add to sync queue
+      await this.addToSyncQueue('service', id, 'update', updatedService);
     }
   }
 
   async deleteService(id: number): Promise<void> {
-    await this.db.services.delete(id);
+    if (!this.db) await this.initializeDB();
+    
+    await this.db!.delete('services', id);
     
     // Add to sync queue
     await this.addToSyncQueue('service', id, 'delete', { id });
@@ -187,7 +201,9 @@ class OfflineStorageService {
     action: 'create' | 'update' | 'delete',
     data: any
   ): Promise<void> {
-    await this.db.syncQueue.add({
+    if (!this.db) await this.initializeDB();
+    
+    await this.db!.add('syncQueue', {
       record_type: recordType,
       record_id: recordId,
       action,
@@ -198,19 +214,34 @@ class OfflineStorageService {
   }
 
   async getSyncQueue(): Promise<SyncQueueItem[]> {
-    return await this.db.syncQueue.orderBy('created_at').toArray();
+    if (!this.db) await this.initializeDB();
+    
+    const items = await this.db!.getAll('syncQueue');
+    return items.sort((a, b) => 
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+    );
   }
 
   async clearSyncQueue(): Promise<void> {
-    await this.db.syncQueue.clear();
+    if (!this.db) await this.initializeDB();
+    
+    await this.db!.clear('syncQueue');
   }
 
   async removeSyncQueueItem(id: number): Promise<void> {
-    await this.db.syncQueue.delete(id);
+    if (!this.db) await this.initializeDB();
+    
+    await this.db!.delete('syncQueue', id);
   }
 
   async updateSyncQueueItem(id: number, updates: Partial<SyncQueueItem>): Promise<void> {
-    await this.db.syncQueue.update(id, updates);
+    if (!this.db) await this.initializeDB();
+    
+    const item = await this.db!.get('syncQueue', id);
+    if (item) {
+      const updatedItem = { ...item, ...updates };
+      await this.db!.put('syncQueue', updatedItem);
+    }
   }
 
   // Sync Operations
@@ -367,9 +398,11 @@ class OfflineStorageService {
 
   // Utility Methods
   async clearAllData(): Promise<void> {
-    await this.db.attendanceRecords.clear();
-    await this.db.services.clear();
-    await this.db.syncQueue.clear();
+    if (!this.db) await this.initializeDB();
+    
+    await this.db!.clear('attendanceRecords');
+    await this.db!.clear('services');
+    await this.db!.clear('syncQueue');
   }
 
   async getStorageStats(): Promise<{
@@ -378,19 +411,18 @@ class OfflineStorageService {
     syncQueue: number;
     pendingSync: number;
   }> {
-    const attendanceCount = await this.db.attendanceRecords.count();
-    const servicesCount = await this.db.services.count();
-    const syncQueueCount = await this.db.syncQueue.count();
-    const pendingSyncCount = await this.db.attendanceRecords
-      .where('sync_status')
-      .equals('pending')
-      .count();
+    if (!this.db) await this.initializeDB();
+    
+    const attendanceRecords = await this.db!.getAll('attendanceRecords');
+    const services = await this.db!.getAll('services');
+    const syncQueue = await this.db!.getAll('syncQueue');
+    const pendingSync = attendanceRecords.filter(record => record.sync_status === 'pending');
 
     return {
-      attendanceRecords: attendanceCount,
-      services: servicesCount,
-      syncQueue: syncQueueCount,
-      pendingSync: pendingSyncCount
+      attendanceRecords: attendanceRecords.length,
+      services: services.length,
+      syncQueue: syncQueue.length,
+      pendingSync: pendingSync.length
     };
   }
 
