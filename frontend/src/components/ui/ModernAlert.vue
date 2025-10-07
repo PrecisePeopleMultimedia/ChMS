@@ -2,6 +2,9 @@
   <div
     :class="[
       'modern-alert',
+      'flex',
+      'items-start',
+      'p-4',
       variantClasses,
       {
         'animate-in': !dismissed
@@ -112,7 +115,7 @@ const props = withDefaults(defineProps<Props>(), {
   dismissible: false
 })
 
-defineEmits<{
+const emit = defineEmits<{
   dismiss: []
 }>()
 
@@ -130,6 +133,7 @@ const variantClasses = computed(() => {
 
 const dismiss = () => {
   dismissed.value = true
+  emit('dismiss')
 }
 </script>
 

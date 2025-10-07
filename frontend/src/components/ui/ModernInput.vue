@@ -14,9 +14,11 @@
     <!-- Input Container -->
     <div class="modern-input-container" :class="containerClasses">
       <!-- Left Icon -->
-      <div v-if="leftIcon || $slots.leftIcon" class="modern-input-icon-left">
+      <div v-if="leftIcon || $slots.leftIcon || $slots.prefix" class="modern-input-icon-left" data-testid="prefix-icon">
         <slot name="leftIcon">
-          <q-icon v-if="leftIcon" :name="leftIcon" :size="iconSize" />
+          <slot name="prefix">
+            <q-icon v-if="leftIcon" :name="leftIcon" :size="iconSize" />
+          </slot>
         </slot>
       </div>
 
@@ -30,7 +32,26 @@
         :readonly="readonly"
         :required="required"
         :autocomplete="autocomplete"
-        :class="inputClasses"
+        :class="[
+          'modern-input',
+          'flex-1 bg-transparent border-0 outline-none',
+          'placeholder:text-muted-foreground',
+          'focus-visible:outline-none',
+          'focus-visible:ring-2',
+          'focus-visible:ring-ring',
+          'focus-visible:ring-offset-2',
+          'backdrop-blur-sm',
+          props.size === 'sm' && 'text-sm px-2',
+          props.size === 'md' && 'text-sm px-3',
+          props.size === 'lg' && 'text-base px-4',
+          props.variant === 'filled' && 'bg-muted',
+          props.variant === 'outlined' && 'border border-input',
+          props.variant === 'default' && 'border-b border-input rounded-none',
+          hasError && 'border-destructive',
+          props.disabled && 'opacity-50 cursor-not-allowed',
+          (leftIcon || $slots.leftIcon || $slots.prefix) && 'pl-10',
+          (rightIcon || $slots.rightIcon || $slots.suffix || showPasswordToggle || props.type === 'password') && 'pr-10'
+        ]"
         @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
         @focus="handleFocus"
         @blur="handleBlur"
@@ -38,22 +59,24 @@
       />
 
       <!-- Right Icon/Button -->
-      <div v-if="rightIcon || $slots.rightIcon || showPasswordToggle" class="modern-input-icon-right">
+      <div v-if="rightIcon || $slots.rightIcon || $slots.suffix || showPasswordToggle || (props.type === 'password')" class="modern-input-icon-right" data-testid="suffix-icon">
         <slot name="rightIcon">
-          <!-- Password Toggle -->
-          <button
-            v-if="showPasswordToggle"
-            type="button"
-            class="modern-input-toggle"
-            @click="togglePassword"
-          >
-            <q-icon 
-              :name="inputType === 'password' ? 'visibility_off' : 'visibility'" 
-              :size="iconSize"
-            />
-          </button>
-          <!-- Custom Right Icon -->
-          <q-icon v-else-if="rightIcon" :name="rightIcon" :size="iconSize" />
+          <slot name="suffix">
+            <!-- Password Toggle -->
+            <button
+              v-if="showPasswordToggle || props.type === 'password'"
+              type="button"
+              class="modern-input-toggle"
+              @click="togglePassword"
+            >
+              <q-icon 
+                :name="inputType === 'password' ? 'visibility_off' : 'visibility'" 
+                :size="iconSize"
+              />
+            </button>
+            <!-- Custom Right Icon -->
+            <q-icon v-else-if="rightIcon" :name="rightIcon" :size="iconSize" />
+          </slot>
         </slot>
       </div>
     </div>
@@ -98,7 +121,7 @@ const props = withDefaults(defineProps<Props>(), {
   showPasswordToggle: false
 })
 
-defineEmits<{
+const emit = defineEmits<{
   'update:modelValue': [value: string]
   focus: []
   blur: []
@@ -143,12 +166,18 @@ const inputClasses = computed(() => [
   'flex-1 bg-transparent border-0 outline-none',
   'placeholder:text-muted-foreground',
   'disabled:cursor-not-allowed disabled:opacity-50',
+  'focus-visible:outline-none',
+  'focus-visible:ring-2',
+  'focus-visible:ring-ring',
+  'focus-visible:ring-offset-2',
+  'backdrop-blur-sm',
   props.size === 'sm' && 'text-sm px-2',
   props.size === 'md' && 'text-sm px-3',
   props.size === 'lg' && 'text-base px-4',
   props.variant === 'filled' && 'bg-muted',
   props.variant === 'outlined' && 'border border-input',
-  props.variant === 'default' && 'border-b border-input rounded-none'
+  props.variant === 'default' && 'border-b border-input rounded-none',
+  hasError.value && 'border-destructive'
 ])
 
 const hasError = computed(() => !!props.errorMessage)
@@ -169,10 +198,12 @@ const togglePassword = () => {
 
 const handleFocus = () => {
   isFocused.value = true
+  emit('focus')
 }
 
 const handleBlur = () => {
   isFocused.value = false
+  emit('blur')
 }
 </script>
 

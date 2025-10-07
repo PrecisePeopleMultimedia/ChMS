@@ -115,9 +115,9 @@ describe('BaseFormCard', () => {
       })
 
       expect(wrapper.find('[data-testid="content-slot"]').exists()).toBe(true)
-      expect(wrapper.find('[data-testid="default-slot"]').exists()).toBe(true)
+      expect(wrapper.find('[data-testid="default-slot"]').exists()).toBe(false)
       expect(wrapper.text()).toContain('Content Slot')
-      expect(wrapper.text()).toContain('Default Slot')
+      expect(wrapper.text()).not.toContain('Default Slot')
     })
   })
 

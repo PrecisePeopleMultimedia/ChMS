@@ -14,20 +14,29 @@ if (axios.defaults) {
 export const useAuthStore = defineStore('auth', () => {
   // State
   const user = ref<User | null>(null)
-  const token = ref<string | null>(typeof localStorage !== 'undefined' ? localStorage.getItem('auth_token') : null)
+  const token = ref<string | null>(null)
   const isLoading = ref(false)
   const error = ref<string | null>(null)
+
+  // Actions
+  const setAuthHeader = (authToken: string) => {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${authToken}`
+  }
+
+  // Initialize token from localStorage if available
+  if (typeof localStorage !== 'undefined') {
+    const cachedToken = localStorage.getItem('auth_token')
+    if (cachedToken) {
+      token.value = cachedToken
+      setAuthHeader(cachedToken)
+    }
+  }
 
   // Getters
   const isAuthenticated = computed(() => !!token.value && !!user.value)
   const userRole = computed(() => user.value?.role || null)
   const isAdmin = computed(() => userRole.value === 'admin')
   const isStaff = computed(() => ['admin', 'staff'].includes(userRole.value || ''))
-
-  // Actions
-  const setAuthHeader = (authToken: string) => {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${authToken}`
-  }
 
   const clearAuthHeader = () => {
     delete axios.defaults.headers.common['Authorization']

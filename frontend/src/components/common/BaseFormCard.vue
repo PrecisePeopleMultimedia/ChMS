@@ -24,9 +24,12 @@
 
     <!-- Content Section -->
     <div class="space-y-4">
-      <slot name="content">
+      <div v-if="$slots.content" data-testid="content-slot">
+        <slot name="content" />
+      </div>
+      <div v-else data-testid="default-slot">
         <slot /> <!-- Default slot for backward compatibility -->
-      </slot>
+      </div>
     </div>
 
     <!-- Footer Section -->

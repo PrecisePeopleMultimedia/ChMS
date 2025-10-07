@@ -23,5 +23,10 @@ export default mergeConfig(
         ],
       },
     },
+    resolve: {
+      alias: {
+        'quasar': fileURLToPath(new URL('./src/__tests__/mocks/quasar.ts', import.meta.url)),
+      },
+    },
   }),
 )

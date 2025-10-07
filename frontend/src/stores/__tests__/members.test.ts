@@ -12,7 +12,7 @@ const mockApi = {
 }
 
 vi.mock('@/services/api', () => ({
-  default: mockApi
+  api: mockApi
 }))
 
 // Mock offline service

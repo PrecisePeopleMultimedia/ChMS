@@ -121,7 +121,7 @@ describe('ModernInput', () => {
       const wrapper = mount(ModernInput, {
         props: {
           modelValue: '',
-          error: 'This field is required'
+          errorMessage: 'This field is required'
         }
       })
 
@@ -137,7 +137,7 @@ describe('ModernInput', () => {
       const wrapper = mount(ModernInput, {
         props: {
           modelValue: '',
-          help: 'This is helpful information'
+          helperText: 'This is helpful information'
         }
       })
 
@@ -150,8 +150,8 @@ describe('ModernInput', () => {
       const wrapper = mount(ModernInput, {
         props: {
           modelValue: '',
-          error: 'Error message',
-          help: 'Help message'
+          errorMessage: 'Error message',
+          helperText: 'Help message'
         }
       })
 
@@ -189,7 +189,7 @@ describe('ModernInput', () => {
 
       const toggleButton = wrapper.find('button')
       expect(toggleButton.exists()).toBe(true)
-      expect(toggleButton.find('svg').exists()).toBe(true)
+      expect(toggleButton.find('.q-icon').exists()).toBe(true)
     })
 
     it('toggles password visibility when button is clicked', async () => {

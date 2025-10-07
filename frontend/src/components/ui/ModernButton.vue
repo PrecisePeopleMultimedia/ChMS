@@ -4,6 +4,12 @@
       'modern-button',
       variantClasses,
       sizeClasses,
+      'focus-visible:outline-none',
+      'focus-visible:ring-2',
+      'focus-visible:ring-ring',
+      'focus-visible:ring-offset-2',
+      'transition-all',
+      'duration-200',
       {
         'opacity-50 cursor-not-allowed': disabled,
         'animate-pulse': loading
