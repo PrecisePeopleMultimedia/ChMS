@@ -231,7 +231,7 @@ class MemberAttributeFactory extends Factory
         ]);
     }
 
-    public function ministry(): static
+    public function ministryInvolvement(): static
     {
         return $this->state(fn (array $attributes) => [
             'key' => 'ministry',

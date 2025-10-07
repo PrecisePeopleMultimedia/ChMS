@@ -178,6 +178,7 @@ class MemberAttributesTest extends TestCase
         $memberData = [
             'first_name' => 'John',
             'last_name' => 'Doe',
+            'member_type' => 'member',
             'custom_attributes' => [
                 'baptism_date' => '2023-01-15'
             ]
@@ -206,6 +207,7 @@ class MemberAttributesTest extends TestCase
         $memberData = [
             'first_name' => 'John',
             'last_name' => 'Doe',
+            'member_type' => 'member',
             'custom_attributes' => [
                 // Missing required_field
             ]
@@ -235,6 +237,7 @@ class MemberAttributesTest extends TestCase
         $memberData = [
             'first_name' => 'John',
             'last_name' => 'Doe',
+            'member_type' => 'member',
             'custom_attributes' => [
                 'secondary_email' => 'invalid-email',
                 'years_attending' => 'not-a-number'

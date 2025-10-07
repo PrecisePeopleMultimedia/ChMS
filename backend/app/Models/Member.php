@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Builder;
+use App\Models\User;
 
 class Member extends Model
 {
@@ -272,7 +273,7 @@ class Member extends Model
 
         return $attributes->map(function ($attribute) use ($attributeValues) {
             $value = $attributeValues->get($attribute->id);
-            
+
             return [
                 'attribute' => $attribute,
                 'value' => $value ? $value->value : null,
@@ -413,5 +414,29 @@ class Member extends Model
             'expired' => $badges->where('expiration_status', 'expired')->count(),
             'badges' => $badges->toArray(),
         ];
+    }
+
+    /**
+     * Check if user can view this member
+     */
+    public function canView(User $user): bool
+    {
+        return $user->organization_id === $this->organization_id;
+    }
+
+    /**
+     * Check if user can edit this member
+     */
+    public function canEdit(User $user): bool
+    {
+        return $user->organization_id === $this->organization_id;
+    }
+
+    /**
+     * Check if user can delete this member
+     */
+    public function canDelete(User $user): bool
+    {
+        return $user->organization_id === $this->organization_id;
     }
 }
