@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Member;
-use App\Models\MemberHistory;
-use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class MemberController extends Controller
 {
@@ -17,17 +16,14 @@ class MemberController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $query = Member::with(['family', 'organization'])
-            ->where('organization_id', auth()->user()->organization_id);
+        $user = Auth::user();
+        $organizationId = $user->organization_id;
 
-        // Search functionality
-        if ($request->has('search') && $request->search) {
-            $query->search($request->search);
-        }
+        $query = User::where('organization_id', $organizationId);
 
-        // Filter by member type
-        if ($request->has('member_type') && $request->member_type) {
-            $query->ofType($request->member_type);
+        // Filter by role
+        if ($request->has('role')) {
+            $query->where('role', $request->role);
         }
 
         // Filter by active status
@@ -35,28 +31,32 @@ class MemberController extends Controller
             $query->where('is_active', $request->boolean('is_active'));
         }
 
-        // Filter by family
-        if ($request->has('family_id') && $request->family_id) {
-            $query->where('family_id', $request->family_id);
+        // Search by name or email
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('first_name', 'like', "%{$search}%")
+                  ->orWhere('last_name', 'like', "%{$search}%");
+            });
         }
 
-        // Sorting
-        $sortBy = $request->get('sort_by', 'first_name');
-        $sortOrder = $request->get('sort_order', 'asc');
-
-        $allowedSorts = ['first_name', 'last_name', 'email', 'join_date', 'created_at'];
-        if (in_array($sortBy, $allowedSorts)) {
-            $query->orderBy($sortBy, $sortOrder);
-        }
+        // Order by name
+        $query->orderBy('first_name')->orderBy('last_name');
 
         // Pagination
-        $perPage = min($request->get('per_page', 20), 100); // Max 100 per page
+        $perPage = $request->get('per_page', 15);
         $members = $query->paginate($perPage);
 
         return response()->json([
-            'success' => true,
-            'data' => $members,
-            'message' => 'Members retrieved successfully'
+            'data' => $members->items(),
+            'pagination' => [
+                'current_page' => $members->currentPage(),
+                'last_page' => $members->lastPage(),
+                'per_page' => $members->perPage(),
+                'total' => $members->total(),
+            ],
         ]);
     }
 
@@ -65,256 +65,178 @@ class MemberController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $validated = $request->validate([
-            'first_name' => 'required|string|max:100',
-            'last_name' => 'required|string|max:100',
-            'email' => 'nullable|email|unique:members,email',
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
             'phone' => 'nullable|string|max:50',
-            'date_of_birth' => 'nullable|date|before:today',
-            'gender' => 'nullable|in:male,female,other',
-            'address' => 'nullable|string',
-            'member_type' => 'required|in:adult,child,youth,visitor',
-            'join_date' => 'nullable|date',
-            'family_id' => 'nullable|exists:families,id',
-            'notes' => 'nullable|string',
+            'role' => 'required|in:admin,staff,member',
+            'date_of_birth' => 'nullable|date',
+            'address' => 'nullable|string|max:500',
+            'emergency_contact_name' => 'nullable|string|max:255',
+            'emergency_contact_phone' => 'nullable|string|max:50',
         ]);
 
-        // Check for duplicates
-        $duplicateCheck = $this->checkForDuplicates($validated);
-        if ($duplicateCheck) {
+        if ($validator->fails()) {
             return response()->json([
-                'success' => false,
-                'message' => 'Potential duplicate member found',
-                'duplicate_member' => $duplicateCheck,
-                'suggestion' => 'Please verify this is not a duplicate before proceeding'
-            ], 409);
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+            ], 422);
         }
 
-        DB::beginTransaction();
-        try {
-            // Add organization_id from authenticated user
-            $validated['organization_id'] = auth()->user()->organization_id;
-            $validated['join_date'] = $validated['join_date'] ?? now()->toDateString();
+        $user = Auth::user();
+        $organizationId = $user->organization_id;
 
-            $member = Member::create($validated);
+        $member = User::create([
+            'organization_id' => $organizationId,
+            'name' => $request->first_name . ' ' . $request->last_name,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'role' => $request->role,
+            'date_of_birth' => $request->date_of_birth,
+            'address' => $request->address,
+            'emergency_contact_name' => $request->emergency_contact_name,
+            'emergency_contact_phone' => $request->emergency_contact_phone,
+            'password' => bcrypt('password123'), // Default password
+            'email_verified_at' => now(),
+        ]);
 
-            // Log member creation
-            MemberHistory::logChange($member, 'created', [], $validated);
+        return response()->json([
+            'message' => 'Member created successfully',
+            'data' => $member,
+        ], 201);
+    }
 
-            DB::commit();
+    /**
+     * Search members by name or email.
+     */
+    public function search(Request $request): JsonResponse
+    {
+        $request->validate([
+            'q' => 'required|string|min:2',
+        ]);
 
-            return response()->json([
-                'success' => true,
-                'data' => $member->load(['family', 'organization']),
-                'message' => 'Member created successfully'
-            ], 201);
+        $user = Auth::user();
+        $organizationId = $user->organization_id;
 
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to create member',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        $members = User::where('organization_id', $organizationId)
+            ->where(function ($query) use ($request) {
+                $query->where('name', 'like', "%{$request->q}%")
+                      ->orWhere('email', 'like', "%{$request->q}%")
+                      ->orWhere('first_name', 'like', "%{$request->q}%")
+                      ->orWhere('last_name', 'like', "%{$request->q}%");
+            })
+            ->select('id', 'name', 'first_name', 'last_name', 'email', 'phone', 'role')
+            ->limit(10)
+            ->get();
+
+        return response()->json([
+            'data' => $members,
+        ]);
     }
 
     /**
      * Display the specified member.
      */
-    public function show(Member $member): JsonResponse
+    public function show(User $member): JsonResponse
     {
-        // Ensure member belongs to user's organization
-        if ($member->organization_id !== auth()->user()->organization_id) {
+        $user = Auth::user();
+        
+        // Check if member belongs to user's organization
+        if ($member->organization_id !== $user->organization_id) {
             return response()->json([
-                'success' => false,
-                'message' => 'Member not found'
+                'message' => 'Member not found',
             ], 404);
         }
 
-        $member->load(['family', 'organization', 'history.changedBy']);
-
         return response()->json([
-            'success' => true,
             'data' => $member,
-            'message' => 'Member retrieved successfully'
         ]);
     }
 
     /**
      * Update the specified member.
      */
-    public function update(Request $request, Member $member): JsonResponse
+    public function update(Request $request, User $member): JsonResponse
     {
-        // Ensure member belongs to user's organization
-        if ($member->organization_id !== auth()->user()->organization_id) {
+        $user = Auth::user();
+        
+        // Check if member belongs to user's organization
+        if ($member->organization_id !== $user->organization_id) {
             return response()->json([
-                'success' => false,
-                'message' => 'Member not found'
+                'message' => 'Member not found',
             ], 404);
         }
 
-        $validated = $request->validate([
-            'first_name' => 'sometimes|required|string|max:100',
-            'last_name' => 'sometimes|required|string|max:100',
-            'email' => [
-                'nullable',
-                'email',
-                Rule::unique('members', 'email')->ignore($member->id)
-            ],
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'sometimes|required|string|max:255',
+            'last_name' => 'sometimes|required|string|max:255',
+            'email' => 'sometimes|required|email|unique:users,email,' . $member->id,
             'phone' => 'nullable|string|max:50',
-            'date_of_birth' => 'nullable|date|before:today',
-            'gender' => 'nullable|in:male,female,other',
-            'address' => 'nullable|string',
-            'member_type' => 'sometimes|required|in:adult,child,youth,visitor',
-            'join_date' => 'nullable|date',
-            'family_id' => 'nullable|exists:families,id',
-            'is_active' => 'sometimes|boolean',
-            'notes' => 'nullable|string',
+            'role' => 'sometimes|required|in:admin,staff,member',
+            'date_of_birth' => 'nullable|date',
+            'address' => 'nullable|string|max:500',
+            'emergency_contact_name' => 'nullable|string|max:255',
+            'emergency_contact_phone' => 'nullable|string|max:50',
         ]);
 
-        DB::beginTransaction();
-        try {
-            // Store old values for history
-            $oldValues = $member->only(array_keys($validated));
-
-            $member->update($validated);
-
-            // Log member update
-            MemberHistory::logChange($member, 'updated', $oldValues, $validated);
-
-            DB::commit();
-
+        if ($validator->fails()) {
             return response()->json([
-                'success' => true,
-                'data' => $member->load(['family', 'organization']),
-                'message' => 'Member updated successfully'
-            ]);
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to update member',
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
-
-    /**
-     * Remove the specified member (soft delete).
-     */
-    public function destroy(Member $member): JsonResponse
-    {
-        // Ensure member belongs to user's organization
-        if ($member->organization_id !== auth()->user()->organization_id) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Member not found'
-            ], 404);
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+            ], 422);
         }
 
-        DB::beginTransaction();
-        try {
-            // Store member data for history
-            $memberData = $member->toArray();
+        $member->update($request->only([
+            'first_name', 'last_name', 'email', 'phone', 'role',
+            'date_of_birth', 'address', 'emergency_contact_name', 'emergency_contact_phone'
+        ]));
 
-            $member->delete();
-
-            // Log member deletion
-            MemberHistory::logChange($member, 'deleted', $memberData, []);
-
-            DB::commit();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Member deleted successfully'
-            ]);
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to delete member',
-                'error' => $e->getMessage()
-            ], 500);
+        // Update name if first_name or last_name changed
+        if ($request->has('first_name') || $request->has('last_name')) {
+            $member->name = $member->first_name . ' ' . $member->last_name;
+            $member->save();
         }
-    }
-
-    /**
-     * Search members with advanced filtering.
-     */
-    public function search(Request $request): JsonResponse
-    {
-        $request->validate([
-            'query' => 'required|string|min:2',
-            'member_type' => 'nullable|in:adult,child,youth,visitor',
-            'is_active' => 'nullable|boolean',
-            'family_id' => 'nullable|exists:families,id',
-        ]);
-
-        $query = Member::with(['family', 'organization'])
-            ->where('organization_id', auth()->user()->organization_id)
-            ->search($request->query);
-
-        // Apply filters
-        if ($request->has('member_type')) {
-            $query->ofType($request->member_type);
-        }
-
-        if ($request->has('is_active')) {
-            $query->where('is_active', $request->boolean('is_active'));
-        }
-
-        if ($request->has('family_id')) {
-            $query->where('family_id', $request->family_id);
-        }
-
-        $members = $query->limit(50)->get(); // Limit search results
 
         return response()->json([
-            'success' => true,
-            'data' => $members,
-            'message' => 'Search completed successfully'
+            'message' => 'Member updated successfully',
+            'data' => $member,
         ]);
     }
 
     /**
-     * Check for potential duplicate members.
+     * Remove the specified member.
      */
-    private function checkForDuplicates(array $memberData): ?Member
+    public function destroy(User $member): JsonResponse
     {
-        $query = Member::where('organization_id', auth()->user()->organization_id);
-
-        // Check for exact name match
-        $exactMatch = $query->where('first_name', $memberData['first_name'])
-                           ->where('last_name', $memberData['last_name'])
-                           ->first();
-
-        if ($exactMatch) {
-            return $exactMatch;
+        $user = Auth::user();
+        
+        // Check if member belongs to user's organization
+        if ($member->organization_id !== $user->organization_id) {
+            return response()->json([
+                'message' => 'Member not found',
+            ], 404);
         }
 
-        // Check for email match if provided
-        if (!empty($memberData['email'])) {
-            $emailMatch = Member::where('organization_id', auth()->user()->organization_id)
-                               ->where('email', $memberData['email'])
-                               ->first();
-            if ($emailMatch) {
-                return $emailMatch;
+        // Prevent deleting the last admin
+        if ($member->role === 'admin') {
+            $adminCount = User::where('organization_id', $member->organization_id)
+                ->where('role', 'admin')
+                ->count();
+            
+            if ($adminCount <= 1) {
+                return response()->json([
+                    'message' => 'Cannot delete the last admin member',
+                ], 422);
             }
         }
 
-        // Check for phone match if provided
-        if (!empty($memberData['phone'])) {
-            $phoneMatch = Member::where('organization_id', auth()->user()->organization_id)
-                               ->where('phone', $memberData['phone'])
-                               ->first();
-            if ($phoneMatch) {
-                return $phoneMatch;
-            }
-        }
+        $member->delete();
 
-        return null;
+        return response()->json([
+            'message' => 'Member deleted successfully',
+        ]);
     }
 }

@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Family;
-use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class FamilyController extends Controller
 {
@@ -14,31 +17,33 @@ class FamilyController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $query = Family::with(['members', 'headOfFamily', 'organization'])
-            ->where('organization_id', auth()->user()->organization_id);
+        $user = Auth::user();
+        $organizationId = $user->organization_id;
 
-        // Search functionality
-        if ($request->has('search') && $request->search) {
-            $query->search($request->search);
+        $query = Family::where('organization_id', $organizationId)
+            ->with(['head', 'members']);
+
+        // Search by family name
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where('name', 'like', "%{$search}%");
         }
 
-        // Sorting
-        $sortBy = $request->get('sort_by', 'family_name');
-        $sortOrder = $request->get('sort_order', 'asc');
-
-        $allowedSorts = ['family_name', 'created_at'];
-        if (in_array($sortBy, $allowedSorts)) {
-            $query->orderBy($sortBy, $sortOrder);
-        }
+        // Order by name
+        $query->orderBy('name');
 
         // Pagination
-        $perPage = min($request->get('per_page', 20), 100);
+        $perPage = $request->get('per_page', 15);
         $families = $query->paginate($perPage);
 
         return response()->json([
-            'success' => true,
-            'data' => $families,
-            'message' => 'Families retrieved successfully'
+            'data' => $families->items(),
+            'pagination' => [
+                'current_page' => $families->currentPage(),
+                'last_page' => $families->lastPage(),
+                'per_page' => $families->perPage(),
+                'total' => $families->total(),
+            ],
         ]);
     }
 
@@ -47,23 +52,52 @@ class FamilyController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $validated = $request->validate([
-            'family_name' => 'required|string|max:255',
-            'head_of_family_id' => 'nullable|exists:members,id',
-            'address' => 'nullable|string',
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'head_id' => 'required|exists:users,id',
+            'address' => 'nullable|string|max:500',
             'phone' => 'nullable|string|max:50',
-            'email' => 'nullable|email',
-            'notes' => 'nullable|string',
+            'email' => 'nullable|email|max:255',
         ]);
 
-        $validated['organization_id'] = auth()->user()->organization_id;
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
 
-        $family = Family::create($validated);
+        $user = Auth::user();
+        $organizationId = $user->organization_id;
+
+        // Check if head belongs to the same organization
+        $head = User::where('id', $request->head_id)
+            ->where('organization_id', $organizationId)
+            ->first();
+
+        if (!$head) {
+            return response()->json([
+                'message' => 'Family head not found or does not belong to your organization',
+            ], 404);
+        }
+
+        $family = Family::create([
+            'organization_id' => $organizationId,
+            'name' => $request->name,
+            'head_id' => $request->head_id,
+            'address' => $request->address,
+            'phone' => $request->phone,
+            'email' => $request->email,
+        ]);
+
+        // Add head as family member
+        $family->members()->attach($request->head_id, ['role' => 'head']);
+
+        $family->load(['head', 'members']);
 
         return response()->json([
-            'success' => true,
-            'data' => $family->load(['members', 'headOfFamily']),
-            'message' => 'Family created successfully'
+            'message' => 'Family created successfully',
+            'data' => $family,
         ], 201);
     }
 
@@ -72,20 +106,19 @@ class FamilyController extends Controller
      */
     public function show(Family $family): JsonResponse
     {
-        // Ensure family belongs to user's organization
-        if ($family->organization_id !== auth()->user()->organization_id) {
+        $user = Auth::user();
+        
+        // Check if family belongs to user's organization
+        if ($family->organization_id !== $user->organization_id) {
             return response()->json([
-                'success' => false,
-                'message' => 'Family not found'
+                'message' => 'Family not found',
             ], 404);
         }
 
-        $family->load(['members', 'headOfFamily', 'organization']);
+        $family->load(['head', 'members']);
 
         return response()->json([
-            'success' => true,
             'data' => $family,
-            'message' => 'Family retrieved successfully'
         ]);
     }
 
@@ -94,29 +127,52 @@ class FamilyController extends Controller
      */
     public function update(Request $request, Family $family): JsonResponse
     {
-        // Ensure family belongs to user's organization
-        if ($family->organization_id !== auth()->user()->organization_id) {
+        $user = Auth::user();
+        
+        // Check if family belongs to user's organization
+        if ($family->organization_id !== $user->organization_id) {
             return response()->json([
-                'success' => false,
-                'message' => 'Family not found'
+                'message' => 'Family not found',
             ], 404);
         }
 
-        $validated = $request->validate([
-            'family_name' => 'sometimes|required|string|max:255',
-            'head_of_family_id' => 'nullable|exists:members,id',
-            'address' => 'nullable|string',
+        $validator = Validator::make($request->all(), [
+            'name' => 'sometimes|required|string|max:255',
+            'head_id' => 'sometimes|required|exists:users,id',
+            'address' => 'nullable|string|max:500',
             'phone' => 'nullable|string|max:50',
-            'email' => 'nullable|email',
-            'notes' => 'nullable|string',
+            'email' => 'nullable|email|max:255',
         ]);
 
-        $family->update($validated);
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        // If changing head, validate new head belongs to organization
+        if ($request->has('head_id')) {
+            $newHead = User::where('id', $request->head_id)
+                ->where('organization_id', $user->organization_id)
+                ->first();
+
+            if (!$newHead) {
+                return response()->json([
+                    'message' => 'New family head not found or does not belong to your organization',
+                ], 404);
+            }
+        }
+
+        $family->update($request->only([
+            'name', 'head_id', 'address', 'phone', 'email'
+        ]));
+
+        $family->load(['head', 'members']);
 
         return response()->json([
-            'success' => true,
-            'data' => $family->load(['members', 'headOfFamily']),
-            'message' => 'Family updated successfully'
+            'message' => 'Family updated successfully',
+            'data' => $family,
         ]);
     }
 
@@ -125,27 +181,103 @@ class FamilyController extends Controller
      */
     public function destroy(Family $family): JsonResponse
     {
-        // Ensure family belongs to user's organization
-        if ($family->organization_id !== auth()->user()->organization_id) {
+        $user = Auth::user();
+        
+        // Check if family belongs to user's organization
+        if ($family->organization_id !== $user->organization_id) {
             return response()->json([
-                'success' => false,
-                'message' => 'Family not found'
+                'message' => 'Family not found',
             ], 404);
-        }
-
-        // Check if family has members
-        if ($family->members()->count() > 0) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Cannot delete family with existing members. Please remove all members first.'
-            ], 422);
         }
 
         $family->delete();
 
         return response()->json([
-            'success' => true,
-            'message' => 'Family deleted successfully'
+            'message' => 'Family deleted successfully',
+        ]);
+    }
+
+    /**
+     * Add a member to the family.
+     */
+    public function addMember(Request $request, Family $family): JsonResponse
+    {
+        $request->validate([
+            'member_id' => 'required|exists:users,id',
+            'role' => 'required|in:head,spouse,child,other',
+        ]);
+
+        $user = Auth::user();
+        
+        // Check if family belongs to user's organization
+        if ($family->organization_id !== $user->organization_id) {
+            return response()->json([
+                'message' => 'Family not found',
+            ], 404);
+        }
+
+        // Check if member belongs to the same organization
+        $member = User::where('id', $request->member_id)
+            ->where('organization_id', $user->organization_id)
+            ->first();
+
+        if (!$member) {
+            return response()->json([
+                'message' => 'Member not found or does not belong to your organization',
+            ], 404);
+        }
+
+        // Check if member is already in this family
+        if ($family->members()->where('user_id', $request->member_id)->exists()) {
+            return response()->json([
+                'message' => 'Member is already in this family',
+            ], 409);
+        }
+
+        $family->members()->attach($request->member_id, [
+            'role' => $request->role,
+        ]);
+
+        $family->load(['head', 'members']);
+
+        return response()->json([
+            'message' => 'Member added to family successfully',
+            'data' => $family,
+        ]);
+    }
+
+    /**
+     * Remove a member from the family.
+     */
+    public function removeMember(Request $request, Family $family): JsonResponse
+    {
+        $request->validate([
+            'member_id' => 'required|exists:users,id',
+        ]);
+
+        $user = Auth::user();
+        
+        // Check if family belongs to user's organization
+        if ($family->organization_id !== $user->organization_id) {
+            return response()->json([
+                'message' => 'Family not found',
+            ], 404);
+        }
+
+        // Check if member is in this family
+        if (!$family->members()->where('user_id', $request->member_id)->exists()) {
+            return response()->json([
+                'message' => 'Member is not in this family',
+            ], 404);
+        }
+
+        $family->members()->detach($request->member_id);
+
+        $family->load(['head', 'members']);
+
+        return response()->json([
+            'message' => 'Member removed from family successfully',
+            'data' => $family,
         ]);
     }
 }
