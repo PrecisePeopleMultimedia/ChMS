@@ -8,6 +8,8 @@ use App\Http\Controllers\Api\OrganizationSettingsController;
 use App\Http\Controllers\Api\ServiceScheduleController;
 use App\Http\Controllers\Api\MemberController;
 use App\Http\Controllers\Api\MemberAttributeController;
+use App\Http\Controllers\Api\BadgeTypeController;
+use App\Http\Controllers\Api\MemberBadgeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -77,12 +79,45 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('members', MemberController::class);
     Route::get('/members/options', [MemberController::class, 'options']);
     Route::post('/members/bulk-update', [MemberController::class, 'bulkUpdate']);
+    
+    // Member notes routes
+    Route::prefix('members/{member}/notes')->group(function () {
+        Route::get('/', [App\Http\Controllers\Api\MemberNoteController::class, 'index']);
+        Route::post('/', [App\Http\Controllers\Api\MemberNoteController::class, 'store']);
+        Route::get('/{note}', [App\Http\Controllers\Api\MemberNoteController::class, 'show']);
+        Route::put('/{note}', [App\Http\Controllers\Api\MemberNoteController::class, 'update']);
+        Route::delete('/{note}', [App\Http\Controllers\Api\MemberNoteController::class, 'destroy']);
+    });
+    
+    // Notes search and utility routes
+    Route::prefix('notes')->group(function () {
+        Route::get('/search', [App\Http\Controllers\Api\MemberNoteController::class, 'search']);
+        Route::get('/types', [App\Http\Controllers\Api\MemberNoteController::class, 'noteTypes']);
+        Route::get('/privacy-levels', [App\Http\Controllers\Api\MemberNoteController::class, 'privacyLevels']);
+    });
 
     // Member attributes routes
     Route::apiResource('member-attributes', MemberAttributeController::class);
     Route::get('/member-attributes-categories', [MemberAttributeController::class, 'categories']);
     Route::get('/member-attributes-field-types', [MemberAttributeController::class, 'fieldTypes']);
     Route::post('/member-attributes/update-order', [MemberAttributeController::class, 'updateOrder']);
+
+    // Badge type routes
+    Route::apiResource('badge-types', BadgeTypeController::class);
+    Route::get('/badge-types-icons', [BadgeTypeController::class, 'icons']);
+    Route::post('/badge-types/create-defaults', [BadgeTypeController::class, 'createDefaults']);
+    Route::get('/badge-types-statistics', [BadgeTypeController::class, 'statistics']);
+    Route::post('/badge-types/bulk-update', [BadgeTypeController::class, 'bulkUpdate']);
+
+    // Member badge routes
+    Route::get('/members/{member}/badges', [MemberBadgeController::class, 'memberBadges']);
+    Route::post('/members/{member}/badges', [MemberBadgeController::class, 'assignBadge']);
+    Route::delete('/members/{member}/badges/{badgeType}', [MemberBadgeController::class, 'removeBadge']);
+    Route::put('/members/{member}/badges/{badgeType}', [MemberBadgeController::class, 'updateBadge']);
+    Route::post('/members/{member}/badges/auto-assign', [MemberBadgeController::class, 'autoAssign']);
+    Route::post('/member-badges/bulk-assign', [MemberBadgeController::class, 'bulkAssign']);
+    Route::post('/member-badges/bulk-remove', [MemberBadgeController::class, 'bulkRemove']);
+    Route::get('/member-badges/expiring', [MemberBadgeController::class, 'expiringBadges']);
 });
 
 // Health check route

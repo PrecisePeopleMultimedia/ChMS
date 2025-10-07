@@ -84,6 +84,75 @@ class Member extends Model
     }
 
     /**
+     * Get all badge assignments for this member
+     */
+    public function memberBadges(): HasMany
+    {
+        return $this->hasMany(MemberBadge::class);
+    }
+
+    /**
+     * Get all notes for this member
+     */
+    public function notes(): HasMany
+    {
+        return $this->hasMany(MemberNote::class);
+    }
+
+    /**
+     * Get pinned notes for this member
+     */
+    public function pinnedNotes(): HasMany
+    {
+        return $this->hasMany(MemberNote::class)->where('is_pinned', true);
+    }
+
+    /**
+     * Get active alert notes for this member
+     */
+    public function activeAlertNotes(): HasMany
+    {
+        return $this->hasMany(MemberNote::class)
+            ->where('is_alert', true)
+            ->where(function ($query) {
+                $query->whereNull('alert_expires_at')
+                      ->orWhere('alert_expires_at', '>', now());
+            });
+    }
+
+    /**
+     * Get active (non-expired) badge assignments
+     */
+    public function activeBadges(): HasMany
+    {
+        return $this->hasMany(MemberBadge::class)->active();
+    }
+
+    /**
+     * Get badge types assigned to this member
+     */
+    public function badges()
+    {
+        return $this->belongsToMany(BadgeType::class, 'member_badges')
+            ->withPivot(['assigned_by', 'assigned_at', 'expires_at', 'notes'])
+            ->withTimestamps();
+    }
+
+    /**
+     * Get active badge types for this member
+     */
+    public function activeBadgeTypes()
+    {
+        return $this->belongsToMany(BadgeType::class, 'member_badges')
+            ->wherePivot(function ($query) {
+                $query->whereNull('expires_at')
+                    ->orWhere('expires_at', '>', now());
+            })
+            ->withPivot(['assigned_by', 'assigned_at', 'expires_at', 'notes'])
+            ->withTimestamps();
+    }
+
+    /**
      * Get the full name of the member
      */
     public function getFullNameAttribute(): string
@@ -229,7 +298,7 @@ class Member extends Model
     public function validateCustomAttributes(array $attributes): array
     {
         $errors = [];
-        
+
         $memberAttributes = MemberAttribute::where('organization_id', $this->organization_id)
             ->active()
             ->get()
@@ -237,7 +306,7 @@ class Member extends Model
 
         foreach ($attributes as $attributeKey => $value) {
             $attribute = $memberAttributes->get($attributeKey);
-            
+
             if (!$attribute) {
                 continue;
             }
@@ -252,4 +321,96 @@ class Member extends Model
 
         return $errors;
     }
-}
+
+    /**
+     * Check if member has a specific badge
+     */
+    public function hasBadge(string $badgeName): bool
+    {
+        return $this->activeBadgeTypes()
+            ->where('name', $badgeName)
+            ->exists();
+    }
+
+    /**
+     * Check if member has a specific badge by ID
+     */
+    public function hasBadgeById(int $badgeTypeId): bool
+    {
+        return $this->activeBadges()
+            ->where('badge_type_id', $badgeTypeId)
+            ->exists();
+    }
+
+    /**
+     * Assign a badge to this member
+     */
+    public function assignBadge(int $badgeTypeId, ?int $assignedBy = null, ?string $notes = null, ?\Carbon\Carbon $expiresAt = null): ?MemberBadge
+    {
+        return MemberBadge::assignBadgeToMember($this->id, $badgeTypeId, $assignedBy, $notes, $expiresAt);
+    }
+
+    /**
+     * Remove a badge from this member
+     */
+    public function removeBadge(int $badgeTypeId): bool
+    {
+        return MemberBadge::removeBadgeFromMember($this->id, $badgeTypeId);
+    }
+
+    /**
+     * Get all badges with display information
+     */
+    public function getBadgesWithDisplayInfo()
+    {
+        return $this->activeBadges()
+            ->with(['badgeType', 'assignedBy'])
+            ->get()
+            ->map(function ($memberBadge) {
+                return $memberBadge->badge_display;
+            });
+    }
+
+    /**
+     * Auto-assign badges based on member attributes
+     */
+    public function autoAssignBadges(): void
+    {
+        MemberBadge::autoAssignBadges($this);
+    }
+
+    /**
+     * Scope to filter members by badge
+     */
+    public function scopeWithBadge(Builder $query, string $badgeName): Builder
+    {
+        return $query->whereHas('activeBadgeTypes', function ($q) use ($badgeName) {
+            $q->where('name', $badgeName);
+        });
+    }
+
+    /**
+     * Scope to filter members by badge ID
+     */
+    public function scopeWithBadgeId(Builder $query, int $badgeTypeId): Builder
+    {
+        return $query->whereHas('activeBadges', function ($q) use ($badgeTypeId) {
+            $q->where('badge_type_id', $badgeTypeId);
+        });
+    }
+
+    /**
+     * Get member's badge summary
+     */
+    public function getBadgeSummaryAttribute(): array
+    {
+        $badges = $this->getBadgesWithDisplayInfo();
+
+        return [
+            'total_badges' => $badges->count(),
+            'active_badges' => $badges->where('expiration_status', 'active')->count(),
+            'expiring_soon' => $badges->where('expiration_status', 'expiring_soon')->count(),
+            'expired' => $badges->where('expiration_status', 'expired')->count(),
+            'badges' => $badges->toArray(),
+        ];
+    }

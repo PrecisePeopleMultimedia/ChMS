@@ -116,6 +116,15 @@ const router = createRouter({
             requiresAuth: true,
             title: 'Custom Attributes - ChurchAfrica'
           }
+        },
+        {
+          path: '/members/badges',
+          name: 'MemberBadges',
+          component: () => import('@/components/members/BadgeManager.vue'),
+          meta: {
+            requiresAuth: true,
+            title: 'Badge Management - ChurchAfrica'
+          }
         }
       ]
     },
