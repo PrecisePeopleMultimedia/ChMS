@@ -414,3 +414,4 @@ class Member extends Model
             'badges' => $badges->toArray(),
         ];
     }
+}
