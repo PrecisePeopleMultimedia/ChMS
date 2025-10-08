@@ -237,7 +237,7 @@ const showActiveOnly = ref(true)
 const showCreateDialog = ref(false)
 const showDeleteDialog = ref(false)
 const selectedBadgeType = ref(null)
-const badgeTypeToDelete = ref(null)
+const badgeTypeToDelete = ref<any>(null)
 
 // Computed properties
 const badgeTypes = computed(() => badgesStore.badgeTypes)

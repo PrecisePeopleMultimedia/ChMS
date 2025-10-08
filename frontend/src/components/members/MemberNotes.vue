@@ -258,7 +258,11 @@ const filteredNotes = computed(() => {
 
 // Methods
 const loadNotes = async () => {
-  await notesStore.fetchNotes(props.memberId, filters.value)
+  await notesStore.fetchNotes(props.memberId, {
+    ...filters.value,
+    is_alert: filters.value.is_alert ?? undefined,
+    is_pinned: filters.value.is_pinned ?? undefined
+  })
 }
 
 const editNote = (note: MemberNote) => {

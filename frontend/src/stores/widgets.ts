@@ -115,7 +115,9 @@ export const useWidgetsStore = defineStore('widgets', () => {
       // Set default layout if none is current
       if (!currentLayout.value && dashboardLayouts.value.length > 0) {
         const defaultLayout = dashboardLayouts.value.find(l => l.isDefault) || dashboardLayouts.value[0]
-        await setCurrentLayout(defaultLayout?.id)
+        if (defaultLayout?.id) {
+          await setCurrentLayout(defaultLayout.id)
+        }
       }
     } catch (err: any) {
       console.error('Failed to fetch dashboard layouts:', err)

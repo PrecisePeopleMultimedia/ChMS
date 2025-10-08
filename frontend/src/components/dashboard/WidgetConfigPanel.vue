@@ -83,7 +83,7 @@
               v-for="(value, key) in configData.widgetSpecific"
               :key="key"
               v-model="configData.widgetSpecific[key]"
-              :label="formatConfigLabel(key)"
+              :label="formatConfigLabel(String(key))"
               outlined
               dense
               class="q-mb-sm"

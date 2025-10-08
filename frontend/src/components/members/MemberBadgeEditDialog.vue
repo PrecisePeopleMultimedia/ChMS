@@ -148,6 +148,8 @@ import { useBadgesStore } from '@/stores/badges'
 
 interface Badge {
   id: number
+  member_id?: number // For badge assignment
+  badge_type_id?: number // For badge type reference
   name: string
   description?: string
   color: string
@@ -235,7 +237,7 @@ const loadBadgeData = () => {
   const expiresAt = props.badge.expires_at
   if (expiresAt) {
     const date = new Date(expiresAt)
-    form.value.expires_at = date.toISOString().split('T')[0]
+    form.value.expires_at = date?.toISOString().split('T')[0] || ''
   } else {
     form.value.expires_at = ''
   }
@@ -275,8 +277,8 @@ const updateBadge = async () => {
     // This would typically come from the parent component or be stored in the badge object
     // For now, we'll assume the badge object has the necessary IDs
     await badgesStore.updateMemberBadge(
-      props.badge.member_id, // This would need to be passed or stored
-      props.badge.badge_type_id, // This would need to be passed or stored
+      props.badge.member_id || 0, // This would need to be passed or stored
+      props.badge.badge_type_id || 0, // This would need to be passed or stored
       updateData
     )
     

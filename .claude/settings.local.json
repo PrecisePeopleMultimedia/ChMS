@@ -3,7 +3,20 @@
     "allow": [
       "Bash(netstat:*)",
       "Bash(findstr:*)",
-      "Bash(npm run test:e2e:*)"
+      "Bash(npm run test:e2e:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm run test:unit:coverage:*)",
+      "Bash(npm audit:*)",
+      "Bash(composer audit:*)",
+      "Bash(npm run test:unit:*)",
+      "Bash(php:*)",
+      "Bash(dir /s)",
+      "Bash(awk:*)",
+      "Bash(npm ls:*)",
+      "Bash(tee:*)",
+      "Bash(xargs ls:*)",
+      "Bash(npx vite-bundle-visualizer:*)",
+      "Bash(npm run test:unit:run:*)"
     ],
     "deny": [],
     "ask": []

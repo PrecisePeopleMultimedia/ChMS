@@ -12,12 +12,16 @@ export interface BadgeType {
   is_active: boolean
   member_count?: number
   active_member_count?: number
+  updating?: boolean // For loading states
+  deleting?: boolean // For loading states
   created_at: string
   updated_at: string
 }
 
 export interface MemberBadge {
   id: number
+  member_id?: number // For badge assignment
+  badge_type_id?: number // For badge type reference
   name: string
   description?: string
   color: string

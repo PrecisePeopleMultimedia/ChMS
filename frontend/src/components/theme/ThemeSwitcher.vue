@@ -146,7 +146,7 @@ const getThemeIcon = (themeId: string): string => {
     'garnet-night': 'nights_stay',
     'default': 'palette'
   }
-  return iconMap[themeId] || iconMap.default
+  return iconMap[themeId || 'default'] || iconMap.default || 'palette'
 }
 
 const getThemeColor = (themeId: string): string => {

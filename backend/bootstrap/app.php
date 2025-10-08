@@ -15,6 +15,14 @@ return Application::configure(basePath: dirname(__DIR__))
         // Add CORS headers for API routes
         $middleware->api(append: [
             \Illuminate\Http\Middleware\HandleCors::class,
+            \App\Http\Middleware\LoggingMiddleware::class,
+            \App\Http\Middleware\SecurityHeadersMiddleware::class,
+            \App\Http\Middleware\SecurityMonitoring::class,
+        ]);
+        
+        // Add security headers to all routes
+        $middleware->web(append: [
+            \App\Http\Middleware\SecurityHeadersMiddleware::class,
         ]);
         
         // Remove CSRF protection from API routes

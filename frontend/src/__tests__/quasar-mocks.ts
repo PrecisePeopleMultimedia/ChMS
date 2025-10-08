@@ -48,7 +48,7 @@ export const quasarMocks = {
     props: ['greedy'],
     emits: ['submit'],
     methods: {
-      handleSubmit(event: Event) {
+      handleSubmit(this: any, event: Event) {
         this.$emit('submit', event)
       },
       validate: vi.fn(() => Promise.resolve(true)),
@@ -89,32 +89,33 @@ export const quasarMocks = {
       readonly: Boolean,
     },
     emits: ['update:modelValue', 'focus', 'blur'],
-    data() {
+    data(this: any): any {
       return {
         hasError: false,
         computedType: this.type,
+        errorMessage: '',
       }
     },
     methods: {
-      handleInput(event: Event) {
+      handleInput(this: any, event: Event) {
         const value = (event.target as HTMLInputElement).value
         this.$emit('update:modelValue', value)
         if (!this.lazyRules) {
           this.validate()
         }
       },
-      handleBlur(event: Event) {
+      handleBlur(this: any, event: Event) {
         this.$emit('blur', event)
         if (this.lazyRules) {
           this.validate()
         }
       },
-      validate() {
+      validate(this: any) {
         if (!this.rules || this.rules.length === 0) {
           this.hasError = false
           return true
         }
-        
+
         for (const rule of this.rules) {
           const result = rule(this.modelValue)
           if (result !== true) {
@@ -123,11 +124,11 @@ export const quasarMocks = {
             return false
           }
         }
-        
+
         this.hasError = false
         return true
       },
-      resetValidation() {
+      resetValidation(this: any) {
         this.hasError = false
         this.errorMessage = ''
       },
@@ -165,7 +166,7 @@ export const quasarMocks = {
     },
     emits: ['click'],
     computed: {
-      btnClasses() {
+      btnClasses(this: any): any {
         const classes = []
         if (this.color) classes.push(`bg-${this.color}`)
         if (this.size) classes.push(`q-btn--${this.size}`)
@@ -178,7 +179,7 @@ export const quasarMocks = {
       },
     },
     methods: {
-      handleClick(event: Event) {
+      handleClick(this: any, event: Event) {
         if (!this.loading && !this.disable) {
           this.$emit('click', event)
         }
@@ -211,7 +212,7 @@ export const quasarMocks = {
     },
     emits: ['update:modelValue'],
     methods: {
-      handleChange(event: Event) {
+      handleChange(this: any, event: Event) {
         const checked = (event.target as HTMLInputElement).checked
         this.$emit('update:modelValue', checked)
       },
@@ -250,9 +251,9 @@ export const quasarMocks = {
     },
     emits: ['update:modelValue'],
     computed: {
-      normalizedOptions() {
+      normalizedOptions(this: any): any {
         if (!this.options) return []
-        return this.options.map(option => {
+        return this.options.map((option: any) => {
           if (typeof option === 'string') {
             return { value: option, label: option }
           }
@@ -264,7 +265,7 @@ export const quasarMocks = {
       },
     },
     methods: {
-      handleChange(event: Event) {
+      handleChange(this: any, event: Event) {
         const value = (event.target as HTMLSelectElement).value
         this.$emit('update:modelValue', value)
       },
@@ -281,7 +282,7 @@ export const quasarMocks = {
       square: Boolean,
     },
     computed: {
-      cardClasses() {
+      cardClasses(this: any): string[] {
         const classes = []
         if (this.flat) classes.push('q-card--flat')
         if (this.bordered) classes.push('q-card--bordered')
@@ -317,13 +318,13 @@ export const quasarMocks = {
       color: String,
     },
     computed: {
-      iconClasses() {
+      iconClasses(this: any): string[] {
         const classes = ['q-icon']
         if (this.name) classes.push(this.name)
         if (this.color) classes.push(`text-${this.color}`)
         return classes
       },
-      iconStyle() {
+      iconStyle(this: any): any {
         const style: any = {}
         if (this.size) {
           style.fontSize = this.size
@@ -340,19 +341,136 @@ export const quasarMocks = {
       color: String,
     },
     computed: {
-      spinnerStyle() {
+      spinnerStyle(): any {
         const style: any = {}
-        if (this.size) style.fontSize = this.size
-        if (this.color) style.color = this.color
+        if ((this as any).size) style.fontSize = (this as any).size
+        if ((this as any).color) style.color = (this as any).color
         return style
       },
     },
+  },
+
+  // Modern UI Components
+  ModernButton: {
+    name: 'ModernButton',
+    template: `
+      <button
+        :type="type || 'button'"
+        :class="['modern-button', variant, size]"
+        :disabled="disabled || loading"
+        @click="$emit('click', $event)"
+      >
+        <span v-if="loading">Loading...</span>
+        <slot name="icon" v-if="!loading"></slot>
+        <slot v-if="!loading"></slot>
+      </button>
+    `,
+    props: {
+      variant: String,
+      size: String,
+      loading: Boolean,
+      disabled: Boolean,
+      type: String,
+    },
+    emits: ['click'],
+  },
+
+  ModernAlert: {
+    name: 'ModernAlert',
+    template: `
+      <div :class="['modern-alert', variant]">
+        <div v-if="title" class="alert-title">{{ title }}</div>
+        <div class="alert-message">{{ message }}</div>
+        <slot></slot>
+        <button v-if="dismissible" @click="$emit('dismiss')" class="alert-dismiss">×</button>
+      </div>
+    `,
+    props: {
+      variant: String,
+      message: String,
+      title: String,
+      dismissible: Boolean,
+    },
+    emits: ['dismiss'],
   },
 
   // Utility components
   QSpace: {
     name: 'QSpace',
     template: '<div class="q-space"></div>',
+  },
+
+  // Banner component
+  QBanner: {
+    name: 'QBanner',
+    template: `
+      <div class="q-banner" :class="bannerClasses">
+        <div class="q-banner__avatar">
+          <slot name="avatar">
+            <q-icon v-if="icon" :name="icon" />
+          </slot>
+        </div>
+        <div class="q-banner__content">
+          <slot />
+        </div>
+        <div v-if="$slots.action" class="q-banner__actions">
+          <slot name="action" />
+        </div>
+      </div>
+    `,
+    props: {
+      icon: String,
+      color: String,
+      textColor: String,
+      inline: Boolean,
+      dense: Boolean,
+      rounded: Boolean,
+    },
+    computed: {
+      bannerClasses(this: any): string[] {
+        const classes = []
+        if (this.color) classes.push(`bg-${this.color}`)
+        if (this.textColor) classes.push(`text-${this.textColor}`)
+        if (this.inline) classes.push('q-banner--inline')
+        if (this.dense) classes.push('q-banner--dense')
+        if (this.rounded) classes.push('q-banner--rounded')
+        return classes
+      },
+    },
+  },
+
+  // Toggle component
+  QToggle: {
+    name: 'QToggle',
+    template: `
+      <label class="q-toggle" :class="{ 'q-toggle--disabled': disable }">
+        <input
+          type="checkbox"
+          :checked="modelValue"
+          :disabled="disable"
+          @change="handleChange"
+          class="q-toggle__native"
+        />
+        <div class="q-toggle__track"></div>
+        <div class="q-toggle__thumb"></div>
+        <div v-if="label || $slots.default" class="q-toggle__label">
+          <slot>{{ label }}</slot>
+        </div>
+      </label>
+    `,
+    props: {
+      modelValue: Boolean,
+      label: String,
+      disable: Boolean,
+      color: String,
+    },
+    emits: ['update:modelValue'],
+    methods: {
+      handleChange(this: any, event: Event) {
+        const checked = (event.target as HTMLInputElement).checked
+        this.$emit('update:modelValue', checked)
+      },
+    },
   },
 }
 
@@ -389,3 +507,6 @@ export const useQuasarMock = () => ({
     isActive: false,
   },
 })
+
+// Export useQuasar for direct import
+export const useQuasar = useQuasarMock

@@ -1,3 +1,7 @@
+---
+type: "always_apply"
+---
+
 # Testing Rules
 
 ## Core Requirements

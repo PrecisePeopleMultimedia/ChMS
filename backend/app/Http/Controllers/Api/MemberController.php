@@ -288,15 +288,24 @@ class MemberController extends Controller
     private function validateCustomAttributes(array $attributes, int $organizationId): array
     {
         $errors = [];
-        
+
         $memberAttributes = MemberAttribute::where('organization_id', $organizationId)
             ->active()
             ->get()
             ->keyBy('key');
 
+        // Check for missing required attributes
+        $requiredAttributes = $memberAttributes->where('is_required', true);
+        foreach ($requiredAttributes as $requiredAttribute) {
+            if (!array_key_exists($requiredAttribute->key, $attributes)) {
+                $errors[$requiredAttribute->key] = 'The ' . strtolower($requiredAttribute->name) . ' field is required.';
+            }
+        }
+
+        // Validate provided attributes
         foreach ($attributes as $attributeKey => $value) {
             $attribute = $memberAttributes->get($attributeKey);
-            
+
             if (!$attribute) {
                 $errors[$attributeKey] = 'Invalid attribute';
                 continue;

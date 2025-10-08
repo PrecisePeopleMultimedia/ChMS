@@ -1,9 +1,13 @@
-# Environment files
+# Environment files (CRITICAL: Never commit these)
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+frontend/.env
+backend/.env
+*/.env
+**/.env
 
 # MCP Server configurations (sensitive)
 .mcp-config.json

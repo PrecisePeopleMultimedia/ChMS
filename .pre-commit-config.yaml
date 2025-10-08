@@ -1,0 +1,48 @@
+# Pre-commit hooks to prevent security issues
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-case-conflict
+      
+  # Prevent committing secrets
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+        exclude: package.lock.json
+        
+  # Prevent committing .env files
+  - repo: local
+    hooks:
+      - id: prevent-env-files
+        name: Prevent .env files from being committed
+        entry: bash -c 'if git diff --cached --name-only | grep -E "\.env$"; then echo "ERROR: .env files should not be committed!"; exit 1; fi'
+        language: system
+        pass_filenames: false
+        
+  # TypeScript and JavaScript linting
+  - repo: local
+    hooks:
+      - id: frontend-lint
+        name: Frontend ESLint
+        entry: bash -c 'cd frontend && npm run lint'
+        language: system
+        files: ^frontend/.*\.(js|ts|vue)$
+        pass_filenames: false
+        
+  # PHP linting
+  - repo: local
+    hooks:
+      - id: backend-lint
+        name: Backend PHP CS Fixer
+        entry: bash -c 'cd backend && composer run-script cs-fix'
+        language: system
+        files: ^backend/.*\.php$
+        pass_filenames: false

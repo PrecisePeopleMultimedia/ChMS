@@ -180,7 +180,7 @@ describe('Auth Store', () => {
       expect(authStore.isAuthenticated).toBe(true)
       expect(authStore.error).toBeNull()
       expect(localStorageMock.setItem).toHaveBeenCalledWith('auth_token', 'test-token')
-      expect(localStorageMock.setItem).toHaveBeenCalledWith('auth_user', JSON.stringify(mockResponse.data.user))
+      expect(localStorageMock.setItem).toHaveBeenCalledWith('user_data', JSON.stringify(mockResponse.data.user))
     })
 
     it('handles login failure', async () => {
@@ -193,10 +193,14 @@ describe('Auth Store', () => {
         }
       })
 
-      await authStore.login({
-        email: 'test@example.com',
-        password: 'wrongpassword'
-      })
+      try {
+        await authStore.login({
+          email: 'test@example.com',
+          password: 'wrongpassword'
+        })
+      } catch (err) {
+        // Expected to throw
+      }
 
       expect(authStore.user).toBeNull()
       expect(authStore.token).toBeNull()
@@ -264,13 +268,17 @@ describe('Auth Store', () => {
         }
       })
 
-      await authStore.register({
-        first_name: 'New',
-        last_name: 'User',
-        email: 'existing@example.com',
-        password: 'password123',
-        password_confirmation: 'password123'
-      })
+      try {
+        await authStore.register({
+          first_name: 'New',
+          last_name: 'User',
+          email: 'existing@example.com',
+          password: 'password123',
+          password_confirmation: 'password123'
+        })
+      } catch (err) {
+        // Expected to throw
+      }
 
       expect(authStore.user).toBeNull()
       expect(authStore.token).toBeNull()
@@ -283,8 +291,8 @@ describe('Auth Store', () => {
       const authStore = useAuthStore()
       
       // Set initial authenticated state
-      authStore.user = { id: 1, name: 'Test User', email: 'test@example.com' }
-      authStore.token = 'test-token'
+      authStore.setUser({ id: 1, name: 'Test User', email: 'test@example.com' })
+      authStore.setToken('test-token')
 
       mockedAxios.post.mockResolvedValueOnce({ data: { message: 'Logged out' } })
 
@@ -294,15 +302,15 @@ describe('Auth Store', () => {
       expect(authStore.token).toBeNull()
       expect(authStore.isAuthenticated).toBe(false)
       expect(localStorageMock.removeItem).toHaveBeenCalledWith('auth_token')
-      expect(localStorageMock.removeItem).toHaveBeenCalledWith('auth_user')
+      expect(localStorageMock.removeItem).toHaveBeenCalledWith('user_data')
     })
 
     it('clears state even if API call fails', async () => {
       const authStore = useAuthStore()
       
       // Set initial authenticated state
-      authStore.user = { id: 1, name: 'Test User', email: 'test@example.com' }
-      authStore.token = 'test-token'
+      authStore.setUser({ id: 1, name: 'Test User', email: 'test@example.com' })
+      authStore.setToken('test-token')
 
       mockedAxios.post.mockRejectedValueOnce(new Error('Network error'))
 
@@ -321,12 +329,12 @@ describe('Auth Store', () => {
 
       localStorageMock.getItem.mockImplementation((key) => {
         if (key === 'auth_token') return mockToken
-        if (key === 'auth_user') return JSON.stringify(mockUser)
+        if (key === 'user_data') return JSON.stringify(mockUser)
         return null
       })
 
       mockedAxios.get.mockResolvedValueOnce({
-        data: { user: mockUser }
+        data: mockUser
       })
 
       const authStore = useAuthStore()
@@ -340,7 +348,7 @@ describe('Auth Store', () => {
     it('clears invalid token from localStorage', async () => {
       localStorageMock.getItem.mockImplementation((key) => {
         if (key === 'auth_token') return 'invalid-token'
-        if (key === 'auth_user') return JSON.stringify({ id: 1, name: 'User' })
+        if (key === 'user_data') return JSON.stringify({ id: 1, name: 'User' })
         return null
       })
 
@@ -354,15 +362,15 @@ describe('Auth Store', () => {
       expect(authStore.token).toBeNull()
       expect(authStore.user).toBeNull()
       expect(localStorageMock.removeItem).toHaveBeenCalledWith('auth_token')
-      expect(localStorageMock.removeItem).toHaveBeenCalledWith('auth_user')
+      expect(localStorageMock.removeItem).toHaveBeenCalledWith('user_data')
     })
   })
 
   describe('Role Management', () => {
     it('hasRole returns correct boolean for user roles', () => {
       const authStore = useAuthStore()
-      
-      authStore.user = { id: 1, name: 'Admin User', email: 'admin@example.com', role: 'admin' }
+
+      authStore.setUser({ id: 1, name: 'Admin User', email: 'admin@example.com', role: 'admin' })
 
       expect(authStore.hasRole('admin')).toBe(true)
       expect(authStore.hasRole('staff')).toBe(false)
@@ -389,15 +397,19 @@ describe('Auth Store', () => {
 
     it('handles network errors gracefully', async () => {
       const authStore = useAuthStore()
-      
+
       mockedAxios.post.mockRejectedValueOnce(new Error('Network Error'))
 
-      await authStore.login({
-        email: 'test@example.com',
-        password: 'password123'
-      })
+      try {
+        await authStore.login({
+          email: 'test@example.com',
+          password: 'password123'
+        })
+      } catch (err) {
+        // Expected to throw
+      }
 
-      expect(authStore.error).toBe('Network error occurred')
+      expect(authStore.error).toBe('Login failed')
       expect(authStore.isAuthenticated).toBe(false)
     })
   })

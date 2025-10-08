@@ -20,56 +20,84 @@
       </div>
     </template>
     <template #content>
-      <q-form @submit="handleLogin" class="q-gutter-md">
+      <q-form
+        @submit="handleLogin"
+        class="q-gutter-md"
+        role="form"
+        aria-label="Sign in form"
+        novalidate
+      >
         <!-- Email Field -->
         <q-input
+          id="login-email"
           v-model="form.email"
           type="email"
           label="Email Address"
           outlined
+          required
+          autocomplete="email"
           :rules="emailRules"
           :error="!!fieldErrors.email"
           :error-message="fieldErrors.email"
+          :aria-describedby="fieldErrors.email ? 'email-error' : undefined"
+          :aria-invalid="!!fieldErrors.email"
           class="garnet-input"
+          @focus="announceFieldFocus('Email Address')"
         >
           <template v-slot:prepend>
-            <q-icon name="email" color="primary" />
+            <q-icon name="email" color="primary" aria-hidden="true" />
           </template>
         </q-input>
 
         <!-- Password Field -->
         <q-input
+          id="login-password"
           v-model="form.password"
           :type="showPassword ? 'text' : 'password'"
           label="Password"
           outlined
+          required
+          autocomplete="current-password"
           :rules="passwordRules"
           :error="!!fieldErrors.password"
           :error-message="fieldErrors.password"
+          :aria-describedby="fieldErrors.password ? 'password-error' : undefined"
+          :aria-invalid="!!fieldErrors.password"
           class="garnet-input"
+          @focus="announceFieldFocus('Password')"
         >
           <template v-slot:prepend>
-            <q-icon name="lock" color="primary" />
+            <q-icon name="lock" color="primary" aria-hidden="true" />
           </template>
           <template v-slot:append>
-            <q-icon
-              :name="showPassword ? 'visibility_off' : 'visibility'"
-              class="cursor-pointer"
+            <q-btn
+              flat
+              round
+              dense
+              :icon="showPassword ? 'visibility_off' : 'visibility'"
               color="grey-5"
-              @click="showPassword = !showPassword"
+              :aria-label="showPassword ? 'Hide password' : 'Show password'"
+              :aria-pressed="showPassword.toString()"
+              @click="togglePasswordVisibility"
               data-testid="password-toggle"
+              tabindex="0"
             />
           </template>
         </q-input>
 
         <!-- Remember Me -->
         <q-checkbox
+          id="login-remember"
           v-model="form.remember"
           label="Remember me"
           color="primary"
           dark
           class="text-grey-3"
+          aria-describedby="remember-help"
         />
+        <div id="remember-help" class="text-caption text-grey-5 q-mt-xs">
+          Keep me signed in on this device
+        </div>
 
         <!-- Error Message -->
         <ModernAlert
@@ -171,6 +199,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import { useAuthStore } from '@/stores/auth'
+import { useAccessibility } from '@/composables/useAccessibility'
 import type { LoginCredentials } from '@/types/auth'
 import BaseFormCard from '@/components/common/BaseFormCard.vue'
 import axios from 'axios'
@@ -182,6 +211,7 @@ import ThemeSwitcher from '@/components/theme/ThemeSwitcher.vue'
 const router = useRouter()
 const $q = useQuasar()
 const authStore = useAuthStore()
+const { announceToScreenReader } = useAccessibility()
 
 // Form state
 const form = ref<LoginCredentials>({
@@ -305,6 +335,17 @@ const handleGoogleLogin = async () => {
 const clearErrors = () => {
   authStore.clearError()
   fieldErrors.value = {}
+}
+
+// Accessibility methods
+const announceFieldFocus = (fieldName: string) => {
+  announceToScreenReader(`${fieldName} field focused`)
+}
+
+const togglePasswordVisibility = () => {
+  showPassword.value = !showPassword.value
+  const message = showPassword.value ? 'Password is now visible' : 'Password is now hidden'
+  announceToScreenReader(message)
 }
 
 // Lifecycle

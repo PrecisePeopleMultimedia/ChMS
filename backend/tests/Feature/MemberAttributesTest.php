@@ -216,7 +216,14 @@ class MemberAttributesTest extends TestCase
         $response = $this->postJson('/api/members', $memberData);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['custom_attributes.required_field']);
+            ->assertJsonStructure([
+                'message',
+                'errors' => [
+                    'custom_attributes' => [
+                        'required_field'
+                    ]
+                ]
+            ]);
     }
 
     /** @test */
@@ -247,9 +254,14 @@ class MemberAttributesTest extends TestCase
         $response = $this->postJson('/api/members', $memberData);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors([
-                'custom_attributes.secondary_email',
-                'custom_attributes.years_attending'
+            ->assertJsonStructure([
+                'message',
+                'errors' => [
+                    'custom_attributes' => [
+                        'secondary_email',
+                        'years_attending'
+                    ]
+                ]
             ]);
     }
 
@@ -308,8 +320,10 @@ class MemberAttributesTest extends TestCase
 
         $bulkData = [
             'member_ids' => $members->pluck('id')->toArray(),
-            'custom_attributes' => [
-                'status' => 'Active'
+            'updates' => [
+                'custom_attributes' => [
+                    'status' => 'Active'
+                ]
             ]
         ];
 
@@ -368,14 +382,14 @@ class MemberAttributesTest extends TestCase
                 'data' => [
                     'id',
                     'first_name',
-                    'last_name',
-                    'custom_attributes' => [
-                        '*' => [
-                            'attribute',
-                            'value',
-                            'formatted_value',
-                            'display_value'
-                        ]
+                    'last_name'
+                ],
+                'custom_attributes' => [
+                    '*' => [
+                        'attribute',
+                        'value',
+                        'formatted_value',
+                        'display_value'
                     ]
                 ]
             ]);

@@ -197,7 +197,7 @@ const showActiveOnly = ref(true)
 const showCreateDialog = ref(false)
 const showDeleteDialog = ref(false)
 const selectedAttribute = ref(null)
-const attributeToDelete = ref(null)
+const attributeToDelete = ref<any>(null)
 
 // Computed properties
 const attributes = computed(() => attributesStore.attributes)
@@ -360,7 +360,7 @@ const handleAttributeSaved = () => {
 }
 
 const getCategoryColor = (category: string): string => {
-  const colors = {
+  const colors: Record<string, string> = {
     'Personal': 'blue',
     'Contact': 'green',
     'Ministry': 'purple',

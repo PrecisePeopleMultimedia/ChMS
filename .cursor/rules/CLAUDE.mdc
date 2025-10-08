@@ -1,0 +1,200 @@
+# ChMS - Claude AI Integration Guide
+
+## Project Overview
+ChMS (Church Management System) is an Africa-first, offline-capable church management solution built with Vue 3, Laravel, and Supabase. This project follows spec-driven development principles with a focus on minimalist, reliable functionality.
+
+## Available Slash Commands
+
+### /constitution
+Create or update project governing principles and development guidelines.
+
+**Usage:** `/constitution Create principles focused on Africa-first development, code quality, testing standards, and performance requirements`
+
+### /specify
+Define what you want to build (requirements and user stories).
+
+**Usage:** `/specify Build a member management system that allows churches to add, edit, and search for members offline, with automatic sync when online`
+
+### /clarify
+Clarify underspecified areas (must be run before /plan unless explicitly skipped).
+
+**Usage:** `/clarify` (interactive process to clarify requirements)
+
+### /plan
+Create technical implementation plans with your chosen tech stack.
+
+**Usage:** `/plan Implement using Laravel 11 backend with RESTful APIs, Vue 3 frontend with Composition API, and Quasar Framework for UI components`
+
+### /tasks
+Generate actionable task lists for implementation.
+
+**Usage:** `/tasks` (generates detailed task breakdown from implementation plan)
+
+### /analyze
+Cross-artifact consistency & coverage analysis (run after /tasks, before /implement).
+
+**Usage:** `/analyze` (validates consistency across specifications, plans, and tasks)
+
+### /implement
+Execute all tasks to build the feature according to the plan.
+
+**Usage:** `/implement` (executes the implementation plan step by step)
+
+## Tech Stack
+
+### Backend
+- **Laravel 11** - PHP framework for robust API development
+- **MySQL/PostgreSQL** - Primary database
+- **Laravel Sanctum** - API authentication
+- **PHPUnit** - Testing framework
+
+### Frontend
+- **Vue 3** - Progressive JavaScript framework
+- **Composition API** - Modern Vue development approach
+- **Quasar Framework** - Material Design UI components (optimized for mobile)
+- **Pinia** - State management
+- **Vite** - Build tool and development server
+- **Vitest** - Unit testing framework
+- **Playwright** - E2E and regression testing
+
+### Database & Services
+- **Supabase** - Backend-as-a-Service with real-time features
+- **PostgreSQL** - Primary database via Supabase
+- **Real-time subscriptions** - Live data updates
+- **Row Level Security** - Built-in authorization
+
+### PWA & Offline
+- **Service Workers** - Offline functionality
+- **IndexedDB** - Local data storage
+- **Background Sync** - Offline action queuing
+- **Web App Manifest** - App-like experience
+
+## Africa-First Principles
+
+### Technical Constraints
+- **Bundle size**: Keep JavaScript bundles under 500KB
+- **Load time**: < 3 seconds on 3G connection
+- **Offline-first**: All core features work without internet
+- **Mobile-first**: Optimized for Android devices
+- **Low bandwidth**: Minimal data usage and smart caching
+
+### Design Principles
+- **Simple UI**: Intuitive for users with varying technical skills
+- **Touch-friendly**: Large buttons, gesture support
+- **Progressive enhancement**: Works on older devices
+- **Accessibility**: WCAG AA compliance
+- **Material Design**: Familiar UI patterns via Quasar Framework
+
+## Development Workflow
+
+### 1. Feature Development Process
+1. **Constitution**: Establish or review project principles
+2. **Specify**: Define feature requirements and user stories
+3. **Clarify**: Address any unclear requirements
+4. **Plan**: Create technical implementation plan
+5. **Tasks**: Break down into actionable tasks
+6. **Analyze**: Validate consistency and coverage
+7. **Implement**: Execute the implementation plan
+
+### 2. Code Quality Standards
+- **TypeScript/PHP strict mode**: Type safety enforcement
+- **ESLint/PHP-CS-Fixer**: Code formatting and style
+- **Test-driven development**: Write tests first
+- **Code reviews**: All changes require peer review
+- **Documentation**: Comprehensive inline and README docs
+
+### 3. Testing Strategy
+- **Unit tests (Vitest)**: 85%+ coverage for critical paths
+- **Integration tests**: API and component integration
+- **E2E tests (Playwright)**: Complete user workflows
+- **Regression tests (Playwright)**: Automated regression testing
+- **Mobile testing**: Test on target Android devices
+- **Offline testing**: Verify offline functionality
+
+## Current MVP Scope
+
+### Core Features (Need-to-Have)
+1. **Organization Setup**
+   - Basic church profile setup
+   - Essential church information only
+
+2. **Member Management**
+   - Add/edit/view member profiles
+   - Basic member search
+   - Family unit linking
+
+3. **Attendance System**
+   - QR code check-in for services
+   - Manual search-based check-in
+   - Offline attendance recording
+   - Basic attendance reports
+
+### Removed Features (Nice-to-Have)
+- Advanced reporting and analytics
+- Financial management
+- Event management beyond basic services
+- Communication systems (SMS, email)
+- Multi-language support (v2 feature)
+- AI/automation features
+- Advanced user roles and permissions
+
+## Performance Targets
+
+### Technical Metrics
+- **Page load time**: < 3 seconds on 3G
+- **Bundle size**: < 500KB initial load
+- **API response time**: < 500ms average
+- **Offline capability**: 100% core features
+- **Mobile performance**: 60fps on mid-range Android
+
+### User Experience Metrics
+- **Task completion rate**: > 95% for core workflows
+- **Error rate**: < 1% for critical operations
+- **Accessibility score**: WCAG AA compliance
+- **Cross-device compatibility**: 95%+ target devices
+
+## Security Considerations
+
+### Authentication & Authorization
+- Laravel Sanctum for API authentication
+- Role-based access control (RBAC)
+- Supabase Row Level Security
+- Session management and token security
+
+### Data Protection
+- Input validation and sanitization
+- SQL injection prevention
+- XSS protection
+- CSRF protection
+- Data encryption at rest and in transit
+
+## Enterprise Considerations
+
+### Scalability
+- Horizontal scaling with Laravel
+- Database optimization and indexing
+- CDN for global content delivery
+- Microservices architecture (future)
+
+### Multi-tenancy
+- Organization-level data isolation
+- Tenant-specific customization
+- Resource usage monitoring
+- Billing and subscription management (future)
+
+### Compliance
+- GDPR compliance for data protection
+- SOC 2 compliance for enterprise customers
+- Regular security audits
+- Data backup and recovery procedures
+
+## Contributing
+
+1. Follow the spec-driven development process
+2. Ensure all tests pass (Vitest + Playwright)
+3. Test on target devices (Android)
+4. Verify offline functionality
+5. Submit pull requests with clear descriptions
+6. Include performance impact assessment
+
+Remember: This is an Africa-first project with enterprise ambitions. Every decision should consider offline capability, mobile performance, low-bandwidth optimization, and enterprise scalability.

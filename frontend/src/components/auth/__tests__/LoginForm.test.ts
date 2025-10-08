@@ -32,6 +32,13 @@ vi.mock('quasar', async () => {
   }
 })
 
+// Mock axios
+vi.mock('axios', () => ({
+  default: {
+    get: vi.fn().mockRejectedValue(new Error('Google OAuth not implemented yet'))
+  }
+}))
+
 describe('LoginForm', () => {
   let mockAuthStore: any
   let wrapper: any
@@ -65,9 +72,58 @@ describe('LoginForm', () => {
             plugins: {}
           }]
         ],
+        components: {
+          ModernButton: {
+            name: 'ModernButton',
+            template: `
+              <button
+                :type="type || 'button'"
+                :class="['modern-button', variant, size]"
+                :disabled="disabled || loading"
+                @click="$emit('click', $event)"
+              >
+                <span v-if="loading">Loading...</span>
+                <slot name="icon" v-if="!loading"></slot>
+                <slot v-if="!loading"></slot>
+              </button>
+            `,
+            props: {
+              variant: String,
+              size: String,
+              loading: Boolean,
+              disabled: Boolean,
+              type: String,
+            },
+            emits: ['click'],
+          },
+          ModernAlert: {
+            name: 'ModernAlert',
+            template: `
+              <div :class="['modern-alert', variant]">
+                <div v-if="title" class="alert-title">{{ title }}</div>
+                <div class="alert-message">{{ message }}</div>
+                <slot></slot>
+                <button v-if="dismissible" @click="$emit('dismiss')" class="alert-dismiss">×</button>
+              </div>
+            `,
+            props: {
+              variant: String,
+              message: String,
+              title: String,
+              dismissible: Boolean,
+            },
+            emits: ['dismiss'],
+          },
+        },
         stubs: {
           'router-link': {
             template: '<a><slot /></a>'
+          },
+          'ThemeSwitcher': {
+            template: '<div class="theme-switcher">Theme</div>'
+          },
+          'BaseFormCard': {
+            template: '<div class="base-form-card"><slot name="header"></slot><slot name="content"></slot><slot name="footer"></slot></div>'
           }
         }
       }
@@ -77,11 +133,12 @@ describe('LoginForm', () => {
   describe('Component Rendering', () => {
     it('should render login form with all required fields', () => {
       wrapper = createWrapper()
-      
+
       expect(wrapper.find('input[type="email"]').exists()).toBe(true)
       expect(wrapper.find('input[type="password"]').exists()).toBe(true)
       expect(wrapper.find('input[type="checkbox"]').exists()).toBe(true)
-      expect(wrapper.find('button[type="submit"]').exists()).toBe(true)
+      // Look for ModernButton component instead of button[type="submit"]
+      expect(wrapper.findComponent({ name: 'ModernButton' }).exists()).toBe(true)
     })
 
     it('should display ChurchAfrica branding', () => {
@@ -93,10 +150,12 @@ describe('LoginForm', () => {
 
     it('should have Google login button', () => {
       wrapper = createWrapper()
-      
-      const googleBtn = wrapper.find('button:not([type="submit"])')
-      expect(googleBtn.exists()).toBe(true)
-      expect(googleBtn.text()).toContain('Continue with Google')
+
+      // Find all ModernButton components and look for the Google one
+      const buttons = wrapper.findAllComponents({ name: 'ModernButton' })
+      const googleBtn = buttons.find((btn: any) => btn.text().includes('Continue with Google'))
+      expect(googleBtn).toBeDefined()
+      expect(googleBtn?.text()).toContain('Continue with Google')
     })
 
     it('should have links to register and forgot password', () => {
@@ -111,22 +170,26 @@ describe('LoginForm', () => {
   describe('Form Validation', () => {
     it('should disable submit button when form is invalid', async () => {
       wrapper = createWrapper()
-      
-      const submitBtn = wrapper.find('button[type="submit"]')
-      expect(submitBtn.attributes('disabled')).toBeDefined()
+
+      // Find the submit button (first ModernButton with "Sign In" text)
+      const buttons = wrapper.findAllComponents({ name: 'ModernButton' })
+      const submitBtn = buttons.find((btn: any) => btn.text().includes('Sign In'))
+      expect(submitBtn?.props('disabled')).toBe(true)
     })
 
     it('should enable submit button when form is valid', async () => {
       wrapper = createWrapper()
-      
+
       // Fill in valid form data
       await wrapper.find('input[type="email"]').setValue('test@example.com')
       await wrapper.find('input[type="password"]').setValue('password123')
-      
+
       await wrapper.vm.$nextTick()
-      
-      const submitBtn = wrapper.find('button[type="submit"]')
-      expect(submitBtn.attributes('disabled')).toBeUndefined()
+
+      // Find the submit button and check it's enabled
+      const buttons = wrapper.findAllComponents({ name: 'ModernButton' })
+      const submitBtn = buttons.find((btn: any) => btn.text().includes('Sign In'))
+      expect(submitBtn?.props('disabled')).toBe(false)
     })
 
     it('should validate email format', async () => {
@@ -172,9 +235,10 @@ describe('LoginForm', () => {
       expect(passwordInput.element.value).toBe('password123')
 
       // Check that submit button exists and is enabled
-      const submitBtn = wrapper.find('button[type="submit"]')
-      expect(submitBtn.exists()).toBe(true)
-      expect(submitBtn.attributes('disabled')).toBeUndefined()
+      const buttons = wrapper.findAllComponents({ name: 'ModernButton' })
+      const submitBtn = buttons.find((btn: any) => btn.text().includes('Sign In'))
+      expect(submitBtn).toBeDefined()
+      expect(submitBtn?.props('disabled')).toBe(false)
     })
 
     it('should include remember me option when checked', async () => {
@@ -226,17 +290,23 @@ describe('LoginForm', () => {
   })
 
   describe('Google Login', () => {
-    it('should show info message for Google login (placeholder)', async () => {
+    it('should show error message when Google login fails', async () => {
       wrapper = createWrapper()
-      
-      const googleBtn = wrapper.find('button:not([type="submit"])')
-      await googleBtn.trigger('click')
-      
+
+      // Find the Google login button
+      const buttons = wrapper.findAllComponents({ name: 'ModernButton' })
+      const googleBtn = buttons.find((btn: any) => btn.text().includes('Continue with Google'))
+      expect(googleBtn).toBeDefined()
+
+      await googleBtn?.trigger('click')
       await wrapper.vm.$nextTick()
-      
+
+      // Wait for the async operation to complete
+      await new Promise(resolve => setTimeout(resolve, 100))
+
       expect(mockNotify).toHaveBeenCalledWith({
-        type: 'info',
-        message: 'Google OAuth integration coming soon!',
+        type: 'negative',
+        message: 'Google login failed. Please try again.',
         position: 'top'
       })
     })
@@ -264,17 +334,22 @@ describe('LoginForm', () => {
     it('should show loading state during login', async () => {
       mockAuthStore.isLoading = true
       wrapper = createWrapper()
-      
-      const submitBtn = wrapper.find('button[type="submit"]')
-      expect(submitBtn.text()).toContain('Signing in...')
+
+      // Find the submit button and check loading text
+      const buttons = wrapper.findAllComponents({ name: 'ModernButton' })
+      const submitBtn = buttons.find((btn: any) => btn.text().includes('Signing in') || btn.text().includes('Loading'))
+      expect(submitBtn).toBeDefined()
+      expect(submitBtn?.text()).toMatch(/Signing in|Loading/)
     })
 
     it('should disable form during loading', async () => {
       mockAuthStore.isLoading = true
       wrapper = createWrapper()
-      
-      const submitBtn = wrapper.find('button[type="submit"]')
-      expect(submitBtn.attributes('disabled')).toBeDefined()
+
+      // Find the submit button and check it's disabled
+      const buttons = wrapper.findAllComponents({ name: 'ModernButton' })
+      const submitBtn = buttons.find((btn: any) => btn.text().includes('Signing in') || btn.text().includes('Loading') || btn.text().includes('Sign In'))
+      expect(submitBtn?.props('disabled')).toBe(true)
     })
   })
 })

@@ -43,10 +43,10 @@ describe('Test Setup Validation', () => {
   })
 
   it('should have global Quasar mocks', () => {
-    expect(global.Quasar).toBeDefined()
-    expect(global.Quasar.Dark).toBeDefined()
-    expect(global.Quasar.notify).toBeDefined()
-    expect(global.Quasar.Loading).toBeDefined()
+    expect((global as any).Quasar).toBeDefined()
+    expect((global as any).Quasar.Dark).toBeDefined()
+    expect((global as any).Quasar.notify).toBeDefined()
+    expect((global as any).Quasar.Loading).toBeDefined()
   })
 
   it('should have browser API mocks', () => {

@@ -225,7 +225,7 @@ const showAssignDialog = ref(false)
 const showEditDialog = ref(false)
 const showRemoveDialog = ref(false)
 const selectedBadge = ref(null)
-const badgeToRemove = ref(null)
+const badgeToRemove = ref<any>(null)
 
 // Computed properties
 const badges = computed(() => badgesStore.memberBadges)

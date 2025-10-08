@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\MemberController;
 use App\Http\Controllers\Api\MemberAttributeController;
 use App\Http\Controllers\Api\BadgeTypeController;
 use App\Http\Controllers\Api\MemberBadgeController;
+use App\Http\Controllers\Api\MonitoringController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,8 +30,8 @@ Route::get('/csrf-token', function () {
     ]);
 });
 
-// Public authentication routes
-Route::prefix('auth')->group(function () {
+// Public authentication routes with rate limiting
+Route::prefix('auth')->middleware(\App\Http\Middleware\RateLimitMiddleware::class)->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
@@ -120,11 +121,28 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/member-badges/expiring', [MemberBadgeController::class, 'expiringBadges']);
 });
 
-// Health check route
+// Monitoring routes
+Route::prefix('monitoring')->group(function () {
+    Route::get('/health', [MonitoringController::class, 'health']);
+    Route::get('/metrics', [MonitoringController::class, 'metrics']);
+    Route::get('/logs', [MonitoringController::class, 'logs']);
+    Route::get('/performance', [MonitoringController::class, 'performance']);
+    Route::get('/security', [MonitoringController::class, 'security']);
+});
+
+// Legacy health check route for backward compatibility
 Route::get('/health', function () {
-    return response()->json([
-        'status' => 'ok',
-        'timestamp' => now(),
-        'version' => '1.0.0'
-    ]);
+    $monitoringService = app(\App\Services\MonitoringService::class);
+    $healthData = $monitoringService->checkHealth();
+    
+    $httpStatus = $healthData['status'] === 'healthy' ? 200 : 503;
+    
+    return response()->json($healthData, $httpStatus);
+});
+
+// Monitoring and observability routes
+Route::prefix('monitoring')->group(function () {
+    Route::get('/metrics', [App\Http\Controllers\Api\MonitoringController::class, 'metrics']);
+    Route::get('/security-alerts', [App\Http\Controllers\Api\MonitoringController::class, 'securityAlerts']);
+    Route::get('/health-status', [App\Http\Controllers\Api\MonitoringController::class, 'healthStatus']);
 });

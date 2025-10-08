@@ -112,13 +112,13 @@ const loading = ref(false)
 const saving = ref(false)
 const isEditing = ref(false)
 const attributesWithValues = ref([])
-const editingValues = ref({})
+const editingValues = ref<Record<string, any>>({})
 
 // Computed properties
 const groupedAttributes = computed(() => {
-  const grouped = {}
-  
-  attributesWithValues.value.forEach(attributeData => {
+  const grouped: Record<string, any[]> = {}
+
+  attributesWithValues.value.forEach((attributeData: any) => {
     const category = attributeData.attribute.category
     if (!grouped[category]) {
       grouped[category] = []
@@ -128,7 +128,9 @@ const groupedAttributes = computed(() => {
 
   // Sort attributes within each category by display_order
   Object.keys(grouped).forEach(category => {
-    grouped[category].sort((a, b) => a.attribute.display_order - b.attribute.display_order)
+    if (grouped[category]) {
+      grouped[category].sort((a: any, b: any) => a.attribute.display_order - b.attribute.display_order)
+    }
   })
 
   return grouped
@@ -156,7 +158,7 @@ const startEditing = () => {
   
   // Initialize editing values with current values
   editingValues.value = {}
-  attributesWithValues.value.forEach(attributeData => {
+  attributesWithValues.value.forEach((attributeData: any) => {
     editingValues.value[attributeData.attribute.key] = attributeData.value
   })
 }
@@ -198,7 +200,7 @@ const saveAttributes = async () => {
 }
 
 const getCategoryIcon = (category: string): string => {
-  const icons = {
+  const icons: Record<string, string> = {
     'Personal': 'person',
     'Contact': 'contact_phone',
     'Ministry': 'church',

@@ -5,7 +5,9 @@ export interface User {
   email: string
   first_name: string
   last_name: string
+  name?: string // Computed or full name field
   phone?: string
+  avatar?: string // Profile picture URL
   role: 'admin' | 'staff' | 'member'
   organization_id: string
   email_verified_at?: string

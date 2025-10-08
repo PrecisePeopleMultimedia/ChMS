@@ -15,14 +15,24 @@ global.matchMedia = vi.fn().mockImplementation((query: string) => ({
 }))
 
 // Mock localStorage with proper reset functionality
-const localStorageMock = {
-  getItem: vi.fn(),
-  setItem: vi.fn(),
-  removeItem: vi.fn(),
-  clear: vi.fn(),
-  length: 0,
-  key: vi.fn(),
-}
+const localStorageMock = (() => {
+  let store: Record<string, string> = {}
+
+  return {
+    getItem: vi.fn((key: string) => store[key] || null),
+    setItem: vi.fn((key: string, value: string) => {
+      store[key] = value
+    }),
+    removeItem: vi.fn((key: string) => {
+      delete store[key]
+    }),
+    clear: vi.fn(() => {
+      store = {}
+    }),
+    length: 0,
+    key: vi.fn(),
+  }
+})()
 
 Object.defineProperty(window, 'localStorage', {
   value: localStorageMock,
@@ -30,14 +40,24 @@ Object.defineProperty(window, 'localStorage', {
 })
 
 // Mock sessionStorage with proper reset functionality
-const sessionStorageMock = {
-  getItem: vi.fn(),
-  setItem: vi.fn(),
-  removeItem: vi.fn(),
-  clear: vi.fn(),
-  length: 0,
-  key: vi.fn(),
-}
+const sessionStorageMock = (() => {
+  let store: Record<string, string> = {}
+
+  return {
+    getItem: vi.fn((key: string) => store[key] || null),
+    setItem: vi.fn((key: string, value: string) => {
+      store[key] = value
+    }),
+    removeItem: vi.fn((key: string) => {
+      delete store[key]
+    }),
+    clear: vi.fn(() => {
+      store = {}
+    }),
+    length: 0,
+    key: vi.fn(),
+  }
+})()
 
 Object.defineProperty(window, 'sessionStorage', {
   value: sessionStorageMock,
@@ -87,7 +107,7 @@ global.cancelAnimationFrame = vi.fn().mockImplementation((id) => {
 })
 
 // Mock Quasar Framework
-(global as any).Quasar = {
+;(global as any).Quasar = {
   Dark: {
     set: vi.fn(),
     toggle: vi.fn(),
@@ -307,6 +327,75 @@ vi.mock('quasar', () => ({
     template: '<div class="q-spinner-tail">Loading...</div>',
     props: ['size', 'color'],
   },
+  QBanner: {
+    name: 'QBanner',
+    template: `
+      <div class="q-banner">
+        <div class="q-banner__avatar">
+          <slot name="avatar">
+            <q-icon v-if="icon" :name="icon" />
+          </slot>
+        </div>
+        <div class="q-banner__content">
+          <slot />
+        </div>
+        <div v-if="$slots.action" class="q-banner__actions">
+          <slot name="action" />
+        </div>
+      </div>
+    `,
+    props: ['icon', 'color', 'textColor', 'inline', 'dense', 'rounded'],
+  },
+  QStepper: {
+    name: 'QStepper',
+    template: `
+      <div class="q-stepper">
+        <slot />
+      </div>
+    `,
+    props: ['modelValue', 'vertical', 'flat', 'bordered', 'alternative-labels', 'header-nav'],
+    emits: ['update:modelValue'],
+  },
+  QStep: {
+    name: 'QStep',
+    template: `
+      <div class="q-step">
+        <slot />
+      </div>
+    `,
+    props: ['name', 'title', 'caption', 'icon', 'color', 'prefix', 'done-icon', 'done-color', 'active-icon', 'active-color', 'error-icon', 'error-color', 'header-nav', 'done', 'disable'],
+  },
+  QStepperNavigation: {
+    name: 'QStepperNavigation',
+    template: `
+      <div class="q-stepper__nav">
+        <slot />
+      </div>
+    `,
+  },
+  QTooltip: {
+    name: 'QTooltip',
+    template: `
+      <div class="q-tooltip">
+        <slot />
+      </div>
+    `,
+    props: ['anchor', 'offset', 'delay', 'max-width', 'max-height', 'class', 'style'],
+  },
+  // useQuasar composable
+  useQuasar: () => ({
+    notify: vi.fn(),
+    dialog: vi.fn(),
+    loading: {
+      show: vi.fn(),
+      hide: vi.fn(),
+    },
+    dark: {
+      set: vi.fn(),
+      toggle: vi.fn(),
+      isActive: false,
+    },
+  }),
 }))
 
 // Mock Quasar plugins
@@ -359,6 +448,25 @@ export const createTestRouter = (routes = []) => {
       ...routes,
     ],
   })
+
+  // Mock router methods to prevent warnings
+  router.resolve = vi.fn().mockImplementation((to) => {
+    if (typeof to === 'string') {
+      return {
+        path: to,
+        name: undefined,
+        params: {},
+        query: {},
+        hash: '',
+        fullPath: to,
+        matched: [],
+        meta: {},
+        redirectedFrom: undefined,
+      }
+    }
+    return to
+  })
+
   return router
 }
 

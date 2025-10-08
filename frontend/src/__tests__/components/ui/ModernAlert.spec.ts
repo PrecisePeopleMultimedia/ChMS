@@ -319,9 +319,10 @@ describe('ModernAlert', () => {
       })
 
       const alert = wrapper.find('.modern-alert')
-      expect(alert.classes()).toContain('flex')
-      expect(alert.classes()).toContain('items-start')
-      expect(alert.classes()).toContain('p-4')
+      // Classes are applied via @apply in CSS, so check for base classes
+      expect(alert.classes()).toContain('modern-alert')
+      expect(alert.classes()).toContain('bg-blue-50') // Default info variant
+      expect(alert.classes()).toContain('animate-in')
     })
 
     it('handles long content gracefully', () => {

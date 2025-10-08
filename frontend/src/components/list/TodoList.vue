@@ -149,7 +149,9 @@ const addTask = () => {
 }
 
 const toggleTask = (index: number) => {
-  tasks.value[index].completed = !tasks.value[index].completed
+  if (tasks.value[index]) {
+    tasks.value[index].completed = !tasks.value[index].completed
+  }
 }
 
 const removeTask = (index: number) => {

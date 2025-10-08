@@ -265,7 +265,7 @@ const getDayName = (dayOfWeek: number): string => {
 const formatTime = (time: string): string => {
   if (!time) return ''
   const [hours, minutes] = time.split(':')
-  const hour = parseInt(hours)
+  const hour = parseInt(hours || '0')
   const ampm = hour >= 12 ? 'PM' : 'AM'
   const displayHour = hour % 12 || 12
   return `${displayHour}:${minutes} ${ampm}`
@@ -298,7 +298,10 @@ const handleAddSchedule = () => {
 }
 
 const editSchedule = (index: number) => {
-  newSchedule.value = { ...schedules.value[index] }
+  const schedule = schedules.value[index]
+  if (schedule) {
+    newSchedule.value = { ...schedule }
+  }
   editingIndex.value = index
 }
 

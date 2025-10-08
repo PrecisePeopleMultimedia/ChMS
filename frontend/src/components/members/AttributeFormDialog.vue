@@ -145,7 +145,11 @@
             <q-card-section>
               <div class="text-subtitle1 q-mb-md">Preview</div>
               <AttributeValueInput
-                :attribute="previewAttribute"
+                :attribute="{
+                  ...previewAttribute,
+                  id: 0,
+                  field_options: previewAttribute.field_options || undefined
+                }"
                 :model-value="previewValue"
                 @update:model-value="previewValue = $event"
                 readonly
@@ -293,19 +297,19 @@ const saveAttribute = async () => {
         })
         return
       }
-      attributeData.field_options = { options: validOptions }
+      attributeData.field_options = { options: validOptions } as any
     } else {
       attributeData.field_options = null
     }
 
     if (isEditing.value) {
-      await attributesStore.updateAttribute(props.attribute.id, attributeData)
+      await attributesStore.updateAttribute(props.attribute.id, attributeData as any)
       $q.notify({
         type: 'positive',
         message: 'Attribute updated successfully'
       })
     } else {
-      await attributesStore.createAttribute(attributeData)
+      await attributesStore.createAttribute(attributeData as any)
       $q.notify({
         type: 'positive',
         message: 'Attribute created successfully'

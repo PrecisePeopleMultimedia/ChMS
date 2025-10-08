@@ -144,6 +144,17 @@ export const useThemeStore = defineStore('theme', () => {
     setMode(newMode)
   }
 
+  const toggleTheme = () => {
+    // Simple theme toggle - could be enhanced to cycle through available themes
+    const availableThemes = ['default', 'modern', 'classic']
+    const currentIndex = availableThemes.indexOf(currentThemeId.value)
+    const nextIndex = (currentIndex + 1) % availableThemes.length
+    const nextTheme = availableThemes[nextIndex]
+    if (nextTheme) {
+      setTheme(nextTheme)
+    }
+  }
+
   // === RETURN ===
   return {
     // State
@@ -164,5 +175,6 @@ export const useThemeStore = defineStore('theme', () => {
     setTheme,
     setMode,
     toggleMode,
+    toggleTheme,
   }
 })

@@ -27,7 +27,7 @@ describe('Test Utils Validation', () => {
         methods: {
           handleClick: vi.fn()
         },
-        created() {
+        created(this: any) {
           // Ensure the method is properly spied
           this.handleClick = vi.fn()
         }
@@ -43,7 +43,7 @@ describe('Test Utils Validation', () => {
       
       // Should handle click
       button.trigger('click')
-      expect(wrapper.vm.handleClick).toHaveBeenCalled()
+      expect((wrapper.vm as any).handleClick).toHaveBeenCalled()
     })
 
     it('should mount component with ModernInput stub', () => {
@@ -76,7 +76,7 @@ describe('Test Utils Validation', () => {
       
       // Should handle v-model
       input.setValue('test@example.com')
-      expect(wrapper.vm.inputValue).toBe('test@example.com')
+      expect((wrapper.vm as any).inputValue).toBe('test@example.com')
     })
 
     it('should mount component with BaseFormCard stub', () => {
@@ -127,7 +127,7 @@ describe('Test Utils Validation', () => {
         methods: {
           onSubmit: vi.fn()
         },
-        created() {
+        created(this: any) {
           // Ensure the method is properly spied
           this.onSubmit = vi.fn()
         }
@@ -142,7 +142,7 @@ describe('Test Utils Validation', () => {
       
       // Should handle form submission
       wrapper.find('form').trigger('submit')
-      expect(wrapper.vm.onSubmit).toHaveBeenCalled()
+      expect((wrapper.vm as any).onSubmit).toHaveBeenCalled()
     })
   })
 
@@ -213,7 +213,7 @@ describe('Test Utils Validation', () => {
           }
         },
         computed: {
-          isFormValid() {
+          isFormValid(this: any): any {
             return this.name.length > 0
           }
         },
@@ -232,8 +232,8 @@ describe('Test Utils Validation', () => {
       const nameInput = wrapper.find('input')
       nameInput.setValue('John Doe')
       
-      expect(wrapper.vm.name).toBe('John Doe')
-      expect(wrapper.vm.isFormValid).toBe(true)
+      expect((wrapper.vm as any).name).toBe('John Doe')
+      expect((wrapper.vm as any).isFormValid).toBe(true)
     })
   })
 
@@ -254,7 +254,7 @@ describe('Test Utils Validation', () => {
           return { isLoading: false }
         },
         methods: {
-          handleClick() {
+          handleClick(this: any) {
             this.isLoading = true
             setTimeout(() => {
               this.isLoading = false
@@ -270,10 +270,10 @@ describe('Test Utils Validation', () => {
       expect(button.attributes('disabled')).toBeUndefined()
       
       // Trigger loading state
-      wrapper.vm.isLoading = true
-      wrapper.vm.$nextTick()
-      
-      expect(wrapper.vm.isLoading).toBe(true)
+      ;(wrapper.vm as any).isLoading = true
+      ;(wrapper.vm as any).$nextTick()
+
+      expect((wrapper.vm as any).isLoading).toBe(true)
     })
   })
 })

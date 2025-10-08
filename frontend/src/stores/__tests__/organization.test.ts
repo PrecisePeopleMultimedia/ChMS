@@ -246,7 +246,7 @@ describe('Organization Store', () => {
       const result = await store.createServiceSchedule(newSchedule)
 
       expect(api.post).toHaveBeenCalledWith('/service-schedules', newSchedule)
-      expect(store.serviceSchedules).toContain(createdSchedule)
+      expect(store.serviceSchedules).toContainEqual(createdSchedule)
       expect(result).toEqual(createdSchedule)
     })
 
