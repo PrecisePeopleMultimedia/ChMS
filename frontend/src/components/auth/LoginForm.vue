@@ -2,7 +2,7 @@
   <BaseFormCard
     title="Welcome to ChurchAfrica"
     subtitle="Sign in to your account"
-    class="fade-in-up"
+    class="fade-in-up login-card"
   >
     <template #header>
       <div class="row items-center justify-between">
@@ -312,19 +312,41 @@ const testApiConnection = async () => {
 const handleGoogleLogin = async () => {
   try {
     isGoogleLoading.value = true
-    
-    // Get Google OAuth redirect URL from backend
-    const response = await axios.get('/auth/google')
+
+    // Check if Google OAuth is configured
+    const response = await axios.get('/api/auth/google')
     const { redirect_url } = response.data
-    
+
+    if (!redirect_url) {
+      throw new Error('Google OAuth not configured')
+    }
+
     // Redirect to Google OAuth
     window.location.href = redirect_url
   } catch (error: any) {
     console.error('Google OAuth error:', error)
+
+    let errorMessage = 'Google login failed. Please try again.'
+
+    if (error.response?.status === 500) {
+      errorMessage = 'Google login is not configured yet. Please use email/password login.'
+    } else if (error.response?.data?.message) {
+      errorMessage = error.response.data.message
+    }
+
     $q.notify({
       type: 'negative',
-      message: 'Google login failed. Please try again.',
-      position: 'top'
+      message: errorMessage,
+      position: 'top',
+      timeout: 5000,
+      actions: [
+        {
+          icon: 'close',
+          color: 'white',
+          round: true,
+          handler: () => {}
+        }
+      ]
     })
   } finally {
     isGoogleLoading.value = false
