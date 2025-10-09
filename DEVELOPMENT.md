@@ -7,12 +7,13 @@ This guide covers the complete development setup and workflow for the ChMS (Chur
 ### Tech Stack
 - **Backend**: Laravel 11 (PHP 8.2+)
 - **Frontend**: Vue 3 with Composition API
+- **UI Framework**: Quasar Framework (Material Design components)
 - **Database**: PostgreSQL via Supabase
 - **Authentication**: Laravel Sanctum + Supabase Auth
 - **State Management**: Pinia
-- **Styling**: Tailwind CSS
-- **Testing**: PHPUnit (backend), Vitest (frontend)
-- **PWA**: Service Workers for offline functionality
+- **Styling**: Quasar Framework + Custom CSS
+- **Testing**: PHPUnit (backend), Vitest (frontend), Playwright (E2E)
+- **PWA**: Quasar PWA mode with Service Workers
 
 ### Project Structure
 ```
@@ -104,11 +105,11 @@ php artisan serve
 # Server runs on http://localhost:8000
 ```
 
-**Frontend (Vue 3):**
+**Frontend (Vue 3 + Quasar):**
 ```bash
 cd frontend
 npm run dev
-# Server runs on http://localhost:3000
+# Quasar dev server runs on http://localhost:1811
 ```
 
 **Database (Docker):**
@@ -133,6 +134,58 @@ cd frontend
 npm run test:unit
 # or
 npm run test:e2e
+```
+
+## 🎨 Quasar Framework Integration
+
+### Why Quasar?
+- **Material Design 3**: Modern, consistent UI components
+- **PWA Ready**: Built-in service worker and offline capabilities
+- **Mobile Optimized**: Touch-friendly components for African mobile users
+- **Performance**: Tree-shaking and optimized builds
+- **Accessibility**: WCAG AA compliant components out of the box
+
+### Quasar Development Commands
+
+**Development Server:**
+```bash
+cd frontend
+npm run dev
+# or
+quasar dev
+```
+
+**Build for Production:**
+```bash
+npm run build
+# or
+quasar build
+```
+
+**PWA Mode:**
+```bash
+quasar mode add pwa
+quasar dev -m pwa
+```
+
+**Component Usage Examples:**
+```vue
+<!-- Quasar Button -->
+<q-btn color="primary" label="Add Member" @click="addMember" />
+
+<!-- Quasar Form -->
+<q-form @submit="onSubmit">
+  <q-input v-model="name" label="Member Name" required />
+  <q-btn type="submit" color="primary" label="Save" />
+</q-form>
+
+<!-- Quasar Table -->
+<q-table
+  :rows="members"
+  :columns="columns"
+  row-key="id"
+  :pagination="pagination"
+/>
 ```
 
 ### Database Operations

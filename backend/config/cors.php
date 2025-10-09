@@ -24,6 +24,8 @@ return [
         'http://127.0.0.1:1811',
         'http://localhost:1812',
         'http://127.0.0.1:1812',
+        'http://localhost:1611',
+        'http://127.0.0.1:1611',
         'http://localhost:3000',
         'http://127.0.0.1:3000',
     ],

@@ -70,6 +70,7 @@ ChMS/
 ### Frontend
 - **Vue 3** - Progressive JavaScript framework
 - **Composition API** - Modern Vue development approach
+- **Quasar Framework** - Material Design UI components and PWA features
 - **Pinia** - State management
 - **Vite** - Build tool and development server
 - **Vitest** - Unit testing framework
