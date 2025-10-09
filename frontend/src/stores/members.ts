@@ -33,7 +33,7 @@ export interface MemberFormData {
   gender?: string
   address?: string
   member_type: string
-  family_id?: number
+  family_id?: number | null
   joined_date?: string
   is_active?: boolean
   custom_attributes?: Record<string, any>
@@ -41,10 +41,12 @@ export interface MemberFormData {
 
 export interface MemberFilters {
   search?: string
-  member_type?: string
-  gender?: string
+  member_type?: string | null
+  gender?: string | null
   family_id?: number
   active_only?: boolean
+  age_min?: number | null
+  age_max?: number | null
 }
 
 export const useMembersStore = defineStore('members', () => {
@@ -118,7 +120,7 @@ export const useMembersStore = defineStore('members', () => {
     }
   }
 
-  const fetchMember = async (id: number) => {
+  const fetchMember = async (id: number | string) => {
     loading.value = true
     error.value = null
 
@@ -153,7 +155,7 @@ export const useMembersStore = defineStore('members', () => {
     }
   }
 
-  const updateMember = async (id: number, memberData: Partial<MemberFormData>) => {
+  const updateMember = async (id: number | string, memberData: Partial<MemberFormData>) => {
     saving.value = true
     error.value = null
 
@@ -161,13 +163,13 @@ export const useMembersStore = defineStore('members', () => {
       const response = await api.put(`/members/${id}`, memberData)
       
       // Update the member in the store
-      const index = members.value.findIndex(member => member.id === id)
+      const index = members.value.findIndex(member => member.id == id)
       if (index !== -1) {
         members.value[index] = response.data.data
       }
-      
+
       // Update current member if it's the same
-      if (currentMember.value?.id === id) {
+      if (currentMember.value?.id == id) {
         currentMember.value = response.data.data
       }
       
@@ -180,18 +182,18 @@ export const useMembersStore = defineStore('members', () => {
     }
   }
 
-  const deleteMember = async (id: number) => {
+  const deleteMember = async (id: number | string) => {
     try {
       await api.delete(`/members/${id}`)
       
       // Remove the member from the store
-      const index = members.value.findIndex(member => member.id === id)
+      const index = members.value.findIndex(member => member.id == id)
       if (index !== -1) {
         members.value.splice(index, 1)
       }
-      
+
       // Clear current member if it's the same
-      if (currentMember.value?.id === id) {
+      if (currentMember.value?.id == id) {
         currentMember.value = null
       }
     } catch (err: any) {

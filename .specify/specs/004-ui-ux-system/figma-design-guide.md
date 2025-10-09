@@ -13,13 +13,48 @@ This guide provides **comprehensive specifications** for designing the ChurchAfr
 - **Touch-Optimized**: 48px minimum touch targets, thumb-friendly navigation zones
 - **Quasar-Native**: All components must map directly to Quasar Framework components
 
-### AI Design Tool Integration
-- **Primary Tools**: Figma Make, Moonchild.ai for initial design generation
-- **Component Library**: Based on Quasar Framework Material Design 3 components
+### Tech Stack Integration (CRITICAL)
+- **Primary UI Framework**: Quasar Framework (Material Design 3 components)
+- **CSS Strategy**: Quasar Framework + Tailwind CSS utilities
+- **Component Mapping**: All designs MUST map to Quasar components (q-btn, q-card, q-input, etc.)
+- **Styling Approach**:
+  - **Primary**: Quasar Framework built-in styling
+  - **Secondary**: Tailwind CSS utilities for spacing, colors, responsive design
+  - **Custom**: Minimal custom CSS only for brand-specific elements
 - **Design Tokens**: Consistent with Quasar's theming system
 - **Responsive System**: Quasar's built-in breakpoint system (xs, sm, md, lg, xl)
 - **Icon System**: Material Design Icons (MDI) via Quasar's q-icon component
 - **Animation System**: Quasar's built-in transitions and micro-interactions
+
+### Brand Asset Creation Strategy
+**RECOMMENDED APPROACH: Manual Brand Foundation + AI Component Generation**
+
+#### Option 1: Manual Brand Assets First (RECOMMENDED)
+✅ **Advantages:**
+- Full control over African-inspired brand identity
+- Authentic cultural elements without stereotypes
+- Professional, unique visual identity
+- Better brand consistency and recognition
+
+**Process:**
+1. **Create core brand assets manually** (logo, icons, color palette)
+2. **Design African-inspired elements** (geometric patterns, cultural motifs)
+3. **Establish brand guidelines** (typography, spacing, colors)
+4. **Use AI for component variations** (layouts, UI patterns, responsive designs)
+5. **Refine with brand elements** (apply manual assets to AI-generated components)
+
+#### Option 2: AI-Generated Assets First
+⚠️ **Considerations:**
+- May lack authentic African cultural elements
+- Generic appearance similar to other systems
+- Requires significant manual refinement
+- Less unique brand identity
+
+**Process:**
+1. Generate base designs with AI tools
+2. Customize extensively with brand elements
+3. Add African cultural elements manually
+4. Refine for brand consistency and authenticity
 
 ---
 

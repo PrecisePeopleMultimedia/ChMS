@@ -3,6 +3,7 @@ import { onMounted, computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useThemeStore } from '@/stores/theme'
 import OfflineIndicator from '@/components/pwa/OfflineIndicator.vue'
+import InstallPrompt from '@/components/pwa/InstallPrompt.vue'
 
 const authStore = useAuthStore()
 const themeStore = useThemeStore()
@@ -30,6 +31,9 @@ onMounted(async () => {
   <div id="q-app" :class="themeClass">
     <!-- PWA Offline Indicator -->
     <OfflineIndicator />
+
+    <!-- PWA Install Prompt -->
+    <InstallPrompt />
 
     <!-- Main App Content -->
     <router-view />

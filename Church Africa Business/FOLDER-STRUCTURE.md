@@ -9,7 +9,7 @@ Church Africa Business/
 ├── FOLDER-STRUCTURE.md                 # This file
 │
 ├── 01-competitive-intelligence/
-│   └── rockrms-competitive-analysis.md # RockRMS analysis & positioning
+│   └── market-analysis.md              # Market analysis & positioning
 │
 ├── 02-business-strategy/
 │   └── monetization-strategy.md        # Revenue model & pricing

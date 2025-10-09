@@ -106,6 +106,146 @@ global.cancelAnimationFrame = vi.fn().mockImplementation((id) => {
   clearTimeout(id)
 })
 
+// Mock IndexedDB
+const mockIDBDatabase = {
+  objectStoreNames: ['organizations', 'members', 'attendance', 'settings', 'sync_queue'],
+  transaction: vi.fn().mockReturnValue({
+    objectStore: vi.fn().mockReturnValue({
+      add: vi.fn().mockResolvedValue(undefined),
+      put: vi.fn().mockResolvedValue(undefined),
+      get: vi.fn().mockResolvedValue(undefined),
+      delete: vi.fn().mockResolvedValue(undefined),
+      getAll: vi.fn().mockResolvedValue([]),
+      getAllFromIndex: vi.fn().mockResolvedValue([]),
+      clear: vi.fn().mockResolvedValue(undefined),
+      createIndex: vi.fn(),
+      index: vi.fn().mockReturnValue({
+        getAll: vi.fn().mockResolvedValue([]),
+      }),
+    }),
+    oncomplete: null,
+    onerror: null,
+    onabort: null,
+  }),
+  close: vi.fn(),
+  createObjectStore: vi.fn().mockReturnValue({
+    createIndex: vi.fn(),
+  }),
+}
+
+const mockIDBRequest = {
+  result: mockIDBDatabase,
+  error: null,
+  onsuccess: null as ((event: any) => void) | null,
+  onerror: null,
+  onupgradeneeded: null,
+}
+
+global.indexedDB = {
+  open: vi.fn().mockReturnValue(mockIDBRequest),
+  deleteDatabase: vi.fn().mockReturnValue(mockIDBRequest),
+  databases: vi.fn().mockResolvedValue([]),
+  cmp: vi.fn(),
+}
+
+// Trigger success callback for IndexedDB open
+setTimeout(() => {
+  if (mockIDBRequest.onsuccess) {
+    mockIDBRequest.onsuccess({ target: mockIDBRequest } as any)
+  }
+}, 0)
+
+// Mock Cache API
+global.caches = {
+  open: vi.fn().mockResolvedValue({
+    match: vi.fn().mockResolvedValue(undefined),
+    matchAll: vi.fn().mockResolvedValue([]),
+    add: vi.fn().mockResolvedValue(undefined),
+    addAll: vi.fn().mockResolvedValue(undefined),
+    put: vi.fn().mockResolvedValue(undefined),
+    delete: vi.fn().mockResolvedValue(true),
+    keys: vi.fn().mockResolvedValue([]),
+  }),
+  match: vi.fn().mockResolvedValue(undefined),
+  has: vi.fn().mockResolvedValue(false),
+  delete: vi.fn().mockResolvedValue(true),
+  keys: vi.fn().mockResolvedValue([]),
+}
+
+// Mock Service Worker
+Object.defineProperty(navigator, 'serviceWorker', {
+  value: {
+    register: vi.fn().mockResolvedValue({
+      installing: null,
+      waiting: null,
+      active: null,
+      scope: 'http://localhost:3000/',
+      update: vi.fn().mockResolvedValue(undefined),
+      unregister: vi.fn().mockResolvedValue(true),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+    }),
+    getRegistrations: vi.fn().mockResolvedValue([]),
+    ready: Promise.resolve({
+      installing: null,
+      waiting: null,
+      active: null,
+      scope: 'http://localhost:3000/',
+      update: vi.fn().mockResolvedValue(undefined),
+      unregister: vi.fn().mockResolvedValue(true),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+    }),
+    controller: null,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+  },
+  writable: true,
+})
+
+// Mock Workbox
+vi.mock('workbox-window', () => ({
+  Workbox: vi.fn().mockImplementation(() => ({
+    register: vi.fn().mockResolvedValue(undefined),
+    update: vi.fn().mockResolvedValue(undefined),
+    messageSkipWaiting: vi.fn().mockResolvedValue(undefined),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+  })),
+}))
+
+// Mock network status
+Object.defineProperty(navigator, 'onLine', {
+  value: true,
+  writable: true,
+})
+
+// Mock window event listeners for network status
+const originalAddEventListener = window.addEventListener
+const originalRemoveEventListener = window.removeEventListener
+
+window.addEventListener = vi.fn().mockImplementation((event, handler, options) => {
+  if (event === 'online' || event === 'offline') {
+    // Store the handler for potential triggering in tests
+    return
+  }
+  return originalAddEventListener.call(window, event, handler, options)
+})
+
+window.removeEventListener = vi.fn().mockImplementation((event, handler, options) => {
+  if (event === 'online' || event === 'offline') {
+    return
+  }
+  return originalRemoveEventListener.call(window, event, handler, options)
+})
+
+// Mock setInterval and clearInterval
+window.setInterval = vi.fn().mockImplementation((callback, delay) => {
+  return 123 // Return a mock timer ID
+})
+
+window.clearInterval = vi.fn()
+
 // Mock Quasar Framework
 ;(global as any).Quasar = {
   Dark: {

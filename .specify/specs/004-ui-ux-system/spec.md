@@ -163,6 +163,7 @@ Based on comprehensive RockRMS competitive analysis, the following critical enha
 - **Maintain mobile optimization** - Preserve Quasar's touch features
 - **Override with Material Design 3** - Modern aesthetic improvements
 - **Keep PWA features** - Offline functionality and app-like experience
+- **Enhanced PWA Installation** - Native "Add to Home Screen" prompts and app icon installation
 - **Preserve accessibility** - Maintain Quasar's accessibility features
 - **Extend component library** - Add custom components alongside Quasar
 - **Theme system integration** - Seamless theme switching
@@ -361,6 +362,71 @@ This enhanced UI/UX specification provides significant competitive advantages ov
 2. **One-Handed Operation**: Critical controls within thumb reach
 3. **Touch Optimization**: Large targets and gesture support
 4. **Cultural Adaptation**: Design patterns familiar to African mobile users
+
+## Progressive Web App (PWA) Features
+
+### **PWA Installation Experience**
+1. **Install Prompt Management**
+   - **Smart Timing**: Show install prompt after user engagement (2+ page visits, 5+ minutes usage)
+   - **Custom Install Button**: Prominent "Install App" button in header/menu
+   - **Install Banner**: Native browser "Add to Home Screen" prompt
+   - **Dismissal Handling**: Respect user choice if they dismiss the prompt
+
+2. **App Icon and Branding**
+   - **Custom App Icon**: ChurchAfrica branded icon (192x192, 512x512 sizes)
+   - **Splash Screen**: Custom loading screen with ChurchAfrica branding
+   - **App Name**: "ChurchAfrica ChMS" appears in app drawer/home screen
+   - **Theme Color**: Garnet Night theme color for status bar
+
+3. **Standalone App Experience**
+   - **Full Screen Mode**: Launches without browser UI (address bar, navigation buttons)
+   - **Native Feel**: Behaves like a native mobile app
+   - **App Switching**: Appears in recent apps list as separate application
+   - **Deep Linking**: Direct links open within the installed app
+
+4. **Offline Functionality**
+   - **Service Worker**: Caches all essential resources for offline use
+   - **Background Sync**: Queues actions when offline, syncs when online
+   - **Offline Indicator**: Clear visual feedback when app is offline
+   - **Cached Content**: All core features work without internet connection
+
+### **PWA Technical Implementation**
+1. **Web App Manifest** (`manifest.json`)
+   ```json
+   {
+     "name": "ChurchAfrica ChMS",
+     "short_name": "ChurchAfrica",
+     "description": "Africa-first church management system",
+     "start_url": "/",
+     "display": "standalone",
+     "theme_color": "#2D1B69",
+     "background_color": "#1A0F3A",
+     "icons": [
+       {
+         "src": "/icons/icon-192x192.png",
+         "sizes": "192x192",
+         "type": "image/png"
+       },
+       {
+         "src": "/icons/icon-512x512.png",
+         "sizes": "512x512",
+         "type": "image/png"
+       }
+     ]
+   }
+   ```
+
+2. **Service Worker Registration**
+   - **Automatic Registration**: Register service worker on app load
+   - **Update Handling**: Prompt user for app updates when new version available
+   - **Cache Strategy**: Cache-first for static assets, network-first for dynamic content
+   - **Background Sync**: Queue offline actions for later synchronization
+
+3. **Install Prompt Component** (`InstallPrompt.vue`)
+   - **Detect Installability**: Check if app can be installed
+   - **Custom Install UI**: Branded install button and modal
+   - **User Preference**: Remember user's install choice
+   - **Analytics Tracking**: Track install prompt interactions
 
 ### Strategic Implementation Priority
 

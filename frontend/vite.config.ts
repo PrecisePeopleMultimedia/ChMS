@@ -59,15 +59,16 @@ export default defineConfig({
         ]
       },
       manifest: {
-        name: 'ChMS - Church Management System',
-        short_name: 'ChMS',
+        name: 'ChurchAfrica ChMS',
+        short_name: 'ChurchAfrica',
         description: 'Africa-first church management system with offline capabilities',
-        theme_color: '#1976d2',
-        background_color: '#ffffff',
+        theme_color: '#2D1B69', // Garnet Night primary color
+        background_color: '#1A0F3A', // Garnet Night dark background
         display: 'standalone',
         orientation: 'portrait',
         scope: '/',
         start_url: '/',
+        categories: ['productivity', 'business'],
         icons: [
           {
             src: '/icons/icon-72x72.png',

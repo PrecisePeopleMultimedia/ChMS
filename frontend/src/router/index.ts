@@ -7,7 +7,12 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: '/auth/login'
+      name: 'Landing',
+      component: () => import('@/pages/LandingPage.vue'),
+      meta: {
+        requiresGuest: true,
+        title: 'ChurchAfrica - Church Management Made Simple'
+      }
     },
     {
       path: '/auth',
@@ -124,6 +129,42 @@ const router = createRouter({
           meta: {
             requiresAuth: true,
             title: 'Badge Management - ChurchAfrica'
+          }
+        },
+        {
+          path: '/members',
+          name: 'MemberList',
+          component: () => import('@/views/MemberListView.vue'),
+          meta: {
+            requiresAuth: true,
+            title: 'Members - ChurchAfrica'
+          }
+        },
+        {
+          path: '/members/new',
+          name: 'MemberCreate',
+          component: () => import('@/views/MemberFormView.vue'),
+          meta: {
+            requiresAuth: true,
+            title: 'Add Member - ChurchAfrica'
+          }
+        },
+        {
+          path: '/members/:id',
+          name: 'MemberDetail',
+          component: () => import('@/views/MemberDetailView.vue'),
+          meta: {
+            requiresAuth: true,
+            title: 'Member Details - ChurchAfrica'
+          }
+        },
+        {
+          path: '/members/:id/edit',
+          name: 'MemberEdit',
+          component: () => import('@/views/MemberFormView.vue'),
+          meta: {
+            requiresAuth: true,
+            title: 'Edit Member - ChurchAfrica'
           }
         }
       ]

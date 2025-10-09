@@ -9,8 +9,8 @@
 ## 📁 **Folder Structure**
 
 ### **01-competitive-intelligence/**
-- RockRMS analysis and competitive positioning
-- Market research and feature comparisons
+- Market analysis and competitive positioning
+- Industry research and feature comparisons
 - Competitive advantages and differentiation strategy
 
 ### **02-business-strategy/**

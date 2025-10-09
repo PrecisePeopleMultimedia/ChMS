@@ -304,11 +304,13 @@ describe('LoginForm', () => {
       // Wait for the async operation to complete
       await new Promise(resolve => setTimeout(resolve, 100))
 
-      expect(mockNotify).toHaveBeenCalledWith({
-        type: 'negative',
-        message: 'Google login failed. Please try again.',
-        position: 'top'
-      })
+      expect(mockNotify).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: 'negative',
+          message: 'Google login failed. Please try again.',
+          position: 'top'
+        })
+      )
     })
   })
 

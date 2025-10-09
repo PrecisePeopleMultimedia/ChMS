@@ -1,33 +1,168 @@
-# Attendance System - Feature Specification
+# Attendance System - Feature Specification (Enhanced Multi-Service Support)
 
 ## Feature Overview
-**Feature Name:** Attendance System
+**Feature Name:** Enhanced Attendance System with Multi-Service Support
 **Epic:** Core Features
-**Priority:** P0
-**Africa-First Considerations:** Offline attendance recording, QR code and manual check-in, works on basic Android devices
+**Priority:** P0 (CRITICAL - Complete attendance management)
+**Implementation Phase:** MVP (Phase 1) + Post-MVP Enhancements (Phase 2)
+**Africa-First Considerations:** Offline attendance recording, QR code and manual check-in, works on basic Android devices, family check-in support
+**Enhanced Features:** Multi-service support, family check-in, child ministry assignment, location-specific tracking, advanced analytics
+
+## 🚀 **MVP vs POST-MVP FEATURE BREAKDOWN**
+
+### **MVP FEATURES (Phase 1: Weeks 3-4) - CRITICAL FOR LAUNCH**
+1. **Multi-Service Attendance** - Support multiple services per day (morning, evening, midweek)
+2. **Family Check-In** - Check in entire families with children's ministry assignment
+3. **Enhanced QR Code System** - Service-specific QR codes with family linking
+4. **Location-Specific Tracking** - Track attendance by specific locations within church
+5. **Offline-First Architecture** - Complete functionality without internet connection
+
+### **POST-MVP FEATURES (Phase 2: Weeks 9-16) - COMPETITIVE ADVANTAGES**
+1. **Advanced Analytics Dashboard** - Attendance trends, engagement patterns, growth metrics
+2. **Automated Follow-Up System** - Identify and follow up with absent members
+3. **Child Check-In Security** - Secure child pickup with parent verification
+4. **Visitor Journey Integration** - Link attendance to member journey tracking
+5. **Multi-Location Support** - Attendance across multiple church campuses
 
 ## User Stories
 
-### Primary User Stories
-- **As a** church greeter, **I want** to record member attendance via QR code scanning **so that** check-in is fast and efficient
-- **As a** church greeter, **I want** to search for members manually **so that** I can check in members without QR codes
-- **As a** church administrator, **I want** to see attendance reports **so that** I can track church engagement
-- **As a** church greeter, **I want** to record attendance offline **so that** check-in works without internet
+### **MVP USER STORIES (Phase 1: Critical for Launch)**
 
-### Edge Cases and Error Scenarios
-- **As a** church greeter, **when** the QR scanner fails **I should** be able to manually enter member information
-- **As a** church greeter, **when** I'm offline **I should** still be able to record all attendance
-- **As a** church greeter, **when** a member is not found **I should** be able to add them as a visitor
+#### **Multi-Service Attendance (MVP)**
+- **As a** church administrator, **I want** to set up multiple services per day **so that** I can track attendance for morning, evening, and midweek services
+- **As a** church greeter, **I want** to select the specific service during check-in **so that** attendance is recorded accurately
+- **As a** pastor, **I want** service-specific attendance reports **so that** I can understand engagement patterns across different services
+
+#### **Family Check-In (MVP)**
+- **As a** church greeter, **I want** to check in entire families at once **so that** the process is efficient for families with multiple children
+- **As a** children's ministry coordinator, **I want** automatic child ministry assignment **so that** children are directed to age-appropriate classes
+- **As a** parent, **I want** secure child check-in with pickup verification **so that** I know my children are safe
+
+#### **Enhanced QR Code System (MVP)**
+- **As a** church member, **I want** service-specific QR codes **so that** I can quickly check in to the correct service
+- **As a** family head, **I want** family QR codes **so that** I can check in my entire family with one scan
+- **As a** church greeter, **I want** QR codes to work offline **so that** check-in continues even without internet
+
+#### **Location-Specific Tracking (MVP)**
+- **As a** church administrator, **I want** to track attendance by location **so that** I can manage capacity and resources
+- **As a** usher, **I want** to record which section/area members sit in **so that** we can optimize seating and follow-up
+- **As a** safety coordinator, **I want** location-based attendance **so that** I can manage emergency procedures
+
+### **POST-MVP USER STORIES (Phase 2: Competitive Advantages)**
+
+#### **Advanced Analytics (Post-MVP)**
+- **As a** pastor, **I want** attendance trend analysis **so that** I can identify growth patterns and seasonal changes
+- **As a** church leadership, **I want** engagement scoring **so that** I can identify members who may need additional care
+- **As a** church planner, **I want** predictive attendance modeling **so that** I can plan resources and capacity
+
+#### **Automated Follow-Up (Post-MVP)**
+- **As a** pastoral care coordinator, **I want** automated absent member alerts **so that** I can follow up with members who haven't attended recently
+- **As a** small group leader, **I want** attendance-based follow-up suggestions **so that** I can reach out to members effectively
+- **As a** church administrator, **I want** visitor follow-up automation **so that** no first-time visitors are missed
 
 ## Functional Requirements
 
-### Core Functionality
-1. QR code generation for members
-2. QR code scanning for quick check-in
-3. Manual member search and check-in
-4. Visitor registration and check-in
-5. Attendance recording with service/event details
-6. Basic attendance reports and statistics
+### **MVP FUNCTIONAL REQUIREMENTS (Phase 1: Weeks 3-4)**
+
+#### **1. Multi-Service Attendance System (MVP - Critical)**
+- **Service Management**
+  - Create and manage multiple services per day (Morning, Evening, Midweek)
+  - Service-specific settings (time, location, capacity, ministry assignments)
+  - Recurring service schedules with automatic creation
+- **Service-Specific Check-In**
+  - Service selection during check-in process
+  - Service-specific QR codes for members
+  - Automatic service detection based on time and location
+- **Cross-Service Analytics**
+  - Attendance comparison across services
+  - Member engagement patterns by service type
+  - Service performance metrics and trends
+
+#### **2. Family Check-In System (MVP - Critical)**
+```php
+// Laravel Service Implementation
+class FamilyAttendanceService {
+    public function checkInFamily($familyId, $serviceId, $memberIds) {
+        // Check in entire family with children's ministry assignment
+        foreach ($memberIds as $memberId) {
+            $member = Member::find($memberId);
+            $ministryAssignment = $this->assignChildMinistry($member, $serviceId);
+
+            $this->recordAttendance($memberId, $serviceId, [
+                'family_checkin' => true,
+                'ministry_assignment' => $ministryAssignment,
+                'checkin_time' => now(),
+                'location' => $this->determineLocation($member, $serviceId)
+            ]);
+        }
+
+        return $this->generateFamilyCheckinReceipt($familyId, $serviceId);
+    }
+}
+```
+
+- **Family Unit Check-In**
+  - Single-scan family check-in with all members
+  - Family-specific QR codes linking all members
+  - Automatic child ministry assignment based on age/grade
+- **Children's Ministry Integration**
+  - Age-appropriate class assignment
+  - Child security tags and parent pickup verification
+  - Special needs and allergy tracking
+- **Family Attendance Tracking**
+  - Family attendance patterns and trends
+  - Parent-child attendance correlation
+  - Family engagement scoring
+
+#### **3. Enhanced QR Code System (MVP - Enhanced)**
+- **Dynamic QR Code Generation**
+  - Service-specific QR codes with embedded service information
+  - Family QR codes for group check-in
+  - Temporary visitor QR codes for quick registration
+- **Offline QR Processing**
+  - Local QR code validation and processing
+  - Offline attendance recording with sync capability
+  - QR code backup systems for network failures
+- **Security Features**
+  - Encrypted QR codes with timestamp validation
+  - QR code expiration for security
+  - Anti-fraud measures and duplicate detection
+
+#### **4. Location-Specific Attendance (MVP - Enhanced)**
+- **Multi-Location Support**
+  - Track attendance by building, room, or section
+  - Location-based capacity management
+  - Location-specific reporting and analytics
+- **Seating and Area Management**
+  - Section-based attendance tracking
+  - Capacity monitoring and overflow management
+  - Location-based follow-up and contact tracing
+- **Resource Optimization**
+  - Location utilization analytics
+  - Resource allocation based on attendance patterns
+  - Space planning and optimization insights
+
+### **POST-MVP FUNCTIONAL REQUIREMENTS (Phase 2: Weeks 9-16)**
+
+#### **5. Advanced Analytics Dashboard (Post-MVP)**
+- **Attendance Trend Analysis**
+  - Growth patterns and seasonal variations
+  - Service comparison and optimization insights
+  - Member engagement lifecycle analysis
+- **Predictive Analytics**
+  - Attendance forecasting for resource planning
+  - Member retention risk based on attendance patterns
+  - Optimal service timing and frequency recommendations
+
+#### **6. Automated Follow-Up System (Post-MVP)**
+- **Absent Member Detection**
+  - Automated identification of members with declining attendance
+  - Customizable absence thresholds and alerts
+  - Integration with member journey tracking
+- **Follow-Up Workflow Automation**
+  - Automated follow-up task creation
+  - Staff assignment based on member relationships
+  - Follow-up effectiveness tracking and optimization
 
 ### Offline Behavior
 - **When offline:** All attendance operations stored locally in IndexedDB
@@ -41,13 +176,146 @@
 
 ## Technical Requirements
 
-### API Endpoints
-- `GET /api/services` - List available services/events
-- `POST /api/attendance` - Record attendance
-- `GET /api/attendance` - Get attendance records with filters
-- `GET /api/members/{id}/qr` - Generate member QR code
-- `POST /api/attendance/checkin` - Check in member (QR or manual)
-- `GET /api/attendance/reports` - Get attendance reports
+### **MVP API ENDPOINTS (Phase 1: Critical Implementation)**
+
+#### **Multi-Service Attendance Endpoints (MVP)**
+```php
+// Enhanced Service Management
+class AttendanceService {
+    public function recordFamilyAttendance($familyId, $serviceId) {
+        // Handle family check-in with children's ministry assignment
+        $family = Family::with('members')->find($familyId);
+        $service = Service::find($serviceId);
+
+        foreach ($family->members as $member) {
+            $ministryAssignment = $this->assignMinistry($member, $service);
+            $location = $this->determineOptimalLocation($member, $service);
+
+            Attendance::create([
+                'member_id' => $member->id,
+                'service_id' => $serviceId,
+                'family_id' => $familyId,
+                'ministry_assignment' => $ministryAssignment,
+                'location' => $location,
+                'checkin_method' => 'family_qr',
+                'checked_in_at' => now()
+            ]);
+        }
+
+        return $this->generateFamilyReceipt($familyId, $serviceId);
+    }
+}
+```
+
+- `GET /api/services` - List services with multi-service support and scheduling
+- `POST /api/services` - Create new service with ministry assignments
+- `GET /api/services/{id}/attendance` - Get service-specific attendance with analytics
+- `POST /api/attendance/family-checkin` - Family check-in with children's ministry assignment
+- `GET /api/attendance/family/{familyId}` - Family attendance history and patterns
+
+#### **Enhanced QR Code Endpoints (MVP)**
+- `GET /api/members/{id}/qr/{serviceId}` - Generate service-specific member QR code
+- `GET /api/families/{id}/qr/{serviceId}` - Generate family QR code for group check-in
+- `POST /api/attendance/qr-checkin` - Process QR code check-in with validation
+- `GET /api/qr/validate/{qrCode}` - Validate QR code and return member/family info
+
+#### **Location-Specific Attendance Endpoints (MVP)**
+- `GET /api/locations` - List church locations and sections
+- `POST /api/attendance/location-checkin` - Check in with specific location assignment
+- `GET /api/attendance/location/{locationId}` - Location-specific attendance analytics
+- `GET /api/locations/{id}/capacity` - Real-time location capacity and availability
+
+### **MVP DATABASE SCHEMA (Phase 1: Critical Tables)**
+
+#### **Enhanced Services Table (MVP)**
+```sql
+-- Multi-service support with ministry assignments
+CREATE TABLE services (
+    id BIGINT PRIMARY KEY,
+    organization_id BIGINT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    service_type ENUM('sunday_morning', 'sunday_evening', 'midweek', 'special_event') NOT NULL,
+    scheduled_date DATE NOT NULL,
+    start_time TIME NOT NULL,
+    end_time TIME NOT NULL,
+    location_id BIGINT NULL,
+    capacity INTEGER DEFAULT 0,
+
+    -- Ministry assignments
+    ministry_assignments JSON, -- Age-based ministry assignments
+    special_requirements JSON, -- Special needs, security requirements
+
+    -- Service configuration
+    allow_family_checkin BOOLEAN DEFAULT TRUE,
+    require_location_assignment BOOLEAN DEFAULT FALSE,
+    enable_child_security BOOLEAN DEFAULT TRUE,
+
+    -- Status and metadata
+    status ENUM('scheduled', 'active', 'completed', 'cancelled') DEFAULT 'scheduled',
+    notes TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (organization_id) REFERENCES organizations(id),
+    FOREIGN KEY (location_id) REFERENCES church_locations(id),
+
+    INDEX idx_services_org (organization_id),
+    INDEX idx_services_date (scheduled_date),
+    INDEX idx_services_type (service_type),
+    INDEX idx_services_status (status)
+);
+
+-- Enhanced attendance table with family and location support
+CREATE TABLE attendance (
+    id BIGINT PRIMARY KEY,
+    member_id BIGINT NOT NULL,
+    service_id BIGINT NOT NULL,
+    family_id BIGINT NULL, -- For family check-ins
+
+    -- Check-in details
+    checked_in_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    checked_out_at TIMESTAMP NULL,
+    checkin_method ENUM('qr_individual', 'qr_family', 'manual_search', 'visitor_registration') NOT NULL,
+
+    -- Location and ministry assignment
+    location_assignment VARCHAR(255) NULL, -- Specific room/section
+    ministry_assignment VARCHAR(255) NULL, -- Children's ministry, adult service, etc.
+    seat_section VARCHAR(100) NULL,
+
+    -- Family and child-specific fields
+    is_family_checkin BOOLEAN DEFAULT FALSE,
+    parent_id BIGINT NULL, -- For children, reference to parent
+    child_security_code VARCHAR(20) NULL, -- For secure child pickup
+    special_needs_notes TEXT NULL,
+
+    -- Metadata
+    device_info JSON NULL, -- Check-in device information
+    offline_sync BOOLEAN DEFAULT FALSE, -- Was this synced from offline?
+    notes TEXT NULL,
+
+    -- Staff tracking
+    checked_in_by BIGINT NOT NULL, -- Staff member who processed check-in
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (member_id) REFERENCES members(id) ON DELETE CASCADE,
+    FOREIGN KEY (service_id) REFERENCES services(id) ON DELETE CASCADE,
+    FOREIGN KEY (family_id) REFERENCES families(id) ON DELETE SET NULL,
+    FOREIGN KEY (parent_id) REFERENCES members(id) ON DELETE SET NULL,
+    FOREIGN KEY (checked_in_by) REFERENCES users(id),
+
+    -- Prevent duplicate check-ins
+    UNIQUE KEY unique_member_service (member_id, service_id),
+
+    INDEX idx_attendance_member (member_id),
+    INDEX idx_attendance_service (service_id),
+    INDEX idx_attendance_family (family_id),
+    INDEX idx_attendance_date (checked_in_at),
+    INDEX idx_attendance_method (checkin_method),
+    INDEX idx_attendance_location (location_assignment)
+);
+```
 
 ### Database Schema
 ```sql

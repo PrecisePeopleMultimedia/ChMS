@@ -17,6 +17,8 @@ class PWAService {
   private registration: ServiceWorkerRegistration | null = null
   private updateAvailable = false
   private offlineReady = false
+  private deferredPrompt: any = null
+  private installPromptShown = false
 
   /**
    * Initialize PWA service worker
@@ -33,6 +35,9 @@ class PWAService {
 
       // Listen for service worker events
       this.setupEventListeners()
+
+      // Setup install prompt listener
+      this.setupInstallPromptListener()
 
       // Register service worker
       this.registration = await this.wb.register() || null
@@ -126,12 +131,66 @@ class PWAService {
   }
 
   /**
+   * Setup install prompt listener
+   */
+  private setupInstallPromptListener(): void {
+    window.addEventListener('beforeinstallprompt', (e) => {
+      // Prevent the mini-infobar from appearing on mobile
+      e.preventDefault()
+
+      // Stash the event so it can be triggered later
+      this.deferredPrompt = e
+
+      console.log('📱 PWA install prompt available')
+
+      // Dispatch custom event for components to listen to
+      window.dispatchEvent(new CustomEvent('pwa-installable'))
+    })
+
+    // Listen for app installed event
+    window.addEventListener('appinstalled', () => {
+      console.log('🎉 PWA was installed')
+      this.deferredPrompt = null
+
+      // Dispatch custom event
+      window.dispatchEvent(new CustomEvent('pwa-installed'))
+    })
+  }
+
+  /**
    * Show install prompt for PWA
    */
   async showInstallPrompt(): Promise<boolean> {
-    // This would be handled by the beforeinstallprompt event
-    // For now, just return false as we need to implement the event handler
-    return false
+    if (!this.deferredPrompt) {
+      console.warn('⚠️ Install prompt not available')
+      return false
+    }
+
+    try {
+      // Show the install prompt
+      this.deferredPrompt.prompt()
+
+      // Wait for the user to respond to the prompt
+      const { outcome } = await this.deferredPrompt.userChoice
+
+      console.log(`👤 User response to install prompt: ${outcome}`)
+
+      // Clear the deferred prompt
+      this.deferredPrompt = null
+      this.installPromptShown = true
+
+      return outcome === 'accepted'
+    } catch (error) {
+      console.error('❌ Failed to show install prompt:', error)
+      return false
+    }
+  }
+
+  /**
+   * Check if install prompt is available
+   */
+  canShowInstallPrompt(): boolean {
+    return !!this.deferredPrompt && !this.installPromptShown
   }
 
   /**
