@@ -1,9 +1,43 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { mount } from '@vue/test-utils'
+import { mount, VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import { Quasar } from 'quasar'
 import OrganizationSetup from '../OrganizationSetup.vue'
 import { useOrganizationStore } from '@/stores/organization'
+
+// Define proper types for the component
+interface OrganizationSetupComponent {
+  currentStep: number
+  organizationData: {
+    name: string
+    address?: string
+    timezone: string
+  }
+  serviceSchedules: Array<{
+    id?: number
+    name: string
+    day_of_week: number
+    start_time: string
+    end_time: string
+    is_active: boolean
+  }>
+  newSchedule: {
+    name: string
+    day_of_week: number
+    start_time: string
+    end_time: string
+    is_active: boolean
+  }
+  settingsData: {
+    welcome_message: string
+  }
+  setupComplete: boolean
+  canProceed: boolean
+  formErrors: Record<string, string>
+  nextStep: () => Promise<void>
+  previousStep: () => Promise<void>
+  completeSetup: () => Promise<void>
+}
 
 // Mock the router
 const mockPush = vi.fn()
@@ -18,7 +52,7 @@ vi.mock('@/stores/organization', () => ({
   useOrganizationStore: vi.fn()
 }))
 
-const createWrapper = (storeOverrides = {}) => {
+const createWrapper = (storeOverrides = {}): VueWrapper<OrganizationSetupComponent> => {
   const mockStore = {
     createOrganization: vi.fn(),
     updateSettings: vi.fn(),
@@ -36,7 +70,7 @@ const createWrapper = (storeOverrides = {}) => {
     global: {
       plugins: [Quasar, createPinia()]
     }
-  })
+  }) as VueWrapper<OrganizationSetupComponent>
 }
 
 describe('OrganizationSetup', () => {
@@ -51,7 +85,7 @@ describe('OrganizationSetup', () => {
 
       expect(wrapper.text()).toContain('Welcome to ChurchAfrica')
       expect(wrapper.text()).toContain('Church Information')
-      expect((wrapper.vm as any).currentStep).toBe(1)
+      expect(wrapper.vm.currentStep).toBe(1)
     })
 
     it('should show progress indicator', () => {
@@ -76,37 +110,37 @@ describe('OrganizationSetup', () => {
       const wrapper = createWrapper()
 
       // Fill in required organization data (actual property name)
-      ;(wrapper.vm as any).organizationData.name = 'Test Church'
-      ;(wrapper.vm as any).organizationData.timezone = 'Africa/Lagos'
+      wrapper.vm.organizationData.name = 'Test Church'
+      wrapper.vm.organizationData.timezone = 'Africa/Lagos'
 
       // Call nextStep method directly since component uses this internally
-      await (wrapper.vm as any).nextStep()
+      await wrapper.vm.nextStep()
 
-      expect((wrapper.vm as any).currentStep).toBe(2)
+      expect(wrapper.vm.currentStep).toBe(2)
     })
 
     it('should not navigate to next step with invalid data', async () => {
       const wrapper = createWrapper()
 
       // Leave required fields empty (use actual property name)
-      ;(wrapper.vm as any).organizationData.name = ''
+      wrapper.vm.organizationData.name = ''
 
       // Call nextStep method - should not advance due to validation
-      await (wrapper.vm as any).nextStep()
+      await wrapper.vm.nextStep()
 
-      expect((wrapper.vm as any).currentStep).toBe(1)
+      expect(wrapper.vm.currentStep).toBe(1)
     })
 
     it('should navigate back to previous step', async () => {
       const wrapper = createWrapper()
 
       // Go to step 2 first
-      ;(wrapper.vm as any).currentStep = 2
+      wrapper.vm.currentStep = 2
 
       // Call previousStep method directly
-      await (wrapper.vm as any).previousStep()
+      await wrapper.vm.previousStep()
 
-      expect((wrapper.vm as any).currentStep).toBe(1)
+      expect(wrapper.vm.currentStep).toBe(1)
     })
 
     it('should not show back button on first step', () => {
@@ -122,32 +156,32 @@ describe('OrganizationSetup', () => {
       const wrapper = createWrapper()
 
       // Try to proceed without required fields (use actual validation logic)
-      ;(wrapper.vm as any).organizationData.name = '' // Empty required field
+      wrapper.vm.organizationData.name = '' // Empty required field
 
       // Component's canProceed computed should return false
-      expect((wrapper.vm as any).canProceed).toBe(false)
-      expect((wrapper.vm as any).currentStep).toBe(1)
+      expect(wrapper.vm.canProceed).toBe(false)
+      expect(wrapper.vm.currentStep).toBe(1)
     })
 
     it('should validate service schedule form', async () => {
       const wrapper = createWrapper()
 
       // Navigate to service schedule step
-      ;(wrapper.vm as any).currentStep = 2
+      wrapper.vm.currentStep = 2
 
       // Clear service schedules to test validation
-      ;(wrapper.vm as any).serviceSchedules = []
+      wrapper.vm.serviceSchedules = []
 
       // Component's canProceed should return false when no schedules
-      expect((wrapper.vm as any).canProceed).toBe(false)
+      expect(wrapper.vm.canProceed).toBe(false)
     })
 
     it('should validate time range in service schedule', async () => {
       const wrapper = createWrapper()
-      ;(wrapper.vm as any).currentStep = 2
+      wrapper.vm.currentStep = 2
 
       // Set end time before start time
-      ;(wrapper.vm as any).newSchedule = {
+      wrapper.vm.newSchedule = {
         name: 'Test Service',
         day_of_week: 0,
         start_time: '11:00',
@@ -159,14 +193,14 @@ describe('OrganizationSetup', () => {
       await wrapper.vm.$nextTick()
 
       // Check if validation error exists in any form
-      expect((wrapper.vm as any).formErrors).toBeDefined()
+      expect(wrapper.vm.formErrors).toBeDefined()
     })
   })
 
   describe('Service Schedule Management', () => {
     it('should add service schedule to list', async () => {
       const wrapper = createWrapper()
-      ;(wrapper.vm as any).currentStep = 2
+      wrapper.vm.currentStep = 2
 
       const validSchedule = {
         name: 'Sunday Service',
@@ -177,16 +211,16 @@ describe('OrganizationSetup', () => {
       }
 
       // Directly add to serviceSchedules array (simulating form submission)
-      ;(wrapper.vm as any).serviceSchedules.push(validSchedule)
+      wrapper.vm.serviceSchedules.push(validSchedule)
 
-      expect((wrapper.vm as any).serviceSchedules).toContainEqual(
+      expect(wrapper.vm.serviceSchedules).toContainEqual(
         expect.objectContaining(validSchedule)
       )
     })
 
     it('should remove service schedule from list', async () => {
       const wrapper = createWrapper()
-      ;(wrapper.vm as any).currentStep = 2
+      wrapper.vm.currentStep = 2
 
       // Add a schedule first
       const schedule = {
@@ -197,17 +231,17 @@ describe('OrganizationSetup', () => {
         end_time: '11:00',
         is_active: true
       }
-      ;(wrapper.vm as any).serviceSchedules = [schedule]
+      wrapper.vm.serviceSchedules = [schedule]
 
       // Remove the schedule directly (simulating form action)
-      ;(wrapper.vm as any).serviceSchedules.splice(0, 1)
+      wrapper.vm.serviceSchedules.splice(0, 1)
 
-      expect((wrapper.vm as any).serviceSchedules).toHaveLength(0)
+      expect(wrapper.vm.serviceSchedules).toHaveLength(0)
     })
 
     it('should edit service schedule', async () => {
       const wrapper = createWrapper()
-      ;(wrapper.vm as any).currentStep = 2
+      wrapper.vm.currentStep = 2
 
       const schedule = {
         id: 1,
@@ -217,12 +251,13 @@ describe('OrganizationSetup', () => {
         end_time: '11:00',
         is_active: true
       }
-      ;(wrapper.vm as any).serviceSchedules = [schedule]
+      wrapper.vm.serviceSchedules = [schedule]
 
       // Edit the schedule directly (simulating form action)
-      ;(wrapper.vm as any).serviceSchedules[0].name = 'Updated Service'
-
-      expect((wrapper.vm as any).serviceSchedules[0].name).toBe('Updated Service')
+      if (wrapper.vm.serviceSchedules[0]) {
+        wrapper.vm.serviceSchedules[0].name = 'Updated Service'
+        expect(wrapper.vm.serviceSchedules[0].name).toBe('Updated Service')
+      }
     })
   })
 
@@ -239,27 +274,27 @@ describe('OrganizationSetup', () => {
       })
 
       // Set up complete data
-      ;(wrapper.vm as any).organizationData = {
+      wrapper.vm.organizationData = {
         name: 'Test Church',
         address: '123 Test St',
         timezone: 'Africa/Lagos'
       }
-      ;(wrapper.vm as any).serviceSchedules = [{
+      wrapper.vm.serviceSchedules = [{
         name: 'Sunday Service',
         day_of_week: 0,
         start_time: '09:00',
         end_time: '11:00',
         is_active: true
       }]
-      ;(wrapper.vm as any).settingsData = {
+      wrapper.vm.settingsData = {
         welcome_message: 'Welcome to our church'
       }
 
-      await (wrapper.vm as any).completeSetup()
+      await wrapper.vm.completeSetup()
 
       // The component sets setupComplete to true and moves to step 4
-      expect((wrapper.vm as any).setupComplete).toBe(true)
-      expect((wrapper.vm as any).currentStep).toBe(4)
+      expect(wrapper.vm.setupComplete).toBe(true)
+      expect(wrapper.vm.currentStep).toBe(4)
     })
 
     it('should handle setup errors gracefully', async () => {
@@ -270,14 +305,14 @@ describe('OrganizationSetup', () => {
         error: 'Setup failed'
       })
 
-      ;(wrapper.vm as any).churchProfile = {
+      wrapper.vm.organizationData = {
         name: 'Test Church',
         timezone: 'Africa/Lagos'
       }
 
-      await (wrapper.vm as any).completeSetup()
+      await wrapper.vm.completeSetup()
 
-      expect((wrapper.vm as any).currentStep).toBe(4) // Should stay on completion step
+      expect(wrapper.vm.currentStep).toBe(4) // Should stay on completion step
       expect(wrapper.text()).toContain('Setup failed')
     })
   })
@@ -315,11 +350,12 @@ describe('OrganizationSetup', () => {
         }
       })
 
-      ;(wrapper.vm as any).organizationData.name = 'Test Church'
+      wrapper.vm.organizationData.name = 'Test Church'
 
       // Simulate saving to localStorage (component doesn't have this method)
-      localStorage.setItem('chms_organization_setup', JSON.stringify((wrapper.vm as any).organizationData))
+      localStorage.setItem('chms_organization_setup', JSON.stringify(wrapper.vm.organizationData))
 
+      // eslint-disable-next-line jest/prefer-toHaveBeenCalledWith
       expect(mockSetItem).toHaveBeenCalledWith(
         'chms_organization_setup',
         expect.stringContaining('Test Church')
