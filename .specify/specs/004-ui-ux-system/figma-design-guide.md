@@ -14,14 +14,176 @@ This guide provides **comprehensive specifications** for designing the ChurchAfr
 - **Quasar-Native**: All components must map directly to Quasar Framework components
 
 ### AI Design Tool Integration
-- **Primary Tools**: Figma Make, Moochild.ai for initial design generation
+- **Primary Tools**: Figma Make, Moonchild.ai for initial design generation
 - **Component Library**: Based on Quasar Framework Material Design 3 components
 - **Design Tokens**: Consistent with Quasar's theming system
 - **Responsive System**: Quasar's built-in breakpoint system (xs, sm, md, lg, xl)
+- **Icon System**: Material Design Icons (MDI) via Quasar's q-icon component
+- **Animation System**: Quasar's built-in transitions and micro-interactions
 
 ---
 
-## 🏗️ Universal Header & Footer Specifications
+## � Design System Foundation
+
+### 🌈 **Garnet Night Theme Colors (Design Tokens)**
+
+#### **Primary Color Palette**
+```css
+/* Garnet Night Theme - Primary Colors */
+--garnet-primary: hsl(330, 40%, 10%)      /* Deep garnet background */
+--garnet-accent-1: hsl(340, 70%, 35%)     /* Bright garnet accent */
+--garnet-accent-2: hsl(290, 50%, 30%)     /* Purple garnet accent */
+
+/* Quasar Framework Integration */
+--q-primary: #8B1538        /* Garnet red primary */
+--q-secondary: #4A1A2C      /* Dark garnet secondary */
+--q-accent: #C41E3A         /* Bright garnet accent */
+--q-dark: #1A0A0F           /* Deep garnet dark */
+--q-positive: #21BA45       /* Success green */
+--q-negative: #C10015       /* Error red */
+--q-info: #31CCEC           /* Info blue */
+--q-warning: #F2C037        /* Warning amber */
+```
+
+#### **Gradient Definitions**
+```css
+/* Background Gradients */
+.garnet-night-bg {
+  background-color: hsl(330, 40%, 10%);
+  background-image:
+    radial-gradient(at 0% 0%, hsl(340, 70%, 35%) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsl(290, 50%, 30%) 0px, transparent 50%);
+}
+
+.magma-flow-bg {
+  background-color: hsl(10, 50%, 8%);
+  background-image:
+    radial-gradient(at 50% 90%, hsl(0, 100%, 45%) 0px, transparent 50%),
+    radial-gradient(at 50% 10%, hsl(25, 90%, 40%) 0px, transparent 50%);
+}
+```
+
+#### **Glass Morphism Effects**
+```css
+.glass-morphism {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+}
+
+.glass-morphism-dark {
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+}
+```
+
+### 🎯 **Icon System Specifications**
+
+#### **Primary Icon Library**
+- **Library**: Material Design Icons (MDI) - 7,000+ icons
+- **Implementation**: Quasar's `q-icon` component
+- **Format**: `<q-icon name="mdi-icon-name" />`
+- **Sizes**: 16px, 20px, 24px, 32px, 48px, 64px
+
+#### **Core Icon Set**
+```typescript
+// Authentication & User
+'mdi-account'           // User profile
+'mdi-login'            // Login action
+'mdi-logout'           // Logout action
+'mdi-account-plus'     // Register/Add user
+
+// Navigation & Actions
+'mdi-home'             // Dashboard/Home
+'mdi-menu'             // Hamburger menu
+'mdi-arrow-left'       // Back navigation
+'mdi-close'            // Close/Cancel
+'mdi-check'            // Confirm/Success
+'mdi-plus'             // Add/Create
+'mdi-pencil'           // Edit
+'mdi-delete'           // Delete
+'mdi-download'         // Export/Download
+'mdi-upload'           // Import/Upload
+
+// Church Management
+'mdi-account-group'    // Members
+'mdi-church'           // Church/Organization
+'mdi-calendar'         // Events/Services
+'mdi-clipboard-check'  // Attendance
+'mdi-chart-line'       // Reports/Analytics
+'mdi-cog'              // Settings
+'mdi-bell'             // Notifications
+'mdi-message'          // Communication
+
+// Status & Feedback
+'mdi-wifi'             // Online status
+'mdi-wifi-off'         // Offline status
+'mdi-sync'             // Syncing
+'mdi-check-circle'     // Success state
+'mdi-alert-circle'     // Warning state
+'mdi-close-circle'     // Error state
+'mdi-information'      // Info state
+
+// QR & Technology
+'mdi-qrcode'           // QR code
+'mdi-qrcode-scan'      // QR scanner
+'mdi-camera'           // Camera
+'mdi-phone'            // Phone/Mobile
+'mdi-email'            // Email
+```
+
+### ⚡ **Animation & Micro-Interaction Guidelines**
+
+#### **Transition Specifications**
+```css
+/* Quasar Built-in Transitions */
+.q-transition--fade         /* Fade in/out */
+.q-transition--slide-up     /* Slide up */
+.q-transition--slide-down   /* Slide down */
+.q-transition--slide-left   /* Slide left */
+.q-transition--slide-right  /* Slide right */
+.q-transition--scale        /* Scale in/out */
+.q-transition--rotate       /* Rotate */
+```
+
+#### **Micro-Interaction Patterns**
+
+**Button Interactions**:
+- **Hover**: Scale 1.02, shadow elevation increase
+- **Press**: Scale 0.98, brief color darken
+- **Loading**: Spinner with fade-in animation
+- **Success**: Check mark with scale bounce
+
+**Form Interactions**:
+- **Focus**: Border color change with 200ms ease
+- **Error**: Shake animation (3 cycles, 100ms each)
+- **Success**: Green border with check icon fade-in
+- **Loading**: Progress bar with pulse animation
+
+**Navigation Transitions**:
+- **Page Change**: Slide transition (300ms ease-out)
+- **Modal Open**: Scale + fade (250ms ease-out)
+- **Drawer Open**: Slide with backdrop fade (300ms)
+- **Tab Switch**: Fade between content (200ms)
+
+**Data Loading States**:
+- **Skeleton Loading**: Shimmer effect (1.5s loop)
+- **Progressive Loading**: Blur-to-sharp (500ms)
+- **Infinite Scroll**: Fade-in new items (300ms stagger)
+- **Refresh**: Pull-to-refresh with spring animation
+
+#### **Performance Guidelines**
+- **Duration**: 200-300ms for most interactions
+- **Easing**: `ease-out` for entrances, `ease-in` for exits
+- **60fps Target**: Use transform and opacity for animations
+- **Reduced Motion**: Respect `prefers-reduced-motion` setting
+
+---
+
+## �🏗️ Universal Header & Footer Specifications
 
 ### 📋 Header System (Universal Across All Pages)
 
