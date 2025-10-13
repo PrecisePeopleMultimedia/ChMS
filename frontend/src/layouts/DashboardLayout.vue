@@ -23,7 +23,7 @@
             color="white"
             icon="fab fa-github"
             type="a"
-            href="https://github.com/JerryAgenyiInc/ChMS"
+            href="https://github.com/PrecisePeopleMultimedia/ChMS"
             target="_blank"
           >
           </q-btn>
