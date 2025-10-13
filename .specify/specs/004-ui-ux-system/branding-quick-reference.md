@@ -9,7 +9,10 @@
 
 ### Primary Colors
 ```css
---garnet-night: #2D1B69;    /* Primary brand color */
+--bright-green: #1CE479;    /* Primary brand color */
+--dark-navy: #0A0A0F;       /* Background color */
+--card-dark: #1A1A20;       /* Card background */
+--medium-gray: #2A2A35;     /* Secondary elements */
 --golden-dawn: #FFB800;     /* Accent color */
 --pure-white: #FFFFFF;      /* Light backgrounds */
 ```
@@ -27,7 +30,10 @@
 
 ### Font Stack
 ```css
-/* UI Text */
+/* Primary UI Text */
+font-family: 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
+
+/* Secondary UI Text */
 font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 
 /* Headings */
@@ -38,11 +44,11 @@ font-family: 'JetBrains Mono', 'Fira Code', monospace;
 ```
 
 ### Hierarchy
-- **H1**: Poppins SemiBold 32px
-- **H2**: Poppins Medium 24px
-- **H3**: Poppins Medium 20px
-- **Body**: Inter Regular 16px
-- **Small**: Inter Regular 14px
+- **H1**: Archivo SemiBold 32px
+- **H2**: Archivo Medium 24px
+- **H3**: Archivo Medium 20px
+- **Body**: Archivo Regular 16px
+- **Small**: Archivo Regular 14px
 
 ## 📱 **PWA Assets**
 
@@ -58,8 +64,8 @@ font-family: 'JetBrains Mono', 'Fira Code', monospace;
 {
   "name": "ChurchAfrica ChMS",
   "short_name": "ChurchAfrica",
-  "theme_color": "#2D1B69",
-  "background_color": "#1A0F3A",
+  "theme_color": "#1CE479",
+  "background_color": "#0A0A0F",
   "display": "standalone"
 }
 ```
@@ -70,8 +76,8 @@ font-family: 'JetBrains Mono', 'Fira Code', monospace;
 ```css
 /* Primary Button */
 .btn-primary {
-  background: #2D1B69;
-  color: white;
+  background: #1CE479;
+  color: #000000;
   border-radius: 8px;
   padding: 12px 24px;
 }
@@ -86,9 +92,9 @@ font-family: 'JetBrains Mono', 'Fira Code', monospace;
 
 /* Secondary Button */
 .btn-secondary {
-  background: white;
-  color: #2D1B69;
-  border: 1px solid #2D1B69;
+  background: #1A1A20;
+  color: #1CE479;
+  border: 1px solid #1CE479;
   border-radius: 8px;
   padding: 12px 24px;
 }
@@ -97,10 +103,10 @@ font-family: 'JetBrains Mono', 'Fira Code', monospace;
 ### Cards
 ```css
 .card {
-  background: white;
+  background: #1A1A20;
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(45, 27, 105, 0.1);
-  border: 1px solid #E5E7EB;
+  box-shadow: 0 4px 16px rgba(28, 228, 121, 0.1);
+  border: 1px solid #2A2A35;
   padding: 24px;
 }
 

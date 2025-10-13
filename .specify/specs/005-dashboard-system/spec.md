@@ -307,9 +307,17 @@ The Dashboard System provides church administrators with a comprehensive overvie
 
 ### Advanced Analytics
 - **Predictive Analytics**: Predict member engagement and attendance trends
-- **Custom Dashboards**: User-customizable dashboard layouts
 - **Advanced Reporting**: Comprehensive reporting and analytics
 - **Data Visualization**: Advanced charts and graphs
+
+### Dashboard Customization System (P1)
+- **Drag-and-Drop Cards**: Administrators can rearrange dashboard cards
+- **Card Selection**: Choose which metrics/widgets to display
+- **Layout Persistence**: Save custom layouts per user role
+- **Card Sizing**: Resize cards (small, medium, large)
+- **Priority Settings**: Set which cards appear first on mobile
+- **Role-Based Defaults**: Different default layouts for Pastor, Admin, Staff
+- **Export Layouts**: Share dashboard configurations between churches
 
 ### Integration Features
 - **Third-party Integrations**: Integration with external church management systems

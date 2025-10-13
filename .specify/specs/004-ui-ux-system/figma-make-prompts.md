@@ -27,6 +27,20 @@ Figma Make prompts should focus on:
 - **Accessibility Structure**: Proper semantic HTML and ARIA labels
 - **Performance Logic**: Efficient DOM structure and minimal complexity
 
+### Green Dark Theme Integration
+- **Primary Color**: Bright Green (#1CE479) for active states and primary actions
+- **Background**: Dark Navy (#0A0A0F) for main backgrounds
+- **Cards**: Card Dark (#1A1A20) for elevated surfaces
+- **Secondary**: Medium Gray (#2A2A35) for supporting elements
+- **Typography**: Archivo font family for modern, clean appearance
+- **Glass Morphism**: Subtle transparency effects for depth and modern feel
+
+### Chat Feature Integration
+- **Chat Sidebar**: Real-time messaging interface with conversation list
+- **Message Components**: Chat bubbles, input fields, user avatars
+- **Notification System**: Unread message indicators and badges
+- **Mobile Integration**: Chat tab in bottom navigation, floating action button
+
 ## 🧼 Prompt Hygiene Checklist
 
 Before writing any Figma Make prompt, ensure:
@@ -80,10 +94,10 @@ Prompt: Create a wireframe for dashboard widget grid with:
 | Figma Make Component | Figma AI Styling Prompt | Implementation Notes |
 |----------------------|-------------------------|---------------------|
 | `card/member` | Apply `var/shadow/medium`, `var/radius/large`, member photo placeholder | Member profile cards with status indicators |
-| `btn/primary` | Use `var/color/primary`, hover/active states, 48px height | Main CTA buttons with touch-friendly sizing |
+| `btn/primary` | Use `var/color/primary` (#1CE479), hover/active states, 48px height | Main CTA buttons with touch-friendly sizing |
 | `form/input/email` | Add validation states, `var/spacing/medium`, focus indicators | Accessible form fields with error handling |
-| `widget/metric` | Apply dashboard styling, `var/color/accent` for highlights | Statistics widgets with trend indicators |
-| `nav/sidebar` | Use `var/color/surface`, collapsible behavior, active states | Navigation with mobile hamburger pattern |
+| `widget/metric` | Apply dashboard styling, `var/color/accent` (#FFB800) for highlights | Statistics widgets with trend indicators |
+| `nav/sidebar` | Use `var/color/card` (#1A1A20), collapsible behavior, active states | Navigation with mobile hamburger pattern |
 | `list/member` | Alternating row colors, selection states, bulk action support | Data tables with sorting and filtering |
 | `modal/confirm` | Overlay styling, backdrop blur, focus management | Confirmation dialogs with proper focus trap |
 | `feed/activity` | Timeline styling, relative timestamps, infinite scroll | Activity streams with real-time updates |
@@ -107,10 +121,445 @@ Create a wireframe for ChurchAfrica ChMS authentication system focusing on struc
 - `btn/primary`, `btn/secondary`, `link/forgot-password`
 - `container/error`, `container/loading`, `indicator/progress`
 
+### 💬 Chat System Wireframe (NEW)
+
+**Prompt:**
+Create a wireframe for ChurchAfrica ChMS chat system focusing on real-time messaging structure and user interaction flow.
+
+**Layout Requirements:**
+- **Chat Sidebar**: Conversation list, search functionality, new message button, user status indicators
+- **Message Interface**: Chat bubbles, message input, typing indicators, message status
+- **Mobile Integration**: Bottom navigation tab, floating action button for new messages
+- **Notification System**: Unread message badges, notification indicators, sound controls
+
+**Semantic Component Names:**
+- `chat/sidebar`, `chat/conversation-list`, `chat/message-input`
+- `bubble/sent`, `bubble/received`, `bubble/system`
+- `avatar/user`, `status/online`, `status/offline`
+- `badge/unread`, `notification/sound`, `indicator/typing`
+- `btn/new-message`, `btn/attach-file`, `btn/emoji-picker`
+
+**Figma Make Implementation:**
+```
+Create a ChurchAfrica ChMS chat system wireframe using this hybrid approach:
+
+LAYOUT INTELLIGENCE from: https://www.figma.com/make/KUXX2InwPwj7znvdP3J5ic/Futuristic-Business-Management-Dashboard
+- Adopt: Sidebar conversation list with user avatars and status indicators
+- Adopt: Message interface with clear conversation flow
+- Adopt: Search and filter organization for conversations
+- Adopt: User profile integration and quick actions
+- Adopt: Notification system with unread message indicators
+
+VISUAL FOUNDATION from: https://www.figma.com/make/cEmpnUsIpqHYZvR7OboEwl/Gambling-Casino-Website
+- Adopt: Clean, minimal chat bubble styling
+- Adopt: Simple message input and attachment controls
+- Adopt: Straightforward user avatar and status indicators
+- Adopt: Uncluttered conversation layout with clear message hierarchy
+
+CHURCH CONTEXT ADAPTATIONS:
+- Replace business conversations with church communication: Ministry teams, event planning, prayer requests, announcements
+- Adapt messaging workflows for church communication: Group chats for ministries, event coordination, prayer request sharing, announcement distribution
+- Simplify complex messaging features for church administrator needs: Basic text messaging, file sharing, prayer request coordination, event announcements
+- Optimize for mobile usage: Church staff using phones/tablets for real-time communication and coordination
+
+LAYOUT REQUIREMENTS:
+- Desktop: 3-column layout (sidebar + main chat + secondary panel)
+- Tablet: 2-column layout (collapsible sidebar + main chat)
+- Mobile: Single column with bottom navigation and slide-out chat
+- Touch targets: Minimum 48px for all interactive elements
+- Accessibility: Screen reader compatible message interface with proper ARIA labels
+
+COMPONENT STRUCTURE:
+- Chat Sidebar: Conversation list, search, new message button, user status, group categories
+- Main Chat: Message bubbles, typing indicators, message input, attachment controls
+- Secondary Panel: User profiles, group details, shared files, prayer requests
+- Mobile: Bottom navigation with chat, conversations, new message, notifications, more
+
+SEMANTIC NAMING:
+- chat/sidebar, chat/conversation-list, chat/message-input, chat/typing-indicator
+- bubble/sent, bubble/received, bubble/system, bubble/prayer-request, bubble/announcement
+- avatar/user, avatar/group, status/online, status/offline, status/typing
+- badge/unread, badge/group, notification/sound, notification/push
+- actions/new-message, actions/attach-file, actions/emoji-picker, actions/voice-message
+- mobile/chat-tab, mobile/conversation-list, mobile/message-input, mobile/bottom-nav
+```
+
+### 🏗️ **Hybrid Dashboard Layout (NEW - Smart UX Adaptation)**
+
+**Prompt:**
+Create a ChurchAfrica ChMS dashboard wireframe with SPECIFIC cards and functionality, combining layout intelligence from two proven designs:
+
+**REFERENCE 1 (Layout Structure)**: https://www.figma.com/make/KUXX2InwPwj7znvdP3J5ic/Futuristic-Business-Management-Dashboard
+- **Adopt**: 3-column layout structure (sidebar + main + secondary)
+- **Adopt**: Card-based information hierarchy and metrics placement
+- **Adopt**: Navigation structure and content organization patterns
+- **Adopt**: Progressive disclosure and information layering
+
+**REFERENCE 2 (Visual Approach)**: https://www.figma.com/make/cEmpnUsIpqHYZvR7OboEwl/Gambling-Casino-Website
+- **Adopt**: Clean, minimal aesthetic approach
+- **Adopt**: Simple, readable typography hierarchy
+- **Adopt**: Straightforward component styling
+- **Adopt**: Uncluttered design philosophy
+
+**SPECIFIC DASHBOARD CARDS (EXACT REQUIREMENTS):**
+
+**Top Metrics Bar (4 cards, always visible):**
+1. **Total Members**: Current count + monthly growth percentage
+2. **Weekly Attendance**: Last Sunday + trend arrow (up/down/stable)
+3. **Monthly Giving**: Current month total + percentage vs. budget
+4. **Active Volunteers**: Count of volunteers who served this month
+
+**Main Dashboard Grid (customizable, drag-and-drop):**
+1. **Recent Members Card**: Last 5 new members with photos and join dates
+2. **Upcoming Events Card**: Next 3 events with dates, times, and RSVP counts
+3. **Prayer Requests Card**: Latest 3 prayer requests with "Pray" button
+4. **Attendance Trends Chart**: 12-week attendance line chart
+5. **Giving Trends Chart**: Monthly giving bar chart (6 months)
+6. **Ministry Teams Card**: List of teams with member counts and "Manage" buttons
+7. **Recent Activity Feed**: Last 10 actions (new members, events created, etc.)
+8. **Quick Actions Card**: "Add Member", "Record Attendance", "Create Event", "Send Announcement"
+
+**Sidebar Quick Stats (always visible):**
+- **This Week**: Attendance count, new members, events
+- **This Month**: Total giving, volunteer hours, prayer requests
+- **Alerts**: Birthdays today, upcoming events, overdue tasks
+
+**CUSTOMIZATION FEATURES:**
+- **Drag-and-drop**: Rearrange main grid cards
+- **Show/Hide**: Toggle cards on/off
+- **Card Sizes**: Small (1x1), Medium (2x1), Large (2x2)
+- **Role Defaults**: Pastor sees giving/attendance, Staff sees events/volunteers
+- **Mobile Priority**: Choose which 3 cards show first on mobile
+
+**Layout Requirements:**
+- **Sidebar (280px)**: Church navigation, user profile, quick stats
+- **Main Area (flexible)**: Dashboard cards with church metrics and recent activity
+- **Secondary Area (320px)**: Chat system, upcoming events, prayer requests
+- **Mobile**: Collapsible sidebar, stacked cards, bottom navigation
+
+**Semantic Component Names:**
+- `dashboard/layout`, `dashboard/sidebar`, `dashboard/main-content`, `dashboard/secondary-panel`
+- `metrics/total-members`, `metrics/weekly-attendance`, `metrics/upcoming-events`
+- `card/metric`, `card/activity`, `card/quick-action`
+- `nav/church-menu`, `nav/user-profile`, `nav/quick-stats`
+- `chat/conversation-list`, `chat/message-preview`, `chat/notification-badge`
+
+**Figma Make Implementation:**
+```
+Create ChurchAfrica ChMS dashboard wireframe with EXACT specifications:
+
+LAYOUT REFERENCE: https://www.figma.com/make/KUXX2InwPwj7znvdP3J5ic/Futuristic-Business-Management-Dashboard
+- Use: 3-column grid (280px sidebar + flexible main + 320px chat)
+- Use: Top metrics bar with 4 KPI cards
+- Use: Card-based grid for main content area
+- Use: Sidebar navigation structure
+
+VISUAL REFERENCE: https://www.figma.com/make/cEmpnUsIpqHYZvR7OboEwl/Gambling-Casino-Website
+- Use: Clean, minimal card styling
+- Use: Simple typography hierarchy
+- Use: Uncluttered layout approach
+
+EXACT DASHBOARD REQUIREMENTS:
+
+TOP METRICS BAR (4 cards, always visible):
+1. Total Members: "1,247" + "+12 this month" + green arrow
+2. Weekly Attendance: "342" + "↑ 8% vs last week" + blue arrow
+3. Monthly Giving: "$8,450" + "92% of budget" + progress bar
+4. Active Volunteers: "89" + "↑ 5 this month" + orange arrow
+
+MAIN DASHBOARD GRID (8 customizable cards):
+1. Recent Members Card: 5 member photos + names + join dates
+2. Upcoming Events Card: 3 events with dates, times, RSVP counts
+3. Prayer Requests Card: 3 latest requests + "Pray" buttons
+4. Attendance Trends Chart: 12-week line chart
+5. Giving Trends Chart: 6-month bar chart
+6. Ministry Teams Card: Team names + member counts + "Manage" buttons
+7. Recent Activity Feed: 10 latest actions with timestamps
+8. Quick Actions Card: 4 buttons (Add Member, Record Attendance, Create Event, Send Announcement)
+
+SIDEBAR QUICK STATS:
+- This Week: Attendance count, new members, events
+- This Month: Total giving, volunteer hours, prayer requests
+- Alerts: Birthdays today, upcoming events, overdue tasks
+
+CUSTOMIZATION FEATURES:
+- Drag-and-drop: Rearrange main grid cards
+- Show/Hide: Toggle cards on/off
+- Card Sizes: Small (1x1), Medium (2x1), Large (2x2)
+- Role Defaults: Pastor sees giving/attendance, Staff sees events/volunteers
+- Mobile Priority: Choose which 3 cards show first on mobile
+
+LAYOUT REQUIREMENTS:
+- Desktop: 3-column grid (280px + flexible + 320px)
+- Tablet: 2-column grid (collapsible sidebar + main content)
+- Mobile: Single column with bottom navigation and slide-out panels
+- Touch targets: Minimum 48px for all interactive elements
+- Accessibility: Screen reader compatible and keyboard navigable
+
+SEMANTIC NAMING:
+- dashboard/layout, dashboard/sidebar, dashboard/main-content, dashboard/secondary-panel
+- metrics/total-members, metrics/weekly-attendance, metrics/monthly-giving, metrics/active-volunteers
+- card/recent-members, card/upcoming-events, card/prayer-requests, card/attendance-trends
+- card/giving-trends, card/ministry-teams, card/activity-feed, card/quick-actions
+- sidebar/quick-stats, sidebar/alerts, sidebar/this-week, sidebar/this-month
+- mobile/bottom-nav, mobile/slide-out, mobile/collapsible-sidebar
+```
+
+### 📊 **Church Metrics Dashboard (NEW - Data-Focused Layout)**
+
+**Prompt:**
+Create a church metrics dashboard wireframe using proven business dashboard patterns adapted for church management:
+
+**REFERENCE LAYOUT**: https://www.figma.com/make/KUXX2InwPwj7znvdP3J5ic/Futuristic-Business-Management-Dashboard
+- **Adopt**: Top metrics bar with key performance indicators
+- **Adopt**: Grid-based card layout for data visualization
+- **Adopt**: Sidebar navigation with contextual actions
+- **Adopt**: Information hierarchy and content prioritization
+
+**CHURCH METRICS FOCUS:**
+- **Primary Metrics**: Total members, weekly attendance, monthly giving, active volunteers
+- **Trend Data**: Attendance growth, member retention, event participation
+- **Quick Actions**: Add new member, record attendance, create event, send announcement
+- **Recent Activity**: New members, attendance records, event updates, prayer requests
+
+**Layout Structure:**
+- **Header**: Church name, user profile, notifications, search
+- **Metrics Bar**: 4 key metrics in prominent cards
+- **Main Grid**: 2x2 or 3x2 card layout for detailed metrics and charts
+- **Sidebar**: Quick actions, recent activity, upcoming events
+- **Mobile**: Stacked layout with collapsible sections
+
+**Semantic Component Names:**
+- `metrics/primary-kpi`, `metrics/trend-chart`, `metrics/comparison-card`
+- `actions/quick-add`, `actions/record-attendance`, `actions/create-event`
+- `activity/recent-members`, `activity/attendance-log`, `activity/event-updates`
+- `navigation/church-menu`, `navigation/user-actions`, `navigation/quick-stats`
+
+**Figma Make Implementation:**
+```
+Create a ChurchAfrica ChMS metrics dashboard wireframe using this data-focused approach:
+
+LAYOUT INTELLIGENCE from: https://www.figma.com/make/KUXX2InwPwj7znvdP3J5ic/Futuristic-Business-Management-Dashboard
+- Adopt: Top metrics bar with 4 prominent KPI cards
+- Adopt: Grid-based layout for detailed data visualization
+- Adopt: Sidebar with contextual actions and quick stats
+- Adopt: Information hierarchy with primary, secondary, and tertiary content
+- Adopt: Card-based organization for different data types
+
+VISUAL FOUNDATION from: https://www.figma.com/make/cEmpnUsIpqHYZvR7OboEwl/Gambling-Casino-Website
+- Adopt: Clean, minimal card styling for data presentation
+- Adopt: Simple, readable typography for metrics and labels
+- Adopt: Straightforward chart and graph styling
+- Adopt: Uncluttered layout with clear data hierarchy
+
+CHURCH METRICS FOCUS:
+- Primary Metrics: Total Members (1,247), Weekly Attendance (342), Monthly Giving ($8,450), Active Volunteers (89)
+- Trend Data: Attendance growth chart, member retention graph, event participation trends
+- Quick Actions: Add New Member, Record Attendance, Create Event, Send Announcement
+- Recent Activity: New members list, attendance records, event updates, prayer requests
+
+LAYOUT REQUIREMENTS:
+- Desktop: 2-column layout (main content + sidebar)
+- Tablet: Stacked layout with collapsible sidebar
+- Mobile: Single column with bottom navigation
+- Touch targets: Minimum 48px for all interactive elements
+- Accessibility: Screen reader compatible data tables and charts
+
+COMPONENT STRUCTURE:
+- Header: Church name, user profile, notifications, search, date picker
+- Metrics Bar: 4 KPI cards with values, trends, and comparison indicators
+- Main Grid: Attendance chart, member growth graph, giving trends, volunteer activity
+- Sidebar: Quick actions, recent activity feed, upcoming events, prayer requests
+- Mobile: Bottom navigation with metrics, members, events, attendance, more
+
+SEMANTIC NAMING:
+- metrics/primary-kpi, metrics/trend-chart, metrics/comparison-card, metrics/growth-indicator
+- actions/quick-add-member, actions/record-attendance, actions/create-event, actions/send-announcement
+- activity/recent-members, activity/attendance-log, activity/event-updates, activity/prayer-requests
+- navigation/church-menu, navigation/user-actions, navigation/quick-stats, navigation/date-filter
+- mobile/bottom-nav, mobile/metrics-tab, mobile/collapsible-charts
+```
+
 **Technical Specifications:**
 - Use semantic HTML structure (form, fieldset, legend elements)
 - Include ARIA labels and accessibility attributes
 - Generate responsive grid layout (mobile-first approach)
+
+### 🎯 **Hybrid Implementation Strategy (NEW)**
+
+#### **Phase 1: Layout Foundation (Week 1)**
+**Goal**: Create wireframes using hybrid prompts with proven UX patterns
+
+**Implementation Tasks:**
+- ✅ **Hybrid Dashboard Wireframe**: Use both reference URLs for layout intelligence
+- ✅ **Church Metrics Wireframe**: Adapt business dashboard patterns for church context
+- ✅ **Chat System Wireframe**: Real-time messaging with church-specific features
+- ✅ **Mobile Layout Wireframes**: Responsive adaptations for church staff usage
+
+**Key Benefits:**
+- **Proven UX Patterns**: Leverage successful information architecture
+- **Church Context**: Adapt business patterns for church management needs
+- **Mobile-First**: Optimize for Africa's mobile-first usage patterns
+- **Performance-Conscious**: Layout intelligence without visual complexity
+
+#### **Phase 2: Component Development (Weeks 2-3)**
+**Goal**: Build Vue components following wireframe structure
+
+**Component Priority:**
+1. **Dashboard Layout**: 3-column responsive grid system
+2. **Metrics Cards**: Church KPIs with clean data presentation
+3. **Navigation Sidebar**: Church-specific menu with user profile
+4. **Chat Interface**: Real-time messaging with church context
+5. **Mobile Navigation**: Bottom nav and collapsible panels
+
+**Technical Approach:**
+- **Quasar Components**: Leverage existing component library
+- **Green Theme**: Apply current color system to new layouts
+- **Accessibility**: Maintain WCAG AA compliance
+- **Performance**: Optimize for low-end devices and slow connections
+
+#### **Phase 3: Content Integration (Week 4)**
+**Goal**: Populate layouts with actual church data structures
+
+**Content Strategy:**
+- **Real Church Data**: Use actual member, attendance, and event data
+- **Information Hierarchy**: Test with church administrator workflows
+- **User Testing**: Validate layout with real church staff
+- **Performance Testing**: Ensure layouts work on target devices
+
+### 🚀 **Hybrid Prompt Template (NEW)**
+
+#### **Template for Any Church Management Layout:**
+
+```
+Create a [SPECIFIC_LAYOUT] wireframe for ChurchAfrica ChMS combining:
+
+LAYOUT INTELLIGENCE from: [FUTURISTIC_DASHBOARD_URL]
+- Adopt: [SPECIFIC_LAYOUT_PATTERNS]
+- Adopt: [INFORMATION_ARCHITECTURE_PATTERNS]
+- Adopt: [NAVIGATION_STRUCTURE_PATTERNS]
+
+VISUAL FOUNDATION from: [CASINO_DESIGN_URL]
+- Adopt: [CLEAN_AESTHETIC_APPROACH]
+- Adopt: [SIMPLE_TYPOGRAPHY_HIERARCHY]
+- Adopt: [STRAIGHTFORWARD_COMPONENT_STYLING]
+
+CHURCH CONTEXT ADAPTATIONS:
+- Replace [BUSINESS_METRICS] with [CHURCH_METRICS]
+- Adapt [BUSINESS_WORKFLOWS] for [CHURCH_WORKFLOWS]
+- Simplify [COMPLEX_FEATURES] for [CHURCH_ADMINISTRATOR_NEEDS]
+- Optimize for [MOBILE_USAGE_PATTERNS]
+
+LAYOUT REQUIREMENTS:
+- [SPECIFIC_LAYOUT_MEASUREMENTS]
+- [RESPONSIVE_BEHAVIOR_PATTERNS]
+- [ACCESSIBILITY_REQUIREMENTS]
+- [PERFORMANCE_CONSIDERATIONS]
+```
+
+#### **Example Usage:**
+
+```
+Create a MEMBER MANAGEMENT wireframe for ChurchAfrica ChMS combining:
+
+LAYOUT INTELLIGENCE from: https://www.figma.com/make/KUXX2InwPwj7znvdP3J5ic/Futuristic-Business-Management-Dashboard
+- Adopt: Data table layout patterns
+- Adopt: Filter and search organization
+- Adopt: Action button placement and hierarchy
+
+VISUAL FOUNDATION from: https://www.figma.com/make/cEmpnUsIpqHYZvR7OboEwl/Gambling-Casino-Website
+- Adopt: Clean table styling
+- Adopt: Simple form layouts
+- Adopt: Minimal button designs
+
+CHURCH CONTEXT ADAPTATIONS:
+- Replace customer data with member information (name, contact, membership date, attendance status)
+- Adapt business workflows for church member management (add member, update info, record attendance, send communications)
+- Simplify complex CRM features for church administrator needs (basic member profiles, attendance tracking, communication tools)
+- Optimize for mobile usage (church staff using phones/tablets for member check-ins)
+
+LAYOUT REQUIREMENTS:
+- Desktop: Full table with filters and actions
+- Tablet: Condensed table with swipe actions
+- Mobile: Card-based layout with collapsible details
+- Accessibility: Screen reader friendly data tables
+- Performance: Lazy loading for large member lists
+```
+
+### 👥 **Member Management Wireframe (NEW - Hybrid Approach)**
+
+**Figma Make Implementation:**
+```
+Create a ChurchAfrica ChMS member management wireframe using this hybrid approach:
+
+LAYOUT INTELLIGENCE from: https://www.figma.com/make/KUXX2InwPwj7znvdP3J5ic/Futuristic-Business-Management-Dashboard
+- Adopt: Data table layout with sortable columns and filters
+- Adopt: Search and filter organization in header area
+- Adopt: Action button placement and hierarchy (primary, secondary, tertiary)
+- Adopt: Pagination and bulk action patterns
+- Adopt: Sidebar with member categories and quick filters
+
+VISUAL FOUNDATION from: https://www.figma.com/make/cEmpnUsIpqHYZvR7OboEwl/Gambling-Casino-Website
+- Adopt: Clean, minimal table styling without excessive decoration
+- Adopt: Simple form layouts for member information
+- Adopt: Straightforward button designs and action patterns
+- Adopt: Uncluttered layout with clear data hierarchy
+
+CHURCH CONTEXT ADAPTATIONS:
+- Replace customer data with member information: Name, Contact, Membership Date, Attendance Status, Ministry Involvement
+- Adapt business workflows for church member management: Add Member, Update Info, Record Attendance, Send Communications, Assign Ministry
+- Simplify complex CRM features for church administrator needs: Basic member profiles, attendance tracking, communication tools, ministry assignments
+- Optimize for mobile usage: Church staff using phones/tablets for member check-ins and event management
+
+LAYOUT REQUIREMENTS:
+- Desktop: Full table with filters, search, and bulk actions
+- Tablet: Condensed table with swipe actions and collapsible details
+- Mobile: Card-based layout with collapsible member details
+- Touch targets: Minimum 48px for all interactive elements
+- Accessibility: Screen reader friendly data tables with proper ARIA labels
+
+COMPONENT STRUCTURE:
+- Header: Search bar, filter dropdowns, add member button, bulk actions
+- Sidebar: Member categories (Active, Inactive, New, Volunteers), quick filters, recent activity
+- Main Content: Member table with sortable columns, pagination, member cards (mobile)
+- Member Details: Profile information, attendance history, ministry involvement, communication log
+- Mobile: Bottom navigation with members, search, add member, filters, more
+
+SEMANTIC NAMING:
+- table/member-list, table/sortable-column, table/filter-control, table/pagination
+- form/add-member, form/edit-member, form/member-details, form/attendance-record
+- actions/add-member, actions/edit-member, actions/delete-member, actions/send-message
+- filters/member-status, filters/ministry-involvement, filters/attendance-range, filters/search
+- mobile/member-card, mobile/member-details, mobile/swipe-actions, mobile/bottom-nav
+```
+
+### 📱 **Mobile-First Hybrid Considerations**
+
+#### **Africa-Specific Adaptations:**
+- **Touch Targets**: Minimum 48px for all interactive elements
+- **Data Usage**: Optimize for 3G connections and limited bandwidth
+- **Device Performance**: Ensure layouts work on low-end Android devices
+- **Battery Life**: Efficient layouts that don't drain battery
+- **Offline Capability**: Layouts that work with cached data
+
+#### **Church Workflow Optimizations:**
+- **Quick Actions**: Prominent buttons for common church tasks
+- **Data Entry**: Simplified forms for member information
+- **Attendance**: Mobile-optimized check-in interfaces
+- **Communication**: Easy access to member contact and messaging
+- **Reporting**: Simple data visualization for church metrics
+
+### 🎯 **Quality Assurance for Hybrid Layouts**
+
+#### **Layout Validation Checklist:**
+- [ ] **Information Hierarchy**: Clear content prioritization for church administrators
+- [ ] **Navigation Flow**: Intuitive paths through church management workflows
+- [ ] **Data Presentation**: Church metrics displayed clearly and accessibly
+- [ ] **Mobile Optimization**: Touch-friendly interfaces for church staff
+- [ ] **Performance**: Layouts load quickly on target devices
+- [ ] **Accessibility**: Screen reader compatible and keyboard navigable
+- [ ] **Church Context**: Layouts serve actual church management needs
+- [ ] **User Testing**: Validated with real church administrators
 - Create component naming convention for handoff
 - Include loading state containers and error message areas
 

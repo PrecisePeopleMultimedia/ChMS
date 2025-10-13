@@ -9,14 +9,75 @@ Figma AI prompts should be:
 - **Mobile-first**: Optimize for African mobile usage patterns
 - **Offline-aware**: Include visual feedback for connection states
 
+## 🔄 Figma Make → Figma AI Workflow Integration
+
+This document works as part of a **modular design pipeline**:
+
+### **Step 1: Figma Make (Structure)**
+- Create wireframes using [figma-make-prompts.md](figma-make-prompts.md)
+- Focus on layout logic, semantic structure, and user flow
+- Establish component hierarchy and interaction patterns
+- Generate clean, semantic wireframes ready for styling
+
+### **Step 2: Figma AI (Styling) - THIS DOCUMENT**
+- Import wireframes from Figma Make into Figma AI
+- Apply visual styling, branding, and polish using prompts below
+- Transform structural wireframes into production-ready designs
+- Maintain semantic component naming from wireframe stage
+
+### **Step 3: Development (Implementation)**
+- Hand off polished designs to development team
+- Use component names and structure from wireframe stage
+- Implement with minimal translation between design and code
+
+**Key Benefits:**
+- ✅ **Separation of concerns** - Structure vs styling decisions
+- ✅ **Teachable workflow** - Clear steps for team members
+- ✅ **Consistent output** - Systematic approach to design
+- ✅ **Efficient handoff** - Minimal design-to-code translation
+
 > **📋 Related Documents**: This prompt system integrates with [branding-guidelines.md](branding-guidelines.md) for design tokens, [branding-quick-reference.md](branding-quick-reference.md) for component snippets, and [spec.md](spec.md) for implementation requirements.
+
+## 📥 Working with Figma Make Wireframes
+
+When styling wireframes imported from Figma Make, follow this systematic approach:
+
+### **Import Preparation**
+1. **Preserve component names** - Keep semantic naming from wireframes (e.g., `form/login`, `card/member`)
+2. **Maintain layout structure** - Don't alter the wireframe's layout logic
+3. **Identify styling targets** - Focus on colors, typography, shadows, and visual polish
+4. **Check component hierarchy** - Ensure parent-child relationships are maintained
+
+### **Styling Application Process**
+```
+PROMPT TEMPLATE for Wireframe Styling:
+"Apply ChurchAfrica green dark theme styling to this [COMPONENT_NAME] wireframe:
+- Use primary green (#1CE479) for [SPECIFIC_ELEMENTS]
+- Apply dark navy background (#0A0A0F)
+- Add card styling (#1A1A20) with subtle shadows
+- Use Archivo typography with [FONT_SIZES]
+- Maintain existing layout and spacing
+- Add glass morphism effects for depth
+- Ensure 48px touch targets for mobile"
+```
+
+### **Quality Checklist for Styled Components**
+- [ ] **Color consistency** - All colors match green dark theme palette
+- [ ] **Typography hierarchy** - Proper font sizes and weights applied
+- [ ] **Spacing preservation** - Original wireframe spacing maintained
+- [ ] **Component naming** - Semantic names from wireframe preserved
+- [ ] **Mobile optimization** - Touch targets and responsive behavior
+- [ ] **Accessibility** - Contrast ratios and screen reader compatibility
 
 ## 🎯 Core Design Principles
 
 ### ChurchAfrica Brand Identity
-- **Primary Color**: Garnet Night (#2D1B69) - spirituality, depth, trust
+- **Primary Color**: Bright Green (#1CE479) - growth, energy, modern technology
+- **Background Color**: Dark Navy (#0A0A0F) - professionalism, sophistication
+- **Card Color**: Card Dark (#1A1A20) - subtle elevation, modern design
+- **Secondary Color**: Medium Gray (#2A2A35) - supporting elements
 - **Accent Color**: Golden Dawn (#FFB800) - hope, prosperity, African sunshine
-- **Typography**: Inter for UI, Poppins for headings
+- **Typography**: Archivo for UI, Inter for fallback, Poppins for headings
 - **Spacing**: 8px base unit (8px, 16px, 24px, 32px, 48px, 64px)
 - **Border Radius**: 4px (small), 8px (medium), 12px (large), 16px (containers)
 
@@ -38,14 +99,17 @@ Design a landing page for ChurchAfrica ChMS using Africa-first principles.
 - **Header**: ChurchAfrica logo (left), navigation menu (right), use auto layout horizontal with 24px spacing
 - **Hero Section**: Large headline "Africa-First Church Management", subtext, CTA button "Get Started", centered vertical stack with 32px spacing
 - **Features Section**: 3 cards in responsive grid, each card: icon, title, description, use auto layout vertical with 16px spacing
-- **Footer**: Logo, social links, contact info, use Garnet Night background with white text
+- **Footer**: Logo, social links, contact info, use Dark Navy background with white text
 
 **Design Requirements:**
-- Use `var/color/primary` (#2D1B69) for primary elements
+- Use `var/color/primary` (#1CE479) for primary elements
 - Use `var/color/accent` (#FFB800) for CTA buttons and highlights
+- Use `var/color/background` (#0A0A0F) for main backgrounds
+- Use `var/color/card` (#1A1A20) for card backgrounds
 - Apply `var/spacing/large` (24px) between sections
 - Use `var/radius/large` (12px) for cards
 - Include offline capability indicators
+- Include chat feature integration
 - Reference: [Framer Botanical Template](https://www.framer.com/marketplace/templates/botanical) for spacing and hierarchy
 
 **Component Naming:**
@@ -68,11 +132,14 @@ Design an admin dashboard for church attendance tracking with offline-first indi
 - **Status Bar**: Connection indicator, last sync time, data usage indicator
 
 **Design Requirements:**
-- Use `var/color/success` (#10B981) for positive metrics
-- Use `var/color/warning` (#F59E0B) for attention items
+- Use `var/color/primary` (#1CE479) for positive metrics and active states
+- Use `var/color/accent` (#FFB800) for attention items
+- Use `var/color/background` (#0A0A0F) for main background
+- Use `var/color/card` (#1A1A20) for card backgrounds
 - Apply `var/shadow/medium` for card elevation
 - Include offline/online status indicators
 - Show sync progress for background operations
+- Include chat feature integration
 - Reference: [Crypto Exchange Dashboard](https://www.behance.net/gallery/217845423/Crypto-Exchange/modules/1241147449) for data visualization
 
 **Component Naming:**

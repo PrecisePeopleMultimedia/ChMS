@@ -60,41 +60,48 @@ This guide provides **comprehensive specifications** for designing the ChurchAfr
 
 ## � Design System Foundation
 
-### 🌈 **Garnet Night Theme Colors (Design Tokens)**
+### 🌈 **Green Dark Theme Colors (Design Tokens)**
 
 #### **Primary Color Palette**
 ```css
-/* Garnet Night Theme - Primary Colors */
---garnet-primary: hsl(330, 40%, 10%)      /* Deep garnet background */
---garnet-accent-1: hsl(340, 70%, 35%)     /* Bright garnet accent */
---garnet-accent-2: hsl(290, 50%, 30%)     /* Purple garnet accent */
+/* Green Dark Theme - Primary Colors */
+--bright-green: #1CE479     /* Primary bright green */
+--dark-navy: #0A0A0F        /* Dark background */
+--card-dark: #1A1A20        /* Card background */
+--medium-gray: #2A2A35      /* Secondary elements */
+--orange-accent: #FF6B35    /* Orange accent for gradients */
 
 /* Quasar Framework Integration */
---q-primary: #8B1538        /* Garnet red primary */
---q-secondary: #4A1A2C      /* Dark garnet secondary */
---q-accent: #C41E3A         /* Bright garnet accent */
---q-dark: #1A0A0F           /* Deep garnet dark */
---q-positive: #21BA45       /* Success green */
---q-negative: #C10015       /* Error red */
---q-info: #31CCEC           /* Info blue */
---q-warning: #F2C037        /* Warning amber */
+--q-primary: #1CE479        /* Bright green primary */
+--q-secondary: #2A2A35      /* Medium gray secondary */
+--q-accent: #FFB800         /* Golden dawn accent */
+--q-dark: #0A0A0F           /* Dark navy background */
+--q-positive: #1CE479       /* Success green */
+--q-negative: #EF4444       /* Error red */
+--q-info: #3B82F6           /* Info blue */
+--q-warning: #F59E0B        /* Warning amber */
 ```
 
 #### **Gradient Definitions**
 ```css
 /* Background Gradients */
-.garnet-night-bg {
-  background-color: hsl(330, 40%, 10%);
+.green-dark-bg {
+  background-color: #0A0A0F;
   background-image:
-    radial-gradient(at 0% 0%, hsl(340, 70%, 35%) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, hsl(290, 50%, 30%) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, #1CE479 0px, transparent 50%),
+    radial-gradient(at 100% 100%, #FF6B35 0px, transparent 50%);
 }
 
-.magma-flow-bg {
-  background-color: hsl(10, 50%, 8%);
+.green-card-bg {
+  background-color: #1A1A20;
   background-image:
-    radial-gradient(at 50% 90%, hsl(0, 100%, 45%) 0px, transparent 50%),
-    radial-gradient(at 50% 10%, hsl(25, 90%, 40%) 0px, transparent 50%);
+    linear-gradient(135deg, rgba(28, 228, 121, 0.1) 0%, rgba(255, 107, 53, 0.05) 100%);
+}
+
+.glass-morphism-bg {
+  background: rgba(26, 26, 32, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(28, 228, 121, 0.2);
 }
 ```
 
@@ -114,6 +121,7 @@ This guide provides **comprehensive specifications** for designing the ChurchAfr
   border-radius: 16px;
 }
 ```
+
 
 ### 🎯 **Icon System Specifications**
 
@@ -276,7 +284,7 @@ This guide provides **comprehensive specifications** for designing the ChurchAfr
 2. **Members**: `q-btn` with people icon → `/members`
 3. **Attendance**: `q-btn` with check icon → `/attendance`
 4. **Events**: `q-btn` with calendar icon → `/events`
-5. **More**: `q-btn` with menu icon (opens drawer with Settings, Reports, etc.)
+5. **Chat**: `q-btn` with message icon → `/chat` (NEW)
 
 **Floating Action Button (FAB)** - Contextual per page:
 - **Component**: `q-page-sticky` with `q-btn` fab (circular button)
@@ -286,7 +294,50 @@ This guide provides **comprehensive specifications** for designing the ChurchAfr
   - **Members Page**: "Add New Member"
   - **Attendance Page**: "Start Service" or "Manual Check-in"
   - **Events Page**: "Create Event"
+  - **Chat Page**: "New Message" (NEW)
   - **Reports Page**: "Generate Report"
+
+### 💬 **Chat System (NEW - Communication Feature)**
+
+#### **Chat Sidebar (Desktop)**
+**Quasar Component**: `q-drawer` with `q-list` and `q-item`
+
+**Layout Structure**:
+- **Width**: 320px (desktop), full-width (mobile)
+- **Header**: "Messages" title, new message button, search input
+- **Conversation List**: `q-list` with `q-item` for each conversation
+- **User Status**: Online/offline indicators with green dots
+- **Unread Badges**: `q-badge` with unread message count
+
+**Chat Features**:
+- **Real-time Messaging**: WebSocket integration for instant delivery
+- **Message Types**: Text, emoji, file attachments, voice messages
+- **Message Status**: Sent, delivered, read indicators
+- **Group Chats**: Ministry teams, event planning groups
+- **Direct Messages**: One-on-one conversations
+- **Message Search**: Find specific messages or conversations
+- **Message History**: Persistent chat history with timestamps
+
+#### **Chat Interface Components**
+**Message List**:
+- **Component**: `q-list` with `q-item` for each message
+- **Message Bubbles**: Different styles for sent/received messages
+- **Timestamps**: Relative time display (2 minutes ago, yesterday)
+- **User Avatars**: Profile pictures with online status
+- **Message Actions**: Reply, forward, delete, edit options
+
+**Message Input**:
+- **Component**: `q-input` with send button
+- **Features**: Emoji picker, file attachment, voice recording
+- **Typing Indicators**: Show when others are typing
+- **Message Drafts**: Auto-save draft messages
+- **Character Limit**: Visual feedback for message length
+
+**Chat Notifications**:
+- **Desktop**: Browser notifications for new messages
+- **Mobile**: Push notifications with message preview
+- **In-app**: Badge counts on chat icon and conversation list
+- **Sound**: Optional notification sounds for new messages
 
 ---
 

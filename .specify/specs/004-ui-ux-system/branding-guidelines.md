@@ -35,47 +35,64 @@
 ### Color Palette
 
 #### Primary Colors
-1. **Garnet Night** - `#2D1B69` (Primary Brand Color)
-   - Usage: Headers, primary buttons, app theme
-   - Represents: Spirituality, depth, trust
+1. **Bright Green** - `#1CE479` (Primary Brand Color)
+   - Usage: Headers, primary buttons, app theme, active states
+   - Represents: Growth, energy, modern technology, life
 
-2. **Golden Dawn** - `#FFB800` (Accent Color)
+2. **Dark Navy** - `#0A0A0F` (Background Color)
+   - Usage: Main backgrounds, dark theme base
+   - Represents: Professionalism, sophistication, depth
+
+3. **Card Dark** - `#1A1A20` (Card Background)
+   - Usage: Card backgrounds, elevated surfaces
+   - Represents: Subtle elevation, modern design
+
+4. **Golden Dawn** - `#FFB800` (Accent Color)
    - Usage: Call-to-action buttons, highlights, success states
    - Represents: Hope, prosperity, African sunshine
 
-3. **Pure White** - `#FFFFFF` (Light Background)
+5. **Pure White** - `#FFFFFF` (Light Background)
    - Usage: Light theme backgrounds, text on dark
    - Represents: Purity, clarity, simplicity
 
 #### Secondary Colors
-4. **Deep Charcoal** - `#1A1A1A` (Dark Text)
+6. **Medium Gray** - `#2A2A35` (Secondary Dark)
+   - Usage: Secondary elements, borders, dividers
+   - Represents: Supporting elements, subtle contrast
+
+7. **Deep Charcoal** - `#1A1A1A` (Dark Text)
    - Usage: Primary text, dark theme elements
    - Represents: Strength, stability
 
-5. **Soft Gray** - `#F5F5F5` (Light Gray)
+8. **Soft Gray** - `#F5F5F5` (Light Gray)
    - Usage: Subtle backgrounds, borders, disabled states
    - Represents: Balance, neutrality
 
-6. **Success Green** - `#10B981` (Success States)
+9. **Success Green** - `#10B981` (Success States)
    - Usage: Success messages, positive indicators
    - Represents: Growth, success, life
 
-7. **Warning Amber** - `#F59E0B` (Warning States)
-   - Usage: Warning messages, caution indicators
-   - Represents: Attention, caution
+10. **Warning Amber** - `#F59E0B` (Warning States)
+    - Usage: Warning messages, caution indicators
+    - Represents: Attention, caution
 
-8. **Error Red** - `#EF4444` (Error States)
-   - Usage: Error messages, critical alerts
-   - Represents: Urgency, attention needed
+11. **Error Red** - `#EF4444` (Error States)
+    - Usage: Error messages, critical alerts
+    - Represents: Urgency, attention needed
 
 ### Typography
 
-#### Primary Font: Inter
-- **Usage**: UI text, body content, forms
+#### Primary Font: Archivo
+- **Usage**: UI text, body content, forms, headings
+- **Weights**: 400 (Regular), 500 (Medium), 600 (SemiBold), 700 (Bold)
+- **Rationale**: Modern, clean, excellent readability, perfect for the green theme
+
+#### Secondary Font: Inter
+- **Usage**: UI text, body content, forms (fallback)
 - **Weights**: 300 (Light), 400 (Regular), 500 (Medium), 600 (SemiBold), 700 (Bold)
 - **Rationale**: Excellent readability, web-optimized, supports multiple languages
 
-#### Secondary Font: Poppins
+#### Tertiary Font: Poppins
 - **Usage**: Headings, titles, marketing materials
 - **Weights**: 400 (Regular), 500 (Medium), 600 (SemiBold), 700 (Bold)
 - **Rationale**: Modern, friendly, great for headings
@@ -501,8 +518,11 @@ convert icon-master-maskable.png -resize 512x512 icon-512x512-maskable.png
 #### CSS Custom Properties
 ```css
 :root {
-  /* Primary Colors */
-  --color-garnet-night: #2D1B69;
+  /* Primary Colors - Green Dark Theme */
+  --color-bright-green: #1CE479;
+  --color-dark-navy: #0A0A0F;
+  --color-card-dark: #1A1A20;
+  --color-medium-gray: #2A2A35;
   --color-golden-dawn: #FFB800;
   --color-pure-white: #FFFFFF;
 
@@ -513,13 +533,15 @@ convert icon-master-maskable.png -resize 512x512 icon-512x512-maskable.png
   --color-warning-amber: #F59E0B;
   --color-error-red: #EF4444;
 
-  /* Semantic Colors */
-  --color-primary: var(--color-garnet-night);
+  /* Semantic Colors - Green Theme */
+  --color-primary: var(--color-bright-green);
   --color-accent: var(--color-golden-dawn);
-  --color-background: var(--color-pure-white);
-  --color-text: var(--color-deep-charcoal);
-  --color-text-muted: #6B7280;
-  --color-border: #E5E7EB;
+  --color-background: var(--color-dark-navy);
+  --color-card: var(--color-card-dark);
+  --color-secondary: var(--color-medium-gray);
+  --color-text: var(--color-pure-white);
+  --color-text-muted: #9CA3AF;
+  --color-border: var(--color-medium-gray);
 
   /* State Colors */
   --color-success: var(--color-success-green);

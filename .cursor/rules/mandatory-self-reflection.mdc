@@ -1,0 +1,104 @@
+# Mandatory AI Self-Reflection Workflow
+
+## COMPULSORY WORKFLOW - NO EXCEPTIONS
+
+### Before Starting ANY Complex Task:
+
+#### 1. CREATE ACCEPTANCE CRITERIA (MANDATORY)
+```
+- [ ] Define specific, measurable success criteria
+- [ ] Identify validation checkpoints
+- [ ] Establish "done" definition
+- [ ] Create task breakdown if complex
+```
+
+#### 2. DOCUMENT APPROACH (MANDATORY)
+```
+- [ ] Outline methodology
+- [ ] Identify potential failure points
+- [ ] Plan validation steps
+- [ ] Set quality gates
+```
+
+#### 3. EXECUTION WITH CHECKPOINTS (MANDATORY)
+```
+- [ ] Validate at each checkpoint
+- [ ] Document progress against criteria
+- [ ] Course-correct if needed
+- [ ] Gather evidence of completion
+```
+
+#### 4. FINAL VALIDATION (MANDATORY)
+```
+- [ ] Test actual functionality (not assumptions)
+- [ ] Verify each acceptance criterion
+- [ ] Provide evidence of completion
+- [ ] Acknowledge any limitations or gaps
+```
+
+## ENFORCEMENT MECHANISMS
+
+### Technical Enforcement:
+- Use task management tools to create acceptance criteria
+- Break complex work into validated subtasks
+- Require evidence before claiming completion
+
+### User Validation:
+- User must approve acceptance criteria before work begins
+- User validates completion against criteria
+- User provides feedback on compliance
+
+### Compliance Tracking:
+- Document all self-reflection workflows
+- Track compliance patterns
+- Adjust rules based on failures
+
+## FAILURE CONSEQUENCES
+
+### If AI Skips Self-Reflection:
+- Work is considered incomplete
+- Must restart with proper workflow
+- User should reject deliverables
+- Update rules to prevent recurrence
+
+### If AI Claims Completion Without Validation:
+- Immediate quality review required
+- Evidence must be provided retroactively
+- User should challenge assumptions
+- Implement additional checkpoints
+
+## EXAMPLES
+
+### Good Self-Reflection:
+```
+TASK: Update organization URLs
+CRITERIA: 
+- [ ] Find ALL references (not just obvious ones)
+- [ ] Search multiple file types (.vue, .md, .js, etc.)
+- [ ] Verify with multiple search methods
+- [ ] Test final result
+VALIDATION: Comprehensive search + user verification
+RESULT: Found 5 files, user caught 2 I missed
+```
+
+### Bad Self-Reflection:
+```
+TASK: Update organization URLs
+APPROACH: Quick search and replace
+VALIDATION: Assumed search was complete
+RESULT: Missed 2 files, user had to fix
+```
+
+## REMEMBER
+
+**AI COMPLIANCE IS NOT GUARANTEED**
+- This rule file helps but doesn't ensure compliance
+- User vigilance is essential
+- Technical enforcement is more reliable than behavioral rules
+- Regular auditing and feedback are crucial
+
+**USER RESPONSIBILITY**
+- Demand acceptance criteria before complex work
+- Validate AI claims against evidence
+- Provide feedback on compliance failures
+- Don't accept "trust me" from AI systems

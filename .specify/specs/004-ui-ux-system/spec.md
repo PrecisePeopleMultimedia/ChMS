@@ -28,6 +28,13 @@ Based on comprehensive RockRMS competitive analysis, the following critical enha
 - **As a** user with limited data, **I want** efficient caching **so that** I don't waste mobile data
 - **As a** user in bright sunlight, **I want** high contrast mode **so that** I can read the screen outdoors
 
+### Communication & Community User Stories (NEW - Chat Feature)
+- **As a** pastor, **I want** to communicate directly with congregation members **so that** I can provide guidance and support
+- **As a** church administrator, **I want** to coordinate with ministry teams **so that** we can plan events and activities effectively
+- **As a** member, **I want** to share prayer requests with the community **so that** I can receive support and encouragement
+- **As a** church leader, **I want** to send announcements to specific groups **so that** relevant information reaches the right people
+- **As a** ministry coordinator, **I want** to discuss event details with team members **so that** we can collaborate on planning
+
 ### Accessibility Requirements (Enhanced)
 - **As a** user, **I want** keyboard navigation support **so that** I can use the system without a mouse
 - **As a** screen reader user, **I want** proper ARIA labels **so that** I can understand the interface
@@ -69,7 +76,7 @@ Based on comprehensive RockRMS competitive analysis, the following critical enha
 - **Consistent with Material Design 3** - Modern design language
 
 #### 2. Dark Mode Support (Enhanced)
-- **Garnet Night theme** (current default) - Brand-consistent dark mode
+- **Green Dark theme** (new default) - Modern dark mode with bright green accents
 - **True black option** - OLED-optimized for battery saving
 - **Reduced eye strain** - Optimized for low-light conditions
 - **Accessibility compliant** - WCAG AA contrast ratios
@@ -85,6 +92,28 @@ Based on comprehensive RockRMS competitive analysis, the following critical enha
 - **System preference detection** - Automatic theme switching
 - **Smooth transitions** - No jarring theme changes
 - **No flash of unstyled content** - Seamless loading
+
+#### 5. Green Dark Theme (NEW - Figma Make Inspired)
+- **Primary Green**: `#1CE479` (bright neon green) - Modern, energetic, growth
+- **Dark Background**: `#0A0A0F` (very dark navy) - Professional, sophisticated
+- **Card Background**: `#1A1A20` (slightly lighter dark) - Subtle elevation
+- **Secondary**: `#2A2A35` (medium dark grey) - Supporting elements
+- **Orange Accent**: Available in chart colors for gradients and highlights
+- **Typography**: Archivo font family for modern, clean appearance
+- **Glass Morphism**: Subtle transparency effects for depth and modern feel
+
+#### 6. Customizable Dashboard System (NEW - Enhanced)
+- **Drag-and-Drop Cards**: Rearrange main dashboard grid with intuitive drag-and-drop
+- **Card Sizing Options**: Small (1x1), Medium (2x1), Large (2x2) for different content needs
+- **Show/Hide Toggle**: Users can toggle cards on/off based on their role and preferences
+- **Role-Based Defaults**: 
+  - **Pastor**: Giving trends, attendance charts, prayer requests, member growth
+  - **Staff**: Event management, volunteer coordination, member check-ins, announcements
+  - **Volunteer**: Upcoming events, ministry teams, prayer requests, quick actions
+- **Mobile Priority Settings**: Choose which 3 cards show first on mobile devices
+- **Layout Persistence**: User preferences saved across sessions and devices
+- **Export Dashboard**: Save and share dashboard configurations with other church staff
+- **Quick Reset**: One-click return to role-based defaults
 
 ### Modern Component Library (Enhanced)
 
@@ -106,7 +135,15 @@ Based on comprehensive RockRMS competitive analysis, the following critical enha
 - **SwipeActions** - Mobile-native swipe gestures
 - **PullToRefresh** - Native mobile refresh pattern
 
-#### 3. Enhanced Micro-Interactions
+#### 3. Communication Components (NEW - Chat Feature)
+- **ChatSidebar** - Real-time messaging interface
+- **MessageList** - Conversation history with timestamps
+- **MessageInput** - Text input with emoji and file support
+- **ChatBubble** - Individual message display with status indicators
+- **UserAvatar** - Profile pictures with online/offline status
+- **ChatNotification** - Unread message indicators and badges
+
+#### 4. Enhanced Micro-Interactions
 - **Hover effects** - Lift, glow, scale with performance optimization
 - **Focus states** - Clear ring effects for accessibility
 - **Loading states** - Shimmer effects and skeleton screens
@@ -114,7 +151,7 @@ Based on comprehensive RockRMS competitive analysis, the following critical enha
 - **Stagger animations** - Smooth list item animations
 - **Haptic feedback** - Touch feedback for mobile devices
 
-#### 4. Responsive Design (Enhanced)
+#### 5. Responsive Design (Enhanced)
 - **Mobile-first approach** - Designed for African mobile usage
 - **Touch-friendly targets** - 48px minimum (larger than standard)
 - **Adaptive layouts** - Optimized for various screen sizes
@@ -285,9 +322,11 @@ Based on comprehensive RockRMS competitive analysis, the following critical enha
 - ✅ CSS custom properties implemented
 - ✅ Micro-interactions added
 
-### Phase 2: Light Mode Implementation
-- [ ] Light theme color palette
-- [ ] Light mode component variants
+### Phase 2: Green Dark Theme Implementation
+- [ ] Green dark theme color palette
+- [ ] Green theme component variants
+- [ ] Chat feature integration
+- [ ] Enhanced sidebar with profile section
 - [ ] Theme switching mechanism
 - [ ] User preference storage
 
