@@ -275,7 +275,7 @@ git push origin hotfix/auth-token-expiry
 
 ## 📚 **Resources**
 
-- **GitHub Repository**: https://github.com/JerryAgenyiInc/ChMS
+- **GitHub Repository**: https://github.com/PrecisePeopleMultimedia/ChMS
 - **CI/CD Dashboard**: GitHub Actions
 - **Local Development**: http://localhost:1811 (frontend)
 - **Backend API**: http://backend.test/api (Laravel Herd)

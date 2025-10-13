@@ -30,7 +30,7 @@ ChurchAfrica is a modern, mobile-first church management system designed specifi
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/JerryAgenyiInc/ChMS.git
+git clone https://github.com/PrecisePeopleMultimedia/ChMS.git
 cd ChMS
 ```
 

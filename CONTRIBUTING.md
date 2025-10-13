@@ -61,7 +61,7 @@ ChMS is designed specifically for African churches with enterprise ambitions, fo
 
 ### **1. Choose an Issue**
 
-- Browse [GitHub Issues](https://github.com/JerryAgenyiInc/ChMS/issues)
+- Browse [GitHub Issues](https://github.com/PrecisePeopleMultimedia/ChMS/issues)
 - Look for issues labeled `good first issue` or `help wanted`
 - Comment on the issue to indicate you're working on it
 
