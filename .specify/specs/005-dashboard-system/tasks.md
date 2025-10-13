@@ -13,10 +13,13 @@ This document outlines the implementation tasks for the Dashboard System, follow
 #### Tasks
 - [ ] **DASH-001-01**: Create dashboard layout structure
   - **Description**: Implement responsive dashboard layout with header, main content, and sidebar
-  - **Acceptance Criteria**: 
+  - **Acceptance Criteria**:
     - Layout works on desktop, tablet, and mobile
     - Header includes church name, user info, theme toggle, logout
     - Main content area is flexible and responsive
+  - **Prompt Integration**: Use `layout/dashboard` prompt template from `../004-ui-ux-system/figma-ai-prompts.md`
+  - **Prompt Integration**: Follow responsive design prompts for mobile, tablet, and desktop layouts
+  - **Prompt Integration**: Apply design tokens from `../004-ui-ux-system/branding-guidelines.md`
   - **Testing**: Layout testing on multiple screen sizes
   - **Files**: `frontend/src/views/DashboardView.vue`, `frontend/src/layouts/DashboardLayout.vue`
 
@@ -48,6 +51,9 @@ This document outlines the implementation tasks for the Dashboard System, follow
   - **Description**: Display member count, new members, active members
   - **Acceptance Criteria**:
     - Shows total member count
+  - **Prompt Integration**: Use `widget/metric` prompt template for consistent styling
+  - **Prompt Integration**: Follow chart/metric prompts for data visualization
+  - **Prompt Integration**: Use design system color variables for trend indicators
     - Displays new members this month
     - Shows active members (attended in last 30 days)
     - Updates in real-time when data changes
@@ -375,5 +381,57 @@ This document outlines the implementation tasks for the Dashboard System, follow
 ### Mitigation Strategies
 - **Regular Testing**: Continuous testing throughout development
 - **User Feedback**: Regular user feedback and iteration
+
+## 🧪 Dashboard Prompt Compliance Checklist
+
+### **Design System Integration**
+- [ ] Component naming matches dashboard prompt templates (`widget/metric`, `panel/quick-actions`, `feed/activity`)
+- [ ] Auto layout used consistently across all dashboard components
+- [ ] Design tokens applied (spacing, radius, color) from `../004-ui-ux-system/branding-guidelines.md`
+- [ ] Responsive behavior matches dashboard prompt logic from `../004-ui-ux-system/figma-ai-prompts.md`
+- [ ] Accessibility states included (error, success, focus) as specified in dashboard prompts
+- [ ] Figma AI compatibility verified for all dashboard components
+
+### **Widget System Compliance**
+- [ ] Metric widgets follow `widget/metric` prompt template structure
+- [ ] Chart components use `chart/attendance` and data visualization prompts
+- [ ] Status indicators follow accessibility-compliant color coding
+- [ ] Loading states use skeleton screen prompts for better UX
+- [ ] All widgets support responsive design prompt requirements
+
+### **Quick Actions Compliance**
+- [ ] Action buttons follow button system prompt templates
+- [ ] Loading states for sync actions follow progress indicator prompts
+- [ ] Button hierarchy follows established design system patterns
+- [ ] Touch targets meet 48px minimum requirement for mobile
+- [ ] Hover and active states support AI generation requirements
+
+### **Activity Feed Compliance**
+- [ ] Activity timeline follows `timeline/user-actions` prompt template
+- [ ] Filter interface uses `filter/activity` prompt specifications
+- [ ] Activity icons follow Material Design Icons standards
+- [ ] Real-time updates maintain prompt-compatible layouts
+- [ ] Pagination follows established component patterns
+
+### **Mobile Dashboard Compliance**
+- [ ] Mobile layout follows mobile app prompt templates
+- [ ] Touch interactions meet mobile-first design principles
+- [ ] Swipe gestures follow mobile interaction patterns
+- [ ] Single-column layout optimized for mobile screens
+- [ ] Quick actions are touch-friendly with proper spacing
+
+## Documentation and Resources
+
+### **Related Documents**
+1. **[UI/UX System Specification](../004-ui-ux-system/spec.md)** - Design system and component guidelines
+2. **[Figma AI Prompts](../004-ui-ux-system/figma-ai-prompts.md)** - Dashboard and widget prompt templates
+3. **[Branding Guidelines](../004-ui-ux-system/branding-guidelines.md)** - Design tokens and styling standards
+
+### **Implementation Notes**
+- All dashboard components must be compatible with Figma AI prompt generation
+- Follow responsive design principles for mobile-first development
+- Use design system variables for consistent styling across all widgets
+- Implement comprehensive accessibility features for all dashboard elements
+- Ensure real-time data updates maintain prompt-compatible layouts
 - **Performance Monitoring**: Continuous performance monitoring
 - **Documentation**: Comprehensive documentation for maintenance

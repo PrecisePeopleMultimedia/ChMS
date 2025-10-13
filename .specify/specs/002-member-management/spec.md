@@ -92,6 +92,16 @@ This specification includes complete member lifecycle management from first cont
 
 ## Functional Requirements
 
+### **Prompt Integration (AI-Assisted Design)**
+- **Figma AI Compatibility** - All member management UI components must be compatible with prompt templates defined in `../004-ui-ux-system/figma-ai-prompts.md`
+- **Auto Layout Requirements** - Use Figma's auto layout for all member management components to ensure AI generation consistency
+- **Component Naming Conventions** - Follow established patterns (e.g., `card/member`, `form/member-edit`, `modal/member-detail`, `list/member-search`)
+- **Design System Variables** - Use semantic variable naming (e.g., `var/color/primary`, `var/spacing/large`, `var/radius/card`)
+- **Member Management Templates** - Components must align with member management and mobile app templates in figma-ai-prompts.md
+- **State Variant Support** - Include all interactive states (hover, active, disabled, loading, error, success) for AI generation
+- **Mobile Data Capture Design** - Follow mobile-first prompt templates with voice-to-text and photo OCR interface requirements
+- **360° Contact View Design** - Use dashboard widget and timeline prompt templates for comprehensive member views
+
 ### **MVP FUNCTIONAL REQUIREMENTS (Phase 1: Weeks 1-8)**
 
 #### **1. Enhanced AI Duplicate Detection (MVP - Critical)**
@@ -800,6 +810,15 @@ CREATE TABLE member_unique_identifiers (
 ```
 
 ### **MVP FRONTEND COMPONENTS (Phase 1: Critical Implementation)**
+
+#### **Prompt-Ready Component Requirements**
+All member management components must follow these AI-assisted design principles:
+- **Layout Logic Integration** - Components must follow member management prompt templates from `../004-ui-ux-system/figma-ai-prompts.md`
+- **State Management** - Include all interactive states (default, hover, active, disabled, loading, error, success) for AI generation
+- **Responsive Behavior** - Components must align with mobile-first member management prompt templates
+- **Accessibility States** - Include focus indicators, error states, and ARIA labels as specified in accessibility prompts
+- **Component Hierarchy** - Follow established naming conventions for consistent AI generation
+- **Mobile Data Capture** - Voice-to-text and photo OCR components must follow mobile app prompt templates
 
 #### **AI Duplicate Detection Components (MVP)**
 ```javascript

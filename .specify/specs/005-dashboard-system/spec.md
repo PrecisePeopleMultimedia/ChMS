@@ -57,26 +57,43 @@ The Dashboard System provides church administrators with a comprehensive overvie
 
 ## Functional Requirements
 
+### Prompt Integration (AI-Assisted Design)
+- **Figma AI Compatibility** - All dashboard UI components must be compatible with prompt templates defined in `../004-ui-ux-system/figma-ai-prompts.md`
+- **Auto Layout Requirements** - Use Figma's auto layout for all dashboard components to ensure AI generation consistency
+- **Component Naming Conventions** - Follow established patterns (e.g., `widget/metric`, `card/dashboard`, `panel/quick-actions`, `feed/activity`)
+- **Design System Variables** - Use semantic variable naming (e.g., `var/color/primary`, `var/spacing/large`, `var/shadow/medium`)
+- **Dashboard Templates** - Components must align with dashboard and reports dashboard templates in figma-ai-prompts.md
+- **State Variant Support** - Include all interactive states (hover, active, disabled, loading, error, success) for AI generation
+- **Responsive Widget System** - Follow responsive design prompt templates for mobile, tablet, and desktop layouts
+- **Real-time Data Display** - Use chart and metric prompt templates for data visualization components
+
 ### Core Dashboard Components
 
-#### Dashboard Cards
-- **Member Statistics**: Total members, new members this month, active members
-- **Attendance Overview**: Today's attendance, weekly average, monthly trends
-- **Event Summary**: Upcoming events, recent events, event attendance
-- **System Status**: Sync status, offline capabilities, last backup
+#### Dashboard Cards (Prompt-Ready Components)
+- **Member Statistics**: Total members, new members this month, active members (must follow `widget/metric` prompt template)
+- **Attendance Overview**: Today's attendance, weekly average, monthly trends (must follow `chart/attendance` prompt template)
+- **Event Summary**: Upcoming events, recent events, event attendance (must follow `card/event-summary` prompt template)
+- **System Status**: Sync status, offline capabilities, last backup (must follow `indicator/system-status` prompt template)
 
-#### Quick Actions Panel
-- **Add Member**: Direct link to member registration
-- **Record Attendance**: Quick attendance recording
-- **Create Event**: Event creation form
-- **Generate Report**: Report generation tools
-- **Sync Data**: Manual sync trigger
+#### Quick Actions Panel (Prompt-Ready Components)
+- **Add Member**: Direct link to member registration (must follow `btn/primary` prompt template)
+- **Record Attendance**: Quick attendance recording (must follow `btn/accent` prompt template)
+- **Create Event**: Event creation form (must follow `btn/secondary` prompt template)
+- **Generate Report**: Report generation tools (must follow `btn/ghost` prompt template)
+- **Sync Data**: Manual sync trigger (must follow `btn/sync` prompt template with loading states)
 
-#### Activity Feed
-- **Recent Activities**: Chronological list of system activities
-- **User Actions**: Who performed what action and when
-- **System Events**: Automated system activities and notifications
-- **Filtering**: Filter by activity type, user, or date range
+#### Activity Feed (Prompt-Ready Components)
+- **Recent Activities**: Chronological list of system activities (must follow `feed/activity` prompt template)
+- **User Actions**: Who performed what action and when (must follow `timeline/user-actions` prompt template)
+- **System Events**: Automated system activities and notifications (must follow `list/system-events` prompt template)
+- **Filtering**: Filter by activity type, user, or date range (must follow `filter/activity` prompt template)
+
+#### AI-Compatible Component Requirements
+- **Layout Logic Integration** - All dashboard components must follow dashboard prompt templates from `../004-ui-ux-system/figma-ai-prompts.md`
+- **State Management** - Include all interactive states (default, hover, active, disabled, loading, error, success) for AI generation
+- **Responsive Behavior** - Components must align with responsive dashboard prompt templates for mobile, tablet, and desktop
+- **Accessibility States** - Include focus indicators, error states, and ARIA labels as specified in dashboard accessibility prompts
+- **Component Hierarchy** - Follow established naming conventions for consistent AI generation
 
 ### Dashboard Layout
 

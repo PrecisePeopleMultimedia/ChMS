@@ -130,11 +130,15 @@
   - ✅ **Router Integration**: Updated routes to use AuthLayout
   - ✅ **CORS Configuration**: Added CORS support for API calls
   - ✅ **Quasar Notify**: Configured notification plugin
+  - **Prompt Integration**: Use `var/color/primary`, `var/spacing/medium` from `../004-ui-ux-system/branding-guidelines.md`
+  - **Prompt Integration**: Follow `form/login` prompt template structure and naming conventions
   - **Estimated Time:** 45 minutes
 
 - [x] **Task A3.2**: Create RegisterForm.vue
   - ✅ Registration form with role selection
   - ✅ Form validation and error handling
+  - **Prompt Integration**: Follow `form/registration` prompt template with proper field spacing and validation states
+  - **Prompt Integration**: Use design tokens from `../004-ui-ux-system/branding-guidelines.md` design system
   - **Estimated Time:** 40 minutes
 
 - [x] **Task A3.3**: Create password reset functionality
@@ -142,6 +146,8 @@
   - ✅ Email integration (Laravel Mail with HTML template)
   - ✅ **Form Debugging**: All form submission issues resolved
   - ✅ **Complete Flow**: Forgot password → Email → Reset working
+  - **Prompt Integration**: Reference authentication flow prompts in `../004-ui-ux-system/figma-ai-prompts.md` for password reset UI
+  - **Prompt Integration**: Use accessibility prompts for form validation states and error handling
   - **Estimated Time:** 30 minutes
 
 #### **AUTH-004: Role-Based Access Control**
@@ -389,6 +395,31 @@ The authentication system is now **100% complete, fully functional, and comprehe
 - **Offline Authentication Caching**: PWA service worker implementation
 - **Advanced Rate Limiting**: Custom rate limiting rules
 - **Multi-factor Authentication**: SMS/Email 2FA (enterprise feature)
+
+## 🧪 Authentication Prompt Compliance Checklist
+
+### **Design System Integration**
+- [ ] Component naming matches authentication prompt templates (`form/login`, `form/registration`, `card/auth`)
+- [ ] Auto layout used consistently across all authentication forms
+- [ ] Design tokens applied (spacing, radius, color) from `../004-ui-ux-system/branding-guidelines.md`
+- [ ] Responsive behavior matches authentication flow prompt logic from `../004-ui-ux-system/figma-ai-prompts.md`
+- [ ] Accessibility states included (error, success, focus) as specified in authentication prompts
+- [ ] Figma AI compatibility verified for all authentication components
+
+### **Authentication Flow Compliance**
+- [ ] Login form follows `form/login` prompt template structure and styling
+- [ ] Registration form follows `form/registration` prompt template with proper field spacing
+- [ ] Password reset flow aligns with authentication flow templates
+- [ ] Form validation states use semantic color variables (`var/color/error`, `var/color/success`)
+- [ ] Loading states follow prompt specifications with proper spinner placement
+- [ ] Error handling matches accessibility prompt requirements
+
+### **Mobile-First Authentication**
+- [ ] Touch targets meet 48px minimum requirement for mobile optimization
+- [ ] Form layouts follow mobile-first authentication prompt templates
+- [ ] Responsive design matches prompt logic for different screen sizes
+- [ ] Keyboard navigation follows accessibility prompt specifications
+- [ ] Form submission feedback aligns with mobile interaction patterns
 
 ### Next Development Phase
 With authentication complete and fully documented, the next major milestone is **Organization Setup (Spec 001)** and **Member Management System (Spec 002)** implementation, which will build upon this authentication foundation.

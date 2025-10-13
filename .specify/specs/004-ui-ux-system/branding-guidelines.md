@@ -568,6 +568,115 @@ $brand-colors: (
 }
 ```
 
+## Design System Tokens
+
+### Spacing System
+```css
+:root {
+  /* Spacing Scale (8px base unit) */
+  --spacing-xs: 4px;    /* 0.5x base */
+  --spacing-sm: 8px;     /* 1x base */
+  --spacing-md: 16px;    /* 2x base */
+  --spacing-lg: 24px;    /* 3x base */
+  --spacing-xl: 32px;    /* 4x base */
+  --spacing-2xl: 48px;   /* 6x base */
+  --spacing-3xl: 64px;   /* 8x base */
+}
+```
+
+### Border Radius System
+```css
+:root {
+  /* Border Radius Scale */
+  --radius-sm: 4px;      /* Small elements */
+  --radius-md: 8px;      /* Buttons, inputs */
+  --radius-lg: 12px;     /* Cards, modals */
+  --radius-xl: 16px;     /* Large containers */
+  --radius-full: 9999px; /* Pills, avatars */
+}
+```
+
+### Shadow System
+```css
+:root {
+  /* Elevation Levels */
+  --shadow-sm: 0 1px 2px rgba(45, 27, 105, 0.05);
+  --shadow-md: 0 4px 6px rgba(45, 27, 105, 0.1);
+  --shadow-lg: 0 10px 15px rgba(45, 27, 105, 0.1);
+  --shadow-xl: 0 20px 25px rgba(45, 27, 105, 0.15);
+  --shadow-2xl: 0 25px 50px rgba(45, 27, 105, 0.25);
+}
+```
+
+### Component Usage Examples
+
+#### Button Components in Context
+- **Dashboard**: Primary buttons for main actions (Create Event, Add Member)
+- **Forms**: Secondary buttons for cancel actions, accent buttons for submit
+- **Navigation**: Ghost buttons for menu items, floating action buttons for mobile
+
+#### Card Components in Context
+- **Event Cards**: Show event details with Golden Dawn accent for upcoming events
+- **Member Cards**: Display member info with success green for active status
+- **Dashboard Widgets**: Use glass effect for overlay information
+
+#### Loader Components in Context
+- **Page Loading**: Full-screen spinner with ChurchAfrica branding
+- **Button Loading**: Inline spinner for form submissions
+- **Data Loading**: Skeleton screens for content areas
+
+### Naming Conventions
+
+#### Figma Layer Naming
+```
+Component Structure:
+- btn/primary (Button Primary)
+- btn/secondary (Button Secondary)
+- card/event (Event Card)
+- card/member (Member Card)
+- form/input (Form Input)
+- form/validation (Form Validation)
+
+Variable Naming:
+- var/color/primary (Primary Color)
+- var/color/accent (Accent Color)
+- var/font/heading (Heading Font)
+- var/font/body (Body Font)
+- var/spacing/medium (Medium Spacing)
+- var/radius/button (Button Radius)
+```
+
+#### CSS Class Naming (BEM Methodology)
+```css
+/* Block__Element--Modifier */
+.btn--primary
+.btn--secondary
+.card__header
+.card__content
+.form__input--error
+.form__label--required
+```
+
+### Figma AI Compatibility Notes
+
+#### Auto Layout Requirements
+- **Use Auto Layout**: All components must use Figma's auto layout for consistency
+- **Spacing Variables**: Reference spacing tokens in auto layout padding/margins
+- **Responsive Design**: Use auto layout for responsive component behavior
+- **Component Nesting**: Maintain proper component hierarchy with auto layout
+
+#### Component Reuse Guidelines
+- **Master Components**: Create master components for buttons, cards, inputs
+- **Instance Overrides**: Use instance overrides for text and color variations
+- **Nested Components**: Build complex components from smaller reusable parts
+- **State Variants**: Create component variants for different states (hover, active, disabled)
+
+#### Variable Naming for AI
+- **Color Variables**: Use semantic names (primary, accent, success, warning, error)
+- **Typography Variables**: Reference font families and weights consistently
+- **Spacing Variables**: Use consistent spacing scale references
+- **Component Variables**: Name components with clear hierarchy (btn/primary, card/event)
+
 ## Brand Monitoring & Maintenance
 
 ### Brand Audit Checklist
@@ -577,6 +686,12 @@ $brand-colors: (
 - [ ] **Accessibility Standards**: WCAG AA compliance maintained
 - [ ] **PWA Assets**: Icons and splash screens properly implemented
 - [ ] **User Experience**: Brand enhances rather than hinders usability
+- [ ] **Design System Tokens**: Spacing, radius, and shadows follow system
+- [ ] **Component Usage**: Components used appropriately in context
+- [ ] **Naming Conventions**: Figma layers and CSS classes follow standards
+- [ ] **Figma AI Compatibility**: Auto layout and variables properly configured
+
+> **📋 Related Documents**: These guidelines integrate with [figma-ai-prompts.md](figma-ai-prompts.md) for AI-assisted design, [branding-quick-reference.md](branding-quick-reference.md) for quick implementation, and [spec.md](spec.md) for technical requirements.
 
 ### Regular Maintenance Tasks
 1. **Monthly**: Review new implementations for brand compliance
@@ -593,3 +708,20 @@ $brand-colors: (
 ---
 
 This comprehensive branding guide ensures consistent, professional, and accessible visual identity across all ChurchAfrica ChMS touchpoints, from PWA installation to marketing materials. The guidelines provide both strategic direction and practical implementation details for maintaining brand integrity across all platforms and use cases.
+
+## 🔗 Related Documentation
+
+### **Design System Integration**
+- **[Figma AI Prompts](./figma-ai-prompts.md)** - AI-assisted design templates using these brand guidelines
+- **[Branding Quick Reference](./branding-quick-reference.md)** - Prompt-ready snippets and quick access to brand elements
+- **[UI/UX System Specification](./spec.md)** - Overall system requirements and brand integration guidelines
+
+### **Implementation Specifications**
+- **[SPEC 000 - Authentication System](../000-authentication-system/spec.md)** - Authentication components using brand guidelines
+- **[SPEC 002 - Member Management](../002-member-management/spec.md)** - Member management components using brand guidelines
+- **[SPEC 005 - Dashboard System](../005-dashboard-system/spec.md)** - Dashboard components using brand guidelines
+
+### **Implementation Tasks**
+- **[Authentication Tasks](../000-authentication-system/tasks.md)** - Authentication implementation with brand compliance
+- **[Member Management Tasks](../002-member-management/tasks.md)** - Member management implementation with brand compliance
+- **[Dashboard Tasks](../005-dashboard-system/tasks.md)** - Dashboard implementation with brand compliance
