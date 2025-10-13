@@ -51,6 +51,15 @@
 - **Screen sizes:** Responsive login forms
 - **Performance:** Fast authentication checks, minimal loading times
 
+### Prompt Integration (AI-Assisted Design)
+- **Figma AI Compatibility** - All authentication UI components must be compatible with prompt templates defined in `../004-ui-ux-system/figma-ai-prompts.md`
+- **Auto Layout Requirements** - Use Figma's auto layout for all authentication forms to ensure AI generation consistency
+- **Component Naming Conventions** - Follow established patterns (e.g., `form/login`, `btn/primary`, `input/email`, `card/auth`)
+- **Design System Variables** - Use semantic variable naming (e.g., `var/color/primary`, `var/spacing/medium`, `var/radius/button`)
+- **Authentication Flow Templates** - Components must align with authentication flow templates in figma-ai-prompts.md
+- **State Variant Support** - Include all interactive states (hover, active, disabled, loading, error, success) for AI generation
+- **Mobile-First Design** - Follow mobile-first prompt templates with 48px touch targets and thumb-friendly navigation
+
 ## Technical Requirements
 
 ### API Endpoints
@@ -109,12 +118,21 @@ CREATE TABLE password_reset_tokens (
 ```
 
 ### Frontend Components
-- `LoginForm.vue` - User login form
-- `RegisterForm.vue` - User registration form
-- `ForgotPasswordForm.vue` - Password reset request form
-- `ResetPasswordForm.vue` - Password reset confirmation form
-- `UserProfile.vue` - User profile management
+
+#### Prompt-Ready Authentication Components
+- `LoginForm.vue` - User login form (must follow `form/login` prompt template)
+- `RegisterForm.vue` - User registration form (must follow `form/registration` prompt template)
+- `ForgotPasswordForm.vue` - Password reset request form (must follow `form/password-reset` prompt template)
+- `ResetPasswordForm.vue` - Password reset confirmation form (must follow `form/password-confirm` prompt template)
+- `UserProfile.vue` - User profile management (must follow `card/profile` prompt template)
 - `AuthGuard.vue` - Route protection component
+
+#### AI-Compatible Component Requirements
+- **Layout Logic Integration** - All components must follow authentication flow prompt templates from `../004-ui-ux-system/figma-ai-prompts.md`
+- **State Management** - Include all interactive states (default, hover, active, disabled, loading, error, success) for AI generation
+- **Responsive Behavior** - Components must align with mobile-first authentication prompt templates
+- **Accessibility States** - Include focus indicators, error states, and ARIA labels as specified in accessibility prompts
+- **Component Hierarchy** - Follow established naming conventions for consistent AI generation
 
 ## User Experience Design
 
@@ -273,3 +291,17 @@ CREATE TABLE password_reset_tokens (
 - Consider more sophisticated session management
 - Add comprehensive audit logging
 - Implement advanced security features
+
+## 🔗 Related Documentation
+
+### **Design System Integration**
+- **[UI/UX System Specification](../004-ui-ux-system/spec.md)** - Design system requirements and prompt integration guidelines
+- **[Figma AI Prompts](../004-ui-ux-system/figma-ai-prompts.md)** - Authentication flow prompt templates
+- **[Branding Guidelines](../004-ui-ux-system/branding-guidelines.md)** - Design tokens and styling standards
+
+### **Implementation Tasks**
+- **[Authentication Tasks](./tasks.md)** - Detailed implementation tasks with prompt compliance checklist
+
+### **Related Specifications**
+- **[SPEC 002 - Member Management](../002-member-management/spec.md)** - Member management system that builds on authentication
+- **[SPEC 005 - Dashboard System](../005-dashboard-system/spec.md)** - Dashboard system that requires authentication
