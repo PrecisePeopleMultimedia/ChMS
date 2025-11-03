@@ -161,8 +161,12 @@ return new class extends Migration
     {
         // Drop indexes in reverse order
         Schema::table('member_attribute_values', function (Blueprint $table) {
-            $table->dropIndex('idx_attr_attribute');
-            $table->dropIndex('idx_attr_member');
+            if ($this->indexExists('member_attribute_values', 'idx_attr_attribute')) {
+                $table->dropIndex('idx_attr_attribute');
+            }
+            if ($this->indexExists('member_attribute_values', 'idx_attr_member')) {
+                $table->dropIndex('idx_attr_member');
+            }
         });
 
         Schema::table('service_schedules', function (Blueprint $table) {
@@ -199,30 +203,79 @@ return new class extends Migration
         });
 
         Schema::table('members', function (Blueprint $table) {
-            $table->dropIndex('idx_members_phone');
-            $table->dropIndex('idx_members_org_active_created');
-            $table->dropIndex('idx_members_active');
-            $table->dropIndex('idx_members_email');
-            $table->dropIndex('idx_members_organization_id');
+            if ($this->indexExists('members', 'idx_members_phone')) {
+                $table->dropIndex('idx_members_phone');
+            }
+            if ($this->indexExists('members', 'idx_members_org_active_created')) {
+                $table->dropIndex('idx_members_org_active_created');
+            }
+            if ($this->indexExists('members', 'idx_members_active')) {
+                $table->dropIndex('idx_members_active');
+            }
+            if ($this->indexExists('members', 'idx_members_email')) {
+                $table->dropIndex('idx_members_email');
+            }
+            if ($this->indexExists('members', 'idx_members_organization_id')) {
+                $table->dropIndex('idx_members_organization_id');
+            }
         });
     }
 
     /**
-     * Check if an index exists on a table
+     * Check if an index exists on a table (database-agnostic)
      */
     private function indexExists(string $table, string $index): bool
     {
         $connection = Schema::getConnection();
-        $database = $connection->getDatabaseName();
-        
-        $result = $connection->select(
-            "SELECT COUNT(*) as count 
-             FROM pg_indexes 
-             WHERE tablename = ? AND indexname = ?",
-            [$table, $index]
-        );
-        
-        return $result[0]->count > 0;
+        $driver = $connection->getDriverName();
+
+        try {
+            switch ($driver) {
+                case 'pgsql':
+                    // PostgreSQL
+                    $result = $connection->select(
+                        "SELECT COUNT(*) as count
+                         FROM pg_indexes
+                         WHERE tablename = ? AND indexname = ?",
+                        [$table, $index]
+                    );
+                    return $result[0]->count > 0;
+
+                case 'sqlite':
+                    // SQLite
+                    $result = $connection->select(
+                        "SELECT COUNT(*) as count
+                         FROM sqlite_master
+                         WHERE type = 'index' AND name = ?",
+                        [$index]
+                    );
+                    return $result[0]->count > 0;
+
+                case 'mysql':
+                    // MySQL
+                    $database = $connection->getDatabaseName();
+                    $result = $connection->select(
+                        "SELECT COUNT(*) as count
+                         FROM information_schema.statistics
+                         WHERE table_schema = ? AND table_name = ? AND index_name = ?",
+                        [$database, $table, $index]
+                    );
+                    return $result[0]->count > 0;
+
+                default:
+                    // For unknown drivers, assume index doesn't exist (safer to create)
+                    if (app()->environment(['local', 'testing'])) {
+                        \Log::warning("Unknown database driver '{$driver}' in index check for {$table}.{$index}");
+                    }
+                    return false;
+            }
+        } catch (\Exception $e) {
+            // If index checking fails, assume index doesn't exist (safer to create)
+            if (app()->environment(['local', 'testing'])) {
+                \Log::warning("Index check failed for {$table}.{$index}: " . $e->getMessage());
+            }
+            return false;
+        }
     }
 };
 

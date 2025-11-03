@@ -106,6 +106,56 @@ global.cancelAnimationFrame = vi.fn().mockImplementation((id) => {
   clearTimeout(id)
 })
 
+// CRITICAL: Don't override Event constructors - jsdom provides them
+// vue-test-utils requires jsdom's native Event constructors to work with dispatchEvent
+// If these are missing, vue-test-utils will fail with "SupportedEventInterface is not a constructor"
+
+// Ensure jsdom's Event constructors are available on window
+// jsdom should provide these automatically, but we verify they exist
+if (typeof window !== 'undefined') {
+  // Verify Event constructors exist (jsdom provides these)
+  if (!window.Event || !window.MouseEvent || !window.KeyboardEvent || !window.InputEvent || !window.FocusEvent) {
+    console.warn('Warning: jsdom Event constructors not found. Tests may fail.')
+  }
+  
+  // Ensure these are available for vue-test-utils
+  // jsdom should already have these, but we're verifying
+  // DO NOT override them with custom classes - it breaks dispatchEvent!
+}
+
+// Initialize window.history.state for vue-router
+// vue-router's createWebHistory requires history.state to exist
+if (typeof window !== 'undefined' && window.history) {
+  if (window.history.state === undefined) {
+    // Initialize history.state if it doesn't exist
+    Object.defineProperty(window.history, 'state', {
+      value: null,
+      writable: true,
+      configurable: true,
+    })
+  }
+}
+
+// Ensure navigator.userAgent exists for accessibility tests
+if (typeof navigator !== 'undefined') {
+  if (!navigator.userAgent) {
+    Object.defineProperty(navigator, 'userAgent', {
+      value: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      writable: true,
+      configurable: true,
+    })
+  }
+  
+  // Ensure navigator.maxTouchPoints exists for Quasar compatibility
+  if (!navigator.maxTouchPoints) {
+    Object.defineProperty(navigator, 'maxTouchPoints', {
+      value: 0,
+      writable: true,
+      configurable: true,
+    })
+  }
+}
+
 // Mock IndexedDB
 const mockIDBDatabase = {
   objectStoreNames: ['organizations', 'members', 'attendance', 'settings', 'sync_queue'],
@@ -279,8 +329,8 @@ vi.mock('quasar', () => ({
   },
   QInput: {
     name: 'QInput',
-    template: '<input v-bind="$attrs" :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
-    props: ['modelValue', 'label', 'placeholder', 'type', 'rules', 'error', 'outlined', 'filled', 'dense'],
+    template: '<div class="q-input"><input v-bind="$attrs" :value="modelValue" :readonly="readonly" :disabled="readonly" @input="$emit(\'update:modelValue\', $event.target.value)" /><slot name="append"></slot><slot name="prepend"></slot></div>',
+    props: ['modelValue', 'label', 'placeholder', 'type', 'rules', 'error', 'outlined', 'filled', 'dense', 'readonly'],
     emits: ['update:modelValue'],
   },
   QCard: {
@@ -319,7 +369,7 @@ vi.mock('quasar', () => ({
   },
   QIcon: {
     name: 'QIcon',
-    template: '<i v-bind="$attrs"><slot /></i>',
+    template: '<i class="q-icon" v-bind="$attrs"><slot /></i>',
     props: ['name', 'size', 'color'],
   },
   QSpinner: {
@@ -535,6 +585,140 @@ vi.mock('quasar', () => ({
     props: ['label', 'icon', 'color', 'text-color', 'size', 'square', 'outline', 'clickable', 'removable', 'selected'],
     emits: ['remove', 'click'],
   },
+  QTable: {
+    name: 'QTable',
+    template: `
+      <div class="q-table">
+        <table>
+          <thead v-if="columns">
+            <tr>
+              <th v-for="col in columns" :key="col.name">{{ col.label }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(row, index) in rows" :key="index">
+              <td v-for="col in columns" :key="col.name">
+                {{ row[col.field] }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <slot />
+      </div>
+    `,
+    props: ['rows', 'columns', 'row-key', 'loading', 'pagination', 'filter', 'selection', 'selected'],
+    emits: ['update:selected', 'request'],
+  },
+  QTh: {
+    name: 'QTh',
+    template: '<th class="q-th"><slot /></th>',
+    props: ['props'],
+  },
+  QTr: {
+    name: 'QTr',
+    template: '<tr class="q-tr"><slot /></tr>',
+    props: ['props'],
+  },
+  QTd: {
+    name: 'QTd',
+    template: '<td class="q-td"><slot /></td>',
+    props: ['props'],
+  },
+  QFile: {
+    name: 'QFile',
+    template: '<input type="file" v-bind="$attrs" @change="$emit(\'update:modelValue\', $event.target.files[0])" />',
+    props: ['modelValue', 'label', 'accept', 'multiple', 'outlined', 'filled'],
+    emits: ['update:modelValue'],
+  },
+  QCardActions: {
+    name: 'QCardActions',
+    template: '<div class="q-card__actions"><slot /></div>',
+    props: ['align', 'vertical'],
+  },
+  QTextarea: {
+    name: 'QTextarea',
+    template: '<textarea v-bind="$attrs" :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)"></textarea>',
+    props: ['modelValue', 'label', 'placeholder', 'rows', 'outlined', 'filled'],
+    emits: ['update:modelValue'],
+  },
+  QDate: {
+    name: 'QDate',
+    template: '<input type="date" v-bind="$attrs" :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
+    props: ['modelValue', 'mask', 'locale'],
+    emits: ['update:modelValue'],
+  },
+  QPopupProxy: {
+    name: 'QPopupProxy',
+    template: '<div v-if="modelValue" class="q-popup-proxy"><slot /></div>',
+    props: ['modelValue', 'cover', 'transition-show', 'transition-hide'],
+    emits: ['update:modelValue'],
+  },
+  QTime: {
+    name: 'QTime',
+    template: '<input type="time" v-bind="$attrs" :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
+    props: ['modelValue', 'mask', 'format24h'],
+    emits: ['update:modelValue'],
+  },
+  QSlider: {
+    name: 'QSlider',
+    template: '<input type="range" v-bind="$attrs" :value="modelValue" @input="$emit(\'update:modelValue\', Number($event.target.value))" />',
+    props: ['modelValue', 'min', 'max', 'step', 'label', 'markers'],
+    emits: ['update:modelValue'],
+  },
+  QRange: {
+    name: 'QRange',
+    template: '<div class="q-range"><input type="range" v-bind="$attrs" /></div>',
+    props: ['modelValue', 'min', 'max', 'step'],
+    emits: ['update:modelValue'],
+  },
+  QRating: {
+    name: 'QRating',
+    template: '<div class="q-rating"><span v-for="n in max" :key="n">⭐</span></div>',
+    props: ['modelValue', 'max', 'size', 'color', 'icon'],
+    emits: ['update:modelValue'],
+  },
+  QKnob: {
+    name: 'QKnob',
+    template: '<div class="q-knob">{{ modelValue }}</div>',
+    props: ['modelValue', 'min', 'max', 'step', 'size'],
+    emits: ['update:modelValue'],
+  },
+  QOptionGroup: {
+    name: 'QOptionGroup',
+    template: `
+      <div class="q-option-group">
+        <div v-for="option in options" :key="option.value">
+          <input
+            :type="type"
+            :name="name"
+            :value="option.value"
+            :checked="modelValue === option.value || (Array.isArray(modelValue) && modelValue.includes(option.value))"
+            @change="handleChange"
+          />
+          <label>{{ option.label }}</label>
+        </div>
+      </div>
+    `,
+    props: ['modelValue', 'options', 'type', 'name'],
+    emits: ['update:modelValue'],
+    methods: {
+      handleChange(event: Event) {
+        const target = event.target as HTMLInputElement
+        if (this.type === 'checkbox') {
+          const newValue = Array.isArray(this.modelValue) ? [...this.modelValue] : []
+          if (target.checked) {
+            newValue.push(target.value)
+          } else {
+            const index = newValue.indexOf(target.value)
+            if (index > -1) newValue.splice(index, 1)
+          }
+          this.$emit('update:modelValue', newValue)
+        } else {
+          this.$emit('update:modelValue', target.value)
+        }
+      }
+    }
+  },
   // useQuasar composable
   useQuasar: () => ({
     notify: vi.fn(),
@@ -589,6 +773,37 @@ console.warn = vi.fn().mockImplementation((...args) => {
     originalConsoleWarn(...args)
   }
 })
+
+// Mock $q object for components
+const mockQuasarInstance = {
+  notify: vi.fn(),
+  dialog: vi.fn().mockReturnValue({
+    onOk: vi.fn().mockReturnThis(),
+    onCancel: vi.fn().mockReturnThis(),
+    onDismiss: vi.fn().mockReturnThis(),
+  }),
+  loading: {
+    show: vi.fn(),
+    hide: vi.fn(),
+  },
+  dark: {
+    set: vi.fn(),
+    toggle: vi.fn(),
+    isActive: false,
+  },
+  localStorage: {
+    getItem: vi.fn(),
+    setItem: vi.fn(),
+    removeItem: vi.fn(),
+    clear: vi.fn(),
+  },
+  sessionStorage: {
+    getItem: vi.fn(),
+    setItem: vi.fn(),
+    removeItem: vi.fn(),
+    clear: vi.fn(),
+  },
+}
 
 // Test utilities for Vue Router and Pinia
 export const createTestRouter = (routes = []) => {
@@ -645,6 +860,12 @@ export const createTestApp = (component: any, options: any = {}) => {
       stubs: {
         'router-link': true,
         'router-view': true,
+      },
+      mocks: {
+        $q: mockQuasarInstance,
+      },
+      provide: {
+        $q: mockQuasarInstance,
       },
       ...otherOptions,
     },

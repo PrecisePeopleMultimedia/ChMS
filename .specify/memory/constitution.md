@@ -47,7 +47,10 @@
 ### Architecture Decisions
 - **Laravel 11**: Backend API framework for reliability and community support
 - **Vue 3 Composition API**: Frontend framework for reactive, maintainable UI
-- **PostgreSQL**: Database and real-time features with offline sync capabilities
+- **Database Strategy (Hybrid)**:
+  - **Production & Development**: PostgreSQL 16 for enterprise features and scalability
+  - **Testing**: SQLite (in-memory) for fast, isolated test execution
+  - **Database-agnostic code**: All migrations and queries work across PostgreSQL, SQLite, and MySQL
 - **PWA**: Service workers for offline functionality and app-like experience
 - **RESTful APIs**: Standard HTTP methods and status codes
 

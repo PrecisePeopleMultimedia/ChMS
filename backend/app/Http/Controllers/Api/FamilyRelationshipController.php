@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\FamilyRelationship;
 use App\Models\RelationshipType;
+use App\Services\RelationshipAnalysisService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -314,6 +315,58 @@ class FamilyRelationshipController extends Controller
         return response()->json([
             'message' => 'Member relationships retrieved successfully',
             'data' => $relationships
+        ]);
+    }
+
+    /**
+     * Analyze complex relationships for a member
+     */
+    public function analyzeComplexRelationships(string $memberId, RelationshipAnalysisService $analysisService): JsonResponse
+    {
+        $user = Auth::user();
+
+        // Verify member belongs to organization
+        $member = \App\Models\Member::where('id', $memberId)
+            ->where('organization_id', $user->organization_id)
+            ->first();
+
+        if (!$member) {
+            return response()->json([
+                'message' => 'Member not found'
+            ], 404);
+        }
+
+        $analysis = $analysisService->analyzeComplexRelationships($memberId, $user->organization_id);
+
+        return response()->json([
+            'message' => 'Complex relationship analysis completed',
+            'data' => $analysis
+        ]);
+    }
+
+    /**
+     * Get relationship statistics for a member
+     */
+    public function relationshipStatistics(string $memberId, RelationshipAnalysisService $analysisService): JsonResponse
+    {
+        $user = Auth::user();
+
+        // Verify member belongs to organization
+        $member = \App\Models\Member::where('id', $memberId)
+            ->where('organization_id', $user->organization_id)
+            ->first();
+
+        if (!$member) {
+            return response()->json([
+                'message' => 'Member not found'
+            ], 404);
+        }
+
+        $statistics = $analysisService->getRelationshipStatistics($memberId, $user->organization_id);
+
+        return response()->json([
+            'message' => 'Relationship statistics retrieved successfully',
+            'data' => $statistics
         ]);
     }
 }

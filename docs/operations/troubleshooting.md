@@ -1,4 +1,21 @@
-# ChurchAfrica Troubleshooting Guide
+# ChMS Troubleshooting Guide
+
+Complete troubleshooting guide for ChMS covering common issues, error messages, and solutions for users, administrators, and developers.
+
+## Table of Contents
+
+1. [Authentication Issues](#-authentication-issues)
+2. [Network & Connectivity Issues](#-network--connectivity-issues)
+3. [Database Issues](#-database-issues)
+4. [Frontend Issues](#-frontend-issues)
+5. [Backend/API Issues](#-backendapi-issues)
+6. [Performance Issues](#-performance-issues)
+7. [Data Issues](#-data-issues)
+8. [Installation Issues](#-installation-issues)
+9. [Production Issues](#-production-issues)
+10. [Debugging Tools](#-debugging-tools)
+
+---
 
 ## Common Issues and Solutions
 
@@ -336,5 +353,395 @@ php artisan tinker --execute="echo 'Users: ' . App\Models\User::count();"
 npm list vue
 npm list quasar
 ```
+
+---
+
+## 📊 Performance Issues
+
+### Issue 11: Slow Page Load Times
+
+**Symptoms:**
+- Pages take 5+ seconds to load
+- Users report slow performance
+- Database queries timing out
+
+**Diagnostic Steps:**
+
+1. **Check Database Performance:**
+   ```sql
+   -- View slow queries
+   SELECT query, mean_time, calls
+   FROM pg_stat_statements
+   ORDER BY mean_time DESC
+   LIMIT 10;
+   ```
+
+2. **Check Server Resources:**
+   ```bash
+   # CPU and memory usage
+   top
+   htop
+   
+   # Disk I/O
+   iotop
+   ```
+
+3. **Check Application Logs:**
+   ```bash
+   tail -f storage/logs/laravel.log | grep -i slow
+   ```
+
+**Solutions:**
+
+1. **Enable Caching:**
+   ```bash
+   php artisan config:cache
+   php artisan route:cache
+   php artisan view:cache
+   ```
+
+2. **Optimise Database:**
+   ```bash
+   # Run database optimisation
+   php artisan db:optimize
+   
+   # Check for missing indexes
+   php artisan db:check-indexes
+   ```
+
+3. **Review Slow Queries:**
+   - Add missing indexes
+   - Optimise N+1 queries
+   - Use eager loading
+
+### Issue 12: High Memory Usage
+
+**Symptoms:**
+- PHP memory limit errors
+- Server running out of memory
+- Application crashes
+
+**Solutions:**
+
+1. **Increase PHP Memory Limit:**
+   ```ini
+   # php.ini
+   memory_limit = 256M
+   ```
+
+2. **Optimise Queue Workers:**
+   ```bash
+   # Limit queue worker memory
+   php artisan queue:work --max-time=3600
+   ```
+
+3. **Check for Memory Leaks:**
+   - Review application code
+   - Check for unclosed resources
+   - Review third-party packages
+
+---
+
+## 💾 Data Issues
+
+### Issue 13: Missing or Corrupted Data
+
+**Symptoms:**
+- Records not appearing
+- Data inconsistencies
+- Reports showing incorrect numbers
+
+**Diagnostic Steps:**
+
+1. **Check Database Integrity:**
+   ```sql
+   -- Check table record counts
+   SELECT COUNT(*) FROM members;
+   SELECT COUNT(*) FROM attendance;
+   
+   -- Verify relationships
+   SELECT COUNT(*) FROM family_relationships;
+   ```
+
+2. **Check Application Logs:**
+   ```bash
+   grep -i "error\|exception" storage/logs/laravel.log
+   ```
+
+**Solutions:**
+
+1. **Restore from Backup:**
+   ```bash
+   # Restore specific table
+   pg_restore -U chms_user -d chms_production \
+       -t members backup.dump
+   ```
+
+2. **Data Repair:**
+   ```bash
+   # Run data integrity checks
+   php artisan db:check-integrity
+   
+   # Repair relationships
+   php artisan relationships:repair
+   ```
+
+### Issue 14: Duplicate Members
+
+**Symptoms:**
+- Same member appearing multiple times
+- Confusion in member lists
+- Attendance recorded multiple times
+
+**Solutions:**
+
+1. **Find Duplicates:**
+   ```sql
+   -- Find duplicate emails
+   SELECT email, COUNT(*) 
+   FROM members 
+   GROUP BY email 
+   HAVING COUNT(*) > 1;
+   ```
+
+2. **Merge Duplicates:**
+   ```bash
+   # Use merge tool
+   php artisan members:merge-duplicates
+   ```
+
+---
+
+## 🔧 Installation Issues
+
+### Issue 15: Migration Failures
+
+**Symptoms:**
+- `php artisan migrate` fails
+- Database errors during installation
+- Schema not matching expectations
+
+**Solutions:**
+
+1. **Check Database Connection:**
+   ```bash
+   # Test connection
+   php artisan tinker
+   DB::connection()->getPdo();
+   ```
+
+2. **Reset Migrations:**
+   ```bash
+   # Fresh migration (WARNING: Deletes all data)
+   php artisan migrate:fresh
+   
+   # Or rollback and re-run
+   php artisan migrate:rollback
+   php artisan migrate
+   ```
+
+3. **Check Migration Status:**
+   ```bash
+   php artisan migrate:status
+   ```
+
+### Issue 16: Permission Errors
+
+**Symptoms:**
+- "Permission denied" errors
+- Cannot write to storage directory
+- Upload failures
+
+**Solutions:**
+
+```bash
+# Fix storage permissions
+sudo chown -R www-data:www-data storage bootstrap/cache
+sudo chmod -R 775 storage bootstrap/cache
+
+# Fix upload directory
+sudo chmod -R 775 storage/app/public
+```
+
+---
+
+## 🏭 Production Issues
+
+### Issue 17: 500 Internal Server Error
+
+**Symptoms:**
+- Users seeing 500 errors
+- Application not responding
+- Error pages displayed
+
+**Diagnostic Steps:**
+
+1. **Check Application Logs:**
+   ```bash
+   tail -f storage/logs/laravel.log
+   ```
+
+2. **Check Web Server Logs:**
+   ```bash
+   # Nginx
+   tail -f /var/log/nginx/error.log
+   
+   # Apache
+   tail -f /var/log/apache2/error.log
+   ```
+
+**Solutions:**
+
+1. **Clear Application Cache:**
+   ```bash
+   php artisan cache:clear
+   php artisan config:clear
+   php artisan view:clear
+   ```
+
+2. **Check Environment:**
+   ```bash
+   # Verify .env is correct
+   cat .env | grep APP_DEBUG
+   # Should be: APP_DEBUG=false in production
+   ```
+
+3. **Restart Services:**
+   ```bash
+   sudo systemctl restart php8.3-fpm
+   sudo systemctl restart nginx
+   ```
+
+### Issue 18: SSL Certificate Issues
+
+**Symptoms:**
+- Browser security warnings
+- Certificate expired errors
+- HTTPS not working
+
+**Solutions:**
+
+1. **Renew Let's Encrypt Certificate:**
+   ```bash
+   sudo certbot renew
+   sudo systemctl reload nginx
+   ```
+
+2. **Check Certificate Status:**
+   ```bash
+   openssl s_client -connect your-domain.com:443 -servername your-domain.com
+   ```
+
+---
+
+## 🔍 Debugging Tools
+
+### Browser Developer Tools
+
+**Chrome/Edge DevTools:**
+1. Press `F12` to open
+2. **Console Tab**: View JavaScript errors
+3. **Network Tab**: Monitor API calls
+4. **Application Tab**: Check localStorage, cookies
+
+**Firefox DevTools:**
+1. Press `F12` to open
+2. Similar functionality to Chrome
+
+### Laravel Debugging
+
+**Laravel Telescope** (if enabled):
+- Access at `/telescope`
+- View requests, queries, jobs, events
+- Debug performance issues
+
+**Laravel Logs:**
+```bash
+# View logs
+tail -f storage/logs/laravel.log
+
+# Filter for errors
+tail -f storage/logs/laravel.log | grep ERROR
+
+# Search logs
+grep "keyword" storage/logs/laravel.log
+```
+
+**Artisan Tinker:**
+```bash
+php artisan tinker
+
+# Test database connection
+DB::connection()->getPdo();
+
+# Check user count
+User::count();
+
+# Test query
+Member::where('is_active', true)->count();
+```
+
+### Database Debugging
+
+**PostgreSQL Logs:**
+```bash
+# View PostgreSQL logs
+sudo tail -f /var/log/postgresql/postgresql-16-main.log
+
+# Check active connections
+psql -U chms_user -d chms_production -c "SELECT * FROM pg_stat_activity;"
+```
+
+**Query Analysis:**
+```sql
+-- Enable query logging
+SET log_statement = 'all';
+
+-- View slow queries
+SELECT * FROM pg_stat_statements ORDER BY mean_time DESC LIMIT 10;
+```
+
+---
+
+## 📞 Getting Help
+
+### Before Requesting Help
+
+1. ✅ Check this troubleshooting guide
+2. ✅ Review application logs
+3. ✅ Check browser console for errors
+4. ✅ Verify environment configuration
+5. ✅ Test with curl/Postman (for API issues)
+
+### Information to Provide
+
+When requesting help, include:
+
+- **Error Messages**: Exact error text
+- **Steps to Reproduce**: What actions led to the issue
+- **Environment Details**:
+  - Operating System
+  - PHP Version: `php -v`
+  - Node Version: `node -v`
+  - Database Version: `psql --version`
+- **Logs**: Relevant log entries
+- **Screenshots**: Visual errors if applicable
+
+### Support Channels
+
+1. **Documentation**: Check [Installation Guide](../guides/installation-guide.md)
+2. **Admin Guide**: See [Admin Guide](../guides/admin-guide.md)
+3. **GitHub Issues**: Report bugs via GitHub
+4. **Community Forums**: Ask questions in community
+5. **Email Support**: Contact technical support
+
+---
+
+**Last Updated**: {{ date }}  
+**Version**: 1.0.0  
+**Related Documentation**:
+- [Installation Guide](../guides/installation-guide.md)
+- [Admin Guide](../guides/admin-guide.md)
+- [Maintenance Procedures](../guides/maintenance-procedures.md)
 
 This troubleshooting guide should be updated as new issues are discovered and resolved.

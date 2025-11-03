@@ -308,7 +308,7 @@ class MemberAttributesTest extends TestCase
     /** @test */
     public function it_can_bulk_update_custom_attributes()
     {
-        $attribute = MemberAttribute::factory()->create([
+        $attribute = MemberAttribute::factory()->active()->create([
             'organization_id' => $this->organization->id,
             'key' => 'status',
             'field_type' => 'text'

@@ -6,13 +6,31 @@
         Family Relationships
       </div>
 
-      <!-- Add Relationship Button -->
-      <div class="q-mb-md">
+      <!-- Enhanced Controls -->
+      <div class="row q-gutter-sm q-mb-md">
         <q-btn
           color="primary"
           icon="add"
           label="Add Relationship"
           @click="showAddDialog = true"
+        />
+        <q-btn
+          color="secondary"
+          icon="gavel"
+          label="Manage Custody"
+          @click="showCustodyManager = true"
+        />
+        <q-btn
+          color="accent"
+          icon="account_tree"
+          label="Complex Relationships"
+          @click="showComplexManager = true"
+        />
+        <q-btn
+          color="info"
+          icon="home_work"
+          label="Household vs Family"
+          @click="showDistinction = true"
         />
       </div>
 
@@ -43,6 +61,12 @@
                 v-if="relationship.is_primary"
                 color="purple"
                 label="Primary"
+                class="q-ml-sm"
+              />
+              <q-badge
+                v-if="relationship.custody_type"
+                color="orange"
+                :label="relationship.custody_type"
                 class="q-ml-sm"
               />
             </q-item-label>
@@ -172,6 +196,31 @@
           </q-card-actions>
         </q-card>
       </q-dialog>
+
+      <!-- Enhanced Components -->
+      <HouseholdFamilyDistinction
+        v-if="showDistinction"
+        :member-id="memberId"
+        :member-family="memberFamily"
+        :family-relationships="memberRelationships"
+        :member-households="memberHouseholds"
+        @manage-family="handleManageFamily"
+        @manage-households="handleManageHouseholds"
+        @view-family-tree="handleViewFamilyTree"
+        @view-relationship-map="handleViewRelationshipMap"
+        @review-complex-relationships="showComplexManager = true"
+      />
+
+      <ComplexRelationshipManager
+        v-model="showComplexManager"
+        :member-id="memberId"
+      />
+
+      <CustodyManager
+        v-if="showCustodyManager"
+        :member-id="memberId"
+        :family-id="familyId"
+      />
     </q-card-section>
   </q-card>
 </template>
@@ -182,6 +231,9 @@ import { useRelationshipsStore } from '@/stores/relationships'
 import { useMembersStore } from '@/stores/members'
 import { useFamiliesStore } from '@/stores/families'
 import { useQuasar } from 'quasar'
+import HouseholdFamilyDistinction from './HouseholdFamilyDistinction.vue'
+import ComplexRelationshipManager from './ComplexRelationshipManager.vue'
+import CustodyManager from './CustodyManager.vue'
 
 const props = defineProps<{
   memberId: number
@@ -197,6 +249,13 @@ const memberRelationships = ref<any[]>([])
 const showRelationshipDialog = ref(false)
 const showAddDialog = ref(false)
 const editingRelationship = ref<any>(null)
+
+// Enhanced relationship management
+const showDistinction = ref(false)
+const showComplexManager = ref(false)
+const showCustodyManager = ref(false)
+const memberFamily = ref<any>(null)
+const memberHouseholds = ref<any[]>([])
 
 const relationshipForm = ref({
   family_id: props.familyId || null,
@@ -387,11 +446,39 @@ watch(showAddDialog, (val) => {
   }
 })
 
+// Enhanced relationship management handlers
+const handleManageFamily = () => {
+  // Navigate to family management or emit event
+  console.log('Manage family clicked')
+}
+
+const handleManageHouseholds = () => {
+  // Navigate to household management or emit event
+  console.log('Manage households clicked')
+}
+
+const handleViewFamilyTree = () => {
+  // Navigate to family tree view or emit event
+  console.log('View family tree clicked')
+}
+
+const handleViewRelationshipMap = () => {
+  // Navigate to relationship map or emit event
+  console.log('View relationship map clicked')
+}
+
 onMounted(async () => {
   try {
     await relationshipsStore.fetchRelationshipTypes({ family_only: true })
     await membersStore.fetchMembers({ active_only: true })
     await loadRelationships()
+
+    // Load additional data for enhanced features
+    if (props.familyId) {
+      memberFamily.value = await familiesStore.fetchFamily(props.familyId)
+    }
+    // Load member households (would need to implement this in the store)
+    // memberHouseholds.value = await householdsStore.fetchMemberHouseholds(props.memberId)
   } catch (error) {
     console.error('Failed to initialize:', error)
   }

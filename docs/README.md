@@ -32,9 +32,18 @@ Development workflow, git practices, and developer guides.
 Monitoring, troubleshooting, security, and operational guides.
 
 - **[Monitoring Setup](./operations/monitoring-setup.md)** - System monitoring and observability
-- **[Troubleshooting](./operations/troubleshooting.md)** - Common issues and solutions
+- **[Troubleshooting](./operations/troubleshooting.md)** - Common issues and solutions (Enhanced)
 - **[Security & Credential Rotation](./operations/security-credential-rotation.md)** - Security practices
 - **[Branch Protection](./operations/branch-protection.md)** - GitHub branch protection rules
+
+### 📘 [User Guides](./guides/)
+Comprehensive user guides, installation instructions, and administrative documentation.
+
+- **[Documentation Index](./guides/README.md)** - Complete guide to all user documentation
+- **[Installation Guide](./guides/installation-guide.md)** - Development, staging, and production installation
+- **[User Manual](./guides/user-manual.md)** - Complete end-user guide for ChMS features
+- **[Admin Guide](./guides/admin-guide.md)** - System administration and configuration guide
+- **[Maintenance Procedures](./guides/maintenance-procedures.md)** - Production maintenance and backup procedures
 
 ### 🌐 [API](./api/)
 API documentation, authentication, and integration guides.

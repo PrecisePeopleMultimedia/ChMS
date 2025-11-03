@@ -235,6 +235,166 @@ Get family details with members.
 #### PUT /families/{id}
 Update family information.
 
+## Family Relationships
+
+### Basic Relationship Management
+
+#### GET /family-relationships
+List all family relationships.
+
+**Query Parameters:**
+- `family_id` - Filter by family ID
+- `member_id` - Filter by member ID
+- `relationship_type_id` - Filter by relationship type
+- `status` - Filter by status (active, inactive)
+
+#### POST /family-relationships
+Create a new family relationship.
+
+**Request Body:**
+```json
+{
+  "family_id": 1,
+  "person1_id": 1,
+  "person2_id": 2,
+  "relationship_type_id": 1,
+  "status": "active",
+  "is_primary": true,
+  "start_date": "2020-06-15",
+  "custody_type": "full",
+  "custody_start_date": "2023-01-01",
+  "custody_notes": "Court-ordered custody",
+  "notes": "Additional relationship notes"
+}
+```
+
+#### GET /family-relationships/{id}
+Get relationship details.
+
+#### PUT /family-relationships/{id}
+Update relationship information.
+
+#### DELETE /family-relationships/{id}
+Delete a relationship.
+
+### Enhanced Relationship Analysis
+
+#### GET /members/{member}/relationships
+Get all relationships for a specific member.
+
+**Response:**
+```json
+{
+  "message": "Member relationships retrieved successfully",
+  "data": [
+    {
+      "id": 1,
+      "person1_id": 1,
+      "person2_id": 2,
+      "relationship_type": {
+        "id": 1,
+        "name": "Spouse",
+        "category": "family"
+      },
+      "status": "active",
+      "is_primary": true,
+      "start_date": "2020-06-15",
+      "custody_type": null,
+      "notes": "Married in 2020"
+    }
+  ]
+}
+```
+
+#### GET /members/{member}/relationships/analysis
+Analyze complex relationships for a member.
+
+**Response:**
+```json
+{
+  "message": "Complex relationship analysis completed",
+  "data": {
+    "conflicts": [
+      {
+        "id": "duplicate_1_2",
+        "type": "duplicate_relationship",
+        "description": "Multiple relationships with Jane Smith",
+        "details": "Spouse, Parent",
+        "relationships": [...]
+      }
+    ],
+    "cross_family_relationships": [
+      {
+        "id": 1,
+        "person1_name": "John Smith",
+        "person2_name": "Mary Johnson",
+        "relationship_type": "Guardian",
+        "family1": "Smith Family",
+        "family2": "Johnson Family",
+        "status": "active"
+      }
+    ],
+    "custody_relationships": [
+      {
+        "id": 2,
+        "person1_id": 1,
+        "person2_id": 3,
+        "custody_type": "full",
+        "custody_notes": "Court-ordered custody",
+        "custody_start_date": "2023-01-01"
+      }
+    ],
+    "household_overlaps": [
+      {
+        "member_id": 1,
+        "member_name": "John Smith",
+        "households": [
+          {
+            "id": 1,
+            "name": "Main House",
+            "type": "primary",
+            "role": "head",
+            "residency_status": "permanent"
+          }
+        ]
+      }
+    ],
+    "suggestions": [
+      {
+        "id": "family_1_4",
+        "type": "missing_family_relationship",
+        "description": "Add relationship with Bobby Smith",
+        "reason": "Both members belong to Smith Family",
+        "suggested_person1_id": 1,
+        "suggested_person2_id": 4
+      }
+    ]
+  }
+}
+```
+
+#### GET /members/{member}/relationships/statistics
+Get relationship statistics for a member.
+
+**Response:**
+```json
+{
+  "message": "Relationship statistics retrieved successfully",
+  "data": {
+    "total_relationships": 5,
+    "active_relationships": 4,
+    "custody_relationships": 2,
+    "primary_relationships": 1,
+    "household_memberships": 2,
+    "relationship_types": {
+      "family": 3,
+      "legal": 1,
+      "household": 1
+    }
+  }
+}
+```
+
 ## Attendance System
 
 ### Service Management

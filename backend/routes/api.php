@@ -183,6 +183,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // Family relationship routes
     Route::apiResource('family-relationships', FamilyRelationshipController::class);
     Route::get('/members/{member}/relationships', [FamilyRelationshipController::class, 'memberRelationships']);
+    Route::get('/members/{member}/relationships/analysis', [FamilyRelationshipController::class, 'analyzeComplexRelationships']);
+    Route::get('/members/{member}/relationships/statistics', [FamilyRelationshipController::class, 'relationshipStatistics']);
 
     // Relationship type routes
     Route::apiResource('relationship-types', RelationshipTypeController::class);
