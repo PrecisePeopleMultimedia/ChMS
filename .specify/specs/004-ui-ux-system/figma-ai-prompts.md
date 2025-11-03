@@ -1,5 +1,32 @@
 # ChurchAfrica ChMS – Figma AI Prompt Templates
 
+## 🏗️ Technical Architecture
+
+### **Tech Stack Foundation**
+- **Frontend**: Vue 3 + Composition API + TypeScript + Pinia (state management)
+- **UI Framework**: Quasar Framework (Material Design 3 components)
+- **Backend**: Laravel 11 + PHP 8.2 + Sanctum (API authentication)
+- **Database**: PostgreSQL via Supabase (production) + SQLite (development)
+- **Testing**: Vitest (unit) + Playwright (E2E) + PHPUnit (backend)
+- **Deployment**: Docker + GitHub Actions CI/CD + Cloudflare Tunnel
+- **AI Integration**: Mem0 self-hosted memory system (planned)
+
+### **Africa-First Design Philosophy**
+- **Offline-First**: Core features work without internet connection
+- **Mobile-First**: Optimized for Android devices and touch interfaces
+- **Low-Bandwidth**: < 500KB bundle size, < 3s load time on 3G networks
+- **Cultural Sensitivity**: Designed for African church contexts and workflows
+- **Enterprise-Ready**: Multi-tenant architecture for scalable church networks
+- **Accessibility**: WCAG AA compliance with touch-friendly interfaces (48px minimum)
+- **Performance**: 60fps on mid-range Android devices, efficient resource usage
+
+### **Quasar Framework Integration**
+- **Component Mapping**: All designs must map to Quasar components (q-btn, q-card, q-input, etc.)
+- **Material Design 3**: Follow Material Design principles with Quasar's implementation
+- **Responsive System**: Use Quasar's breakpoint system (xs, sm, md, lg, xl)
+- **Icon System**: Material Design Icons (MDI) via Quasar's q-icon component
+- **Theming**: Leverage Quasar's CSS custom properties for consistent styling
+
 ## 🧠 Prompt Philosophy
 
 Figma AI prompts should be:
@@ -8,6 +35,7 @@ Figma AI prompts should be:
 - **Context-aware**: Reference real designs and brand guidelines
 - **Mobile-first**: Optimize for African mobile usage patterns
 - **Offline-aware**: Include visual feedback for connection states
+- **Quasar-aligned**: Design components that map directly to Quasar Framework elements
 
 ## 🔄 Figma Make → Figma AI Workflow Integration
 

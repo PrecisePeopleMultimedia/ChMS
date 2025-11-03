@@ -8,7 +8,7 @@ ChurchAfrica is a modern, mobile-first church management system designed specifi
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Frontend      │    │   Backend       │    │   Database      │
-│   Vue 3 +       │◄──►│   Laravel 11 +   │◄──►│   SQLite/       │
+│   Vue 3 +       │◄──►│   Laravel 11 +  │◄──►│   SQLite/       │
 │   Quasar        │    │   Sanctum       │    │   Supabase      │
 │   Framework     │    │   API           │    │   PostgreSQL    │
 └─────────────────┘    └─────────────────┘    └─────────────────┘

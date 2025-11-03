@@ -163,7 +163,7 @@ describe('Auth Store', () => {
       authStore.setUser(mockUser)
 
       expect(authStore.user).toEqual(mockUser)
-      expect(JSON.parse(localStorage.getItem('user_data') || '{}')).toEqual(mockUser)
+      expect(JSON.parse(localStorage.getItem('auth_user') || '{}')).toEqual(mockUser)
     })
 
     it('should clear user and remove from localStorage', () => {
@@ -187,7 +187,7 @@ describe('Auth Store', () => {
       authStore.clearUser()
       
       expect(authStore.user).toBeNull()
-      expect(localStorage.getItem('user_data')).toBeNull()
+      expect(localStorage.getItem('auth_user')).toBeNull()
     })
   })
 
@@ -286,7 +286,7 @@ describe('Auth Store', () => {
       expect(authStore.token).toBeNull()
       expect(authStore.isAuthenticated).toBe(false)
       expect(localStorage.getItem('auth_token')).toBeNull()
-      expect(localStorage.getItem('user_data')).toBeNull()
+      expect(localStorage.getItem('auth_user')).toBeNull()
     })
   })
 })

@@ -13,13 +13,23 @@ export default mergeConfig(
       globals: true,
       testTimeout: 10000, // 10 seconds for async operations
       hookTimeout: 10000, // 10 seconds for setup/teardown
-      deps: {
-        inline: [
-          'quasar',
-          '@quasar/extras',
-          'vue-router',
-          'pinia',
-        ],
+      server: {
+        deps: {
+          inline: [
+            'quasar',
+            '@quasar/extras',
+            'vue-router',
+            'pinia',
+            'webidl-conversions',
+            'whatwg-url',
+          ],
+        },
+      },
+      pool: 'forks',
+      poolOptions: {
+        forks: {
+          singleFork: true,
+        },
       },
       coverage: {
         provider: 'v8',

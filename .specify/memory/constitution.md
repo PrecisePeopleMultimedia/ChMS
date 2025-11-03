@@ -42,7 +42,7 @@
 ### Architecture Decisions
 - **Laravel 11**: Backend API framework for reliability and community support
 - **Vue 3 Composition API**: Frontend framework for reactive, maintainable UI
-- **Supabase**: Database and real-time features with offline sync capabilities
+- **PostgreSQL**: Database and real-time features with offline sync capabilities
 - **PWA**: Service workers for offline functionality and app-like experience
 - **RESTful APIs**: Standard HTTP methods and status codes
 

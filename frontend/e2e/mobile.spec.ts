@@ -255,7 +255,6 @@ test.describe('Mobile Authentication - Pixel 5', () => {
       }
     })
   })
-})
 
 // Additional mobile-specific tests
 test.describe('Mobile-Specific Features', () => {

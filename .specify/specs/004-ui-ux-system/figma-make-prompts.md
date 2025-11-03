@@ -1,6 +1,25 @@
 # ChurchAfrica ChMS – Figma Make Prompt Templates
 **Wireframing, Structure & Logic-First Design Prompts**
 
+## 🏗️ Technical Architecture
+
+### **Tech Stack**
+- **Frontend**: Vue 3 + Composition API + TypeScript + Pinia (state management)
+- **UI Framework**: Quasar Framework (Material Design components)
+- **Backend**: Laravel 11 + PHP 8.2 + Sanctum (API authentication)
+- **Database**: PostgreSQL via Supabase (production) + SQLite (development)
+- **Testing**: Vitest (unit) + Playwright (E2E) + PHPUnit (backend)
+- **Deployment**: Docker + GitHub Actions CI/CD + Cloudflare Tunnel
+- **AI Integration**: Mem0 self-hosted memory system (planned)
+
+### **Design Philosophy: Africa-First**
+- **Offline-First**: Core features work without internet connection
+- **Mobile-First**: Optimized for Android devices and touch interfaces
+- **Low-Bandwidth**: < 500KB bundle size, < 3s load time on 3G
+- **Cultural Sensitivity**: Designed for African church contexts and workflows
+- **Enterprise-Ready**: Multi-tenant architecture for scalable church networks
+- **Accessibility**: WCAG AA compliance with touch-friendly interfaces
+
 ## 🧠 Figma Make Philosophy
 
 Figma Make prompts should focus on:
@@ -9,6 +28,7 @@ Figma Make prompts should focus on:
 - **Rapid Iteration**: Quick wireframing and concept validation
 - **Technical Foundation**: Code generation and handoff preparation
 - **Responsive Logic**: Layout behavior across devices without visual styling
+- **Quasar Mapping**: Components that map directly to Quasar Framework elements
 
 > **🔄 Workflow Integration**: These Make prompts create the structural foundation that [figma-ai-prompts.md](figma-ai-prompts.md) will enhance with visual design and branding.
 

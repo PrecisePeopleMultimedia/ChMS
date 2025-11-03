@@ -16,9 +16,17 @@
       "Bash(tee:*)",
       "Bash(xargs ls:*)",
       "Bash(npx vite-bundle-visualizer:*)",
-      "Bash(npm run test:unit:run:*)"
+      "Bash(npm run test:unit:run:*)",
+      "Bash(npm run dev:*)",
+      "Bash(node_modules.binvite.cmd:*)"
     ],
     "deny": [],
     "ask": []
-  }
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "chms-filesystem",
+    "chms-git",
+    "chms-supabase"
+  ]
 }

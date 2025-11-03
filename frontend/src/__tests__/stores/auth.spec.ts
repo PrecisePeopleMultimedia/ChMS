@@ -180,7 +180,7 @@ describe('Auth Store', () => {
       expect(authStore.isAuthenticated).toBe(true)
       expect(authStore.error).toBeNull()
       expect(localStorageMock.setItem).toHaveBeenCalledWith('auth_token', 'test-token')
-      expect(localStorageMock.setItem).toHaveBeenCalledWith('user_data', JSON.stringify(mockResponse.data.user))
+      expect(localStorageMock.setItem).toHaveBeenCalledWith('auth_user', JSON.stringify(mockResponse.data.user))
     })
 
     it('handles login failure', async () => {
@@ -302,7 +302,7 @@ describe('Auth Store', () => {
       expect(authStore.token).toBeNull()
       expect(authStore.isAuthenticated).toBe(false)
       expect(localStorageMock.removeItem).toHaveBeenCalledWith('auth_token')
-      expect(localStorageMock.removeItem).toHaveBeenCalledWith('user_data')
+      expect(localStorageMock.removeItem).toHaveBeenCalledWith('auth_user')
     })
 
     it('clears state even if API call fails', async () => {
@@ -329,7 +329,7 @@ describe('Auth Store', () => {
 
       localStorageMock.getItem.mockImplementation((key) => {
         if (key === 'auth_token') return mockToken
-        if (key === 'user_data') return JSON.stringify(mockUser)
+        if (key === 'auth_user') return JSON.stringify(mockUser)
         return null
       })
 
@@ -348,7 +348,7 @@ describe('Auth Store', () => {
     it('clears invalid token from localStorage', async () => {
       localStorageMock.getItem.mockImplementation((key) => {
         if (key === 'auth_token') return 'invalid-token'
-        if (key === 'user_data') return JSON.stringify({ id: 1, name: 'User' })
+        if (key === 'auth_user') return JSON.stringify({ id: 1, name: 'User' })
         return null
       })
 
@@ -362,7 +362,7 @@ describe('Auth Store', () => {
       expect(authStore.token).toBeNull()
       expect(authStore.user).toBeNull()
       expect(localStorageMock.removeItem).toHaveBeenCalledWith('auth_token')
-      expect(localStorageMock.removeItem).toHaveBeenCalledWith('user_data')
+      expect(localStorageMock.removeItem).toHaveBeenCalledWith('auth_user')
     })
   })
 

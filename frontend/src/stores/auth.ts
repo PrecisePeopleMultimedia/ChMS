@@ -1,15 +1,7 @@
 import { ref, computed, readonly } from 'vue'
 import { defineStore } from 'pinia'
-import axios from 'axios'
+import { api } from '@/services/api'
 import type { User, LoginCredentials, RegisterCredentials, AuthResponse } from '@/types/auth'
-
-const API_URL = import.meta.env.VITE_API_URL
-
-// Configure axios defaults
-if (axios.defaults) {
-  axios.defaults.baseURL = API_URL
-  axios.defaults.withCredentials = true
-}
 
 export const useAuthStore = defineStore('auth', () => {
   // State
@@ -26,11 +18,11 @@ export const useAuthStore = defineStore('auth', () => {
 
   // Actions
   const setAuthHeader = (authToken: string) => {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${authToken}`
+    api.defaults.headers.common['Authorization'] = `Bearer ${authToken}`
   }
 
   const clearAuthHeader = () => {
-    delete axios.defaults.headers.common['Authorization']
+    delete api.defaults.headers.common['Authorization']
   }
 
   const setToken = (authToken: string) => {
@@ -48,12 +40,12 @@ export const useAuthStore = defineStore('auth', () => {
   const setUser = (userData: User) => {
     user.value = userData
     // Cache user data for offline access
-    localStorage.setItem('user_data', JSON.stringify(userData))
+    localStorage.setItem('auth_user', JSON.stringify(userData))
   }
 
   const clearUser = () => {
     user.value = null
-    localStorage.removeItem('user_data')
+    localStorage.removeItem('auth_user')
   }
 
   const login = async (credentials: LoginCredentials): Promise<void> => {
@@ -61,7 +53,7 @@ export const useAuthStore = defineStore('auth', () => {
       isLoading.value = true
       error.value = null
 
-      const response = await axios.post<AuthResponse>('/auth/login', credentials)
+      const response = await api.post<AuthResponse>('/auth/login', credentials)
       const { user: userData, token: authToken } = response.data
 
       setToken(authToken)
@@ -79,7 +71,7 @@ export const useAuthStore = defineStore('auth', () => {
       isLoading.value = true
       error.value = null
 
-      const response = await axios.post<AuthResponse>('/auth/register', credentials)
+      const response = await api.post<AuthResponse>('/auth/register', credentials)
       const { user: userData, token: authToken } = response.data
 
       setToken(authToken)
@@ -98,7 +90,7 @@ export const useAuthStore = defineStore('auth', () => {
 
       // Call logout API if token exists
       if (token.value) {
-        await axios.post('/auth/logout')
+        await api.post('/auth/logout')
       }
     } catch (err) {
       // Continue with logout even if API call fails
@@ -117,7 +109,7 @@ export const useAuthStore = defineStore('auth', () => {
       isLoading.value = true
       setAuthHeader(token.value)
 
-      const response = await axios.get<User>('/user')
+      const response = await api.get<User>('/user')
       setUser(response.data)
     } catch (err: any) {
       // If token is invalid, clear auth data
@@ -135,7 +127,7 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       if (!token.value) return
 
-      const response = await axios.post<{ token: string, expires_at: string }>('/auth/refresh')
+      const response = await api.post<{ token: string, expires_at: string }>('/auth/refresh')
       setToken(response.data.token)
     } catch (err: any) {
       // If refresh fails, clear auth data
@@ -150,7 +142,7 @@ export const useAuthStore = defineStore('auth', () => {
       isLoading.value = true
       error.value = null
 
-      const response = await axios.post<AuthResponse>('/auth/google/login', {
+      const response = await api.post<AuthResponse>('/auth/google/login', {
         token: googleToken
       })
       const { user: userData, token: authToken } = response.data
@@ -168,7 +160,7 @@ export const useAuthStore = defineStore('auth', () => {
   const initializeAuth = async (): Promise<void> => {
     // Check for cached token
     const cachedToken = localStorage.getItem('auth_token')
-    const cachedUser = localStorage.getItem('user_data')
+    const cachedUser = localStorage.getItem('auth_user')
 
     if (cachedToken && cachedUser) {
       try {
@@ -237,6 +229,8 @@ export const useAuthStore = defineStore('auth', () => {
     setToken,
     clearToken,
     setUser,
-    clearUser
+    clearUser,
+    setAuthHeader,
+    clearAuthHeader
   }
 })
