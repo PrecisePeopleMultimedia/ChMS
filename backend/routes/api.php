@@ -11,10 +11,12 @@ use App\Http\Controllers\Api\MemberAttributeController;
 use App\Http\Controllers\Api\MemberAttributeValueController;
 use App\Http\Controllers\Api\BadgeTypeController;
 use App\Http\Controllers\Api\MemberBadgeController;
-use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\MonitoringController;
 use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\AttendanceController;
+use App\Http\Controllers\Api\HouseholdController;
+use App\Http\Controllers\Api\FamilyRelationshipController;
+use App\Http\Controllers\Api\RelationshipTypeController;
 
 // Health check endpoint for Docker
 Route::get('/health', function () {
@@ -158,27 +160,22 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/member-badges/bulk-remove', [MemberBadgeController::class, 'bulkRemove']);
     Route::get('/member-badges/expiring', [MemberBadgeController::class, 'expiringBadges']);
 
-    // Attendance routes
-    Route::prefix('attendance')->group(function () {
-        // Services
-        Route::get('/services', [AttendanceController::class, 'services']);
-        Route::post('/services', [AttendanceController::class, 'createService']);
-        Route::get('/services/{service}', [AttendanceController::class, 'showService']);
-        
-        // Check-in methods
-        Route::post('/qr-checkin', [AttendanceController::class, 'qrCheckIn']);
-        Route::post('/manual-checkin', [AttendanceController::class, 'manualCheckIn']);
-        Route::post('/family-checkin', [AttendanceController::class, 'familyCheckIn']);
-        
-        // Records and statistics
-        Route::get('/records', [AttendanceController::class, 'attendanceRecords']);
-        Route::get('/statistics', [AttendanceController::class, 'statistics']);
-        
-        // QR Code generation
-        Route::post('/members/{member}/qr-code', [AttendanceController::class, 'generateQrCode']);
-        
-        // Offline sync
-        Route::post('/sync-offline', [AttendanceController::class, 'syncOffline']);
+    // Household routes
+    Route::apiResource('households', HouseholdController::class);
+    Route::post('/households/{id}/members', [HouseholdController::class, 'addMember']);
+    Route::delete('/households/{id}/members/{memberId}', [HouseholdController::class, 'removeMember']);
+    Route::get('/households/{id}/members', [HouseholdController::class, 'members']);
+
+    // Family relationship routes
+    Route::apiResource('family-relationships', FamilyRelationshipController::class);
+    Route::get('/members/{member}/relationships', [FamilyRelationshipController::class, 'memberRelationships']);
+
+    // Relationship type routes
+    Route::apiResource('relationship-types', RelationshipTypeController::class);
+    Route::get('/relationship-types-categories', function () {
+        return response()->json([
+            'data' => \App\Models\RelationshipType::CATEGORIES
+        ]);
     });
 });
 

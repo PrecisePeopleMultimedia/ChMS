@@ -168,11 +168,7 @@ const router = createRouter({
           }
         },
         {
-<<<<<<< Current (Your changes)
-          path: '/attendance',
-=======
           path: '/attendance/checkin',
->>>>>>> Incoming (Background Agent changes)
           name: 'AttendanceCheckIn',
           component: () => import('@/views/AttendanceCheckInView.vue'),
           meta: {

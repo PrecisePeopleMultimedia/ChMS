@@ -11,7 +11,7 @@ import { defineConfig, devices } from '@playwright/test'
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  testDir: './e2e',
+  testDir: './tests/e2e',
   /* Maximum time one test can run for. */
   timeout: 30 * 1000,
   expect: {
@@ -60,8 +60,8 @@ export default defineConfig({
   outputDir: 'test-results/',
 
   /* Global setup and teardown */
-  globalSetup: './e2e/regression/utils/global-setup.ts',
-  globalTeardown: './e2e/regression/utils/global-teardown.ts',
+  globalSetup: './tests/e2e/regression/utils/global-setup.ts',
+  globalTeardown: './tests/e2e/regression/utils/global-teardown.ts',
 
   /* Run your local dev server before starting the tests */
   webServer: {
@@ -86,7 +86,7 @@ export default defineConfig({
     // Regression test suite
     {
       name: 'regression',
-      testDir: './e2e/regression',
+      testDir: './tests/e2e/regression',
       dependencies: ['setup'],
       use: {
         ...devices['Desktop Chrome'],
@@ -147,7 +147,7 @@ export default defineConfig({
     // Regression tests on mobile
     {
       name: 'regression-mobile',
-      testDir: './e2e/regression',
+      testDir: './tests/e2e/regression',
       dependencies: ['setup'],
       use: {
         ...devices['Pixel 5'],

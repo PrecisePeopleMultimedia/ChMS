@@ -32,9 +32,14 @@ frontend/
 │   │       └── LoginForm.spec.ts
 │   └── stores/
 │       └── auth.spec.ts
-├── e2e/
-│   ├── auth.spec.ts
-│   └── mobile.spec.ts
+├── tests/
+│   ├── e2e/
+│   │   ├── auth.spec.ts
+│   │   ├── mobile.spec.ts
+│   │   └── regression/
+│   └── unit/
+│       ├── components/
+│       └── stores/
 └── playwright.config.ts
 ```
 
@@ -249,7 +254,7 @@ npx vitest --reporter=verbose
 npm run test:e2e:headed
 
 # Run specific test file
-npx playwright test e2e/auth.spec.ts
+npx playwright test tests/e2e/auth.spec.ts
 
 # Debug mode with browser DevTools
 npx playwright test --debug

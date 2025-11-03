@@ -176,6 +176,32 @@
             :member-id="member.id"
             class="q-mb-md"
           />
+
+          <!-- Family Relationships -->
+          <q-card flat bordered class="q-mb-md">
+            <q-card-section>
+              <q-tabs v-model="familyTab" align="left" class="q-mb-md">
+                <q-tab name="relationships" label="Relationships" icon="people" />
+                <q-tab name="tree" label="Family Tree" icon="account_tree" />
+              </q-tabs>
+
+              <q-tab-panels v-model="familyTab" animated>
+                <q-tab-panel name="relationships">
+                  <RelationshipMapper
+                    :member-id="member.id"
+                    :family-id="member.family_id"
+                  />
+                </q-tab-panel>
+
+                <q-tab-panel name="tree">
+                  <FamilyTree
+                    :member-id="member.id"
+                    :family-id="member.family_id"
+                  />
+                </q-tab-panel>
+              </q-tab-panels>
+            </q-card-section>
+          </q-card>
         </div>
 
         <!-- Sidebar -->
@@ -321,6 +347,8 @@ import { useMembersStore } from '@/stores/members'
 import MemberAttributesPanel from '@/components/members/MemberAttributesPanel.vue'
 import MemberBadges from '@/components/members/MemberBadges.vue'
 import MemberNotes from '@/components/members/MemberNotes.vue'
+import RelationshipMapper from '@/components/family/RelationshipMapper.vue'
+import FamilyTree from '@/components/family/FamilyTree.vue'
 
 // Composables
 const route = useRoute()
@@ -331,6 +359,7 @@ const membersStore = useMembersStore()
 // Local state
 const member = ref<any>(null)
 const loading = ref(true)
+const familyTab = ref('relationships')
 const recentActivity = ref([
   {
     id: 1,

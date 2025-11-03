@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\User;
@@ -66,6 +67,60 @@ class Member extends Model
     public function family(): BelongsTo
     {
         return $this->belongsTo(Family::class);
+    }
+
+    /**
+     * Get all family relationships where this member is person1
+     */
+    public function relationshipsAsPerson1(): HasMany
+    {
+        return $this->hasMany(FamilyRelationship::class, 'person1_id');
+    }
+
+    /**
+     * Get all family relationships where this member is person2
+     */
+    public function relationshipsAsPerson2(): HasMany
+    {
+        return $this->hasMany(FamilyRelationship::class, 'person2_id');
+    }
+
+    /**
+     * Get all family relationships for this member (both directions)
+     */
+    public function allRelationships()
+    {
+        return FamilyRelationship::where('person1_id', $this->id)
+            ->orWhere('person2_id', $this->id);
+    }
+
+    /**
+     * Get households this member belongs to
+     */
+    public function households(): BelongsToMany
+    {
+        return $this->belongsToMany(Household::class, 'household_members')
+            ->withPivot([
+                'relationship_type_id',
+                'role',
+                'residency_start_date',
+                'residency_end_date',
+                'residency_status',
+                'custody_type',
+                'custody_notes',
+                'guardian_id',
+                'notes',
+            ])
+            ->withTimestamps();
+    }
+
+    /**
+     * Get active household memberships
+     */
+    public function activeHouseholds(): BelongsToMany
+    {
+        return $this->households()
+            ->wherePivot('residency_status', '!=', 'former');
     }
 
     /**
@@ -438,29 +493,5 @@ class Member extends Model
     public function canDelete(User $user): bool
     {
         return $user->organization_id === $this->organization_id;
-    }
-
-    /**
-     * Get attendance records for this member.
-     */
-    public function attendanceRecords(): HasMany
-    {
-        return $this->hasMany(AttendanceRecord::class);
-    }
-
-    /**
-     * Get QR codes for this member.
-     */
-    public function qrCodes(): HasMany
-    {
-        return $this->hasMany(MemberQrCode::class);
-    }
-
-    /**
-     * Get active QR code for this member.
-     */
-    public function activeQrCode(): HasMany
-    {
-        return $this->hasMany(MemberQrCode::class)->active();
     }
 }
