@@ -321,4 +321,170 @@ class MemberController extends Controller
 
         return $errors;
     }
+
+    /**
+     * Import members from CSV file
+     */
+    public function import(Request $request): JsonResponse
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:csv,txt|max:10240', // 10MB max
+        ]);
+
+        try {
+            $file = $request->file('file');
+            $csvData = array_map('str_getcsv', file($file->getPathname()));
+
+            // Remove header row
+            $headers = array_shift($csvData);
+
+            // Validate headers
+            $requiredHeaders = ['first_name', 'last_name', 'email'];
+            $missingHeaders = array_diff($requiredHeaders, $headers);
+
+            if (!empty($missingHeaders)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Missing required headers: ' . implode(', ', $missingHeaders),
+                    'errors' => ['headers' => $missingHeaders]
+                ], 422);
+            }
+
+            $results = [
+                'imported' => 0,
+                'skipped' => 0,
+                'errors' => []
+            ];
+
+            $organizationId = $request->user()->organization_id;
+
+            foreach ($csvData as $rowIndex => $row) {
+                $rowNumber = $rowIndex + 2; // +2 because we removed header and arrays are 0-indexed
+
+                try {
+                    // Skip rows with mismatched column count
+                    if (count($headers) !== count($row)) {
+                        $results['errors'][] = "Row {$rowNumber}: Column count mismatch (expected " . count($headers) . ", got " . count($row) . ")";
+                        $results['skipped']++;
+                        continue;
+                    }
+
+                    // Map CSV row to associative array
+                    $memberData = array_combine($headers, $row);
+
+                    // Validate required fields
+                    if (empty($memberData['first_name']) || empty($memberData['last_name'])) {
+                        $results['errors'][] = "Row {$rowNumber}: First name and last name are required";
+                        $results['skipped']++;
+                        continue;
+                    }
+
+                    // Check for duplicate email
+                    if (!empty($memberData['email'])) {
+                        $existingMember = Member::where('organization_id', $organizationId)
+                            ->where('email', $memberData['email'])
+                            ->first();
+
+                        if ($existingMember) {
+                            $results['errors'][] = "Row {$rowNumber}: Email {$memberData['email']} already exists";
+                            $results['skipped']++;
+                            continue;
+                        }
+                    }
+
+                    // Create member
+                    $member = Member::create([
+                        'organization_id' => $organizationId,
+                        'first_name' => $memberData['first_name'],
+                        'last_name' => $memberData['last_name'],
+                        'email' => $memberData['email'] ?? null,
+                        'phone' => $memberData['phone'] ?? null,
+                        'date_of_birth' => !empty($memberData['date_of_birth']) ? $memberData['date_of_birth'] : null,
+                        'gender' => $memberData['gender'] ?? null,
+                        'address' => $memberData['address'] ?? null,
+                        'city' => $memberData['city'] ?? null,
+                        'state' => $memberData['state'] ?? null,
+                        'postal_code' => $memberData['postal_code'] ?? null,
+                        'country' => $memberData['country'] ?? 'Nigeria',
+                        'member_type' => $memberData['member_type'] ?? 'member',
+                        'membership_status' => $memberData['membership_status'] ?? 'active',
+                        'joined_date' => !empty($memberData['joined_date']) ? $memberData['joined_date'] : now(),
+                    ]);
+
+                    $results['imported']++;
+
+                } catch (\Exception $e) {
+                    $results['errors'][] = "Row {$rowNumber}: " . $e->getMessage();
+                    $results['skipped']++;
+                }
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => "Import completed. {$results['imported']} members imported, {$results['skipped']} skipped.",
+                'data' => $results
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Import failed: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Download CSV template for member import
+     */
+    public function downloadTemplate(): \Symfony\Component\HttpFoundation\StreamedResponse
+    {
+        $headers = [
+            'first_name',
+            'last_name',
+            'email',
+            'phone',
+            'date_of_birth',
+            'gender',
+            'address',
+            'city',
+            'state',
+            'postal_code',
+            'country',
+            'member_type',
+            'membership_status',
+            'joined_date'
+        ];
+
+        $filename = 'member_import_template.csv';
+
+        return response()->streamDownload(function () use ($headers) {
+            $handle = fopen('php://output', 'w');
+
+            // Add header row
+            fputcsv($handle, $headers);
+
+            // Add example row
+            fputcsv($handle, [
+                'John',
+                'Doe',
+                'john.doe@example.com',
+                '+234-804-123-4567',
+                '1990-01-15',
+                'male',
+                '123 Main Street',
+                'Lagos',
+                'Lagos',
+                '100001',
+                'Nigeria',
+                'member',
+                'active',
+                '2024-01-01'
+            ]);
+
+            fclose($handle);
+        }, $filename, [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename=' . $filename,
+        ]);
+    }
 }

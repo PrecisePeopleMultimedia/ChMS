@@ -128,6 +128,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('members', MemberController::class);
     Route::get('/members/options', [MemberController::class, 'options']);
     Route::post('/members/bulk-update', [MemberController::class, 'bulkUpdate']);
+    Route::post('/members/import', [MemberController::class, 'import']);
+    Route::get('/members/import/template', [MemberController::class, 'downloadTemplate']);
     Route::get('/members/{member}/qr-code', [AttendanceController::class, 'generateMemberQrCode']);
     
     // Member notes routes

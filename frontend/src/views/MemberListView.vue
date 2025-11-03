@@ -288,22 +288,88 @@
 
     <!-- Import Dialog -->
     <q-dialog v-model="showImportDialog">
-      <q-card style="min-width: 400px">
+      <q-card style="min-width: 500px">
         <q-card-section>
           <div class="text-h6">Import Members</div>
         </q-card-section>
         <q-card-section>
           <p>Upload a CSV file to import multiple members at once.</p>
+
+          <!-- Download Template Button -->
+          <div class="q-mb-md">
+            <q-btn
+              color="secondary"
+              icon="download"
+              label="Download Template"
+              @click="downloadTemplate"
+              outline
+              size="sm"
+            />
+            <div class="text-caption text-grey-6 q-mt-xs">
+              Download a CSV template with the correct format and example data
+            </div>
+          </div>
+
+          <!-- File Upload -->
           <q-file
-            v-model="importFile"
+            v-model="selectedFile"
             label="Select CSV file"
-            accept=".csv"
+            accept=".csv,.txt"
             outlined
-          />
+            clearable
+            :loading="isImporting"
+            :disable="isImporting"
+          >
+            <template v-slot:prepend>
+              <q-icon name="attach_file" />
+            </template>
+          </q-file>
+
+          <!-- Import Instructions -->
+          <div class="q-mt-md">
+            <q-expansion-item
+              icon="help"
+              label="Import Instructions"
+              header-class="text-primary"
+            >
+              <div class="q-pa-md">
+                <p><strong>Required columns:</strong></p>
+                <ul>
+                  <li>first_name</li>
+                  <li>last_name</li>
+                  <li>email</li>
+                </ul>
+                <p><strong>Optional columns:</strong></p>
+                <ul>
+                  <li>phone, date_of_birth, gender, address, city, state, postal_code, country</li>
+                  <li>member_type (member, visitor, inactive)</li>
+                  <li>membership_status (active, inactive, pending)</li>
+                  <li>joined_date</li>
+                </ul>
+                <p><strong>Notes:</strong></p>
+                <ul>
+                  <li>Duplicate emails will be skipped</li>
+                  <li>Maximum file size: 10MB</li>
+                  <li>Supported formats: CSV, TXT</li>
+                </ul>
+              </div>
+            </q-expansion-item>
+          </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn flat label="Cancel" @click="showImportDialog = false" />
-          <q-btn color="primary" label="Import" @click="importMembers" />
+          <q-btn
+            flat
+            label="Cancel"
+            @click="showImportDialog = false"
+            :disable="isImporting"
+          />
+          <q-btn
+            color="primary"
+            label="Import"
+            @click="importMembers"
+            :loading="isImporting"
+            :disable="!selectedFile || isImporting"
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -327,7 +393,8 @@ const searchQuery = ref('')
 const selected = ref([])
 const showAdvancedFilters = ref(false)
 const showImportDialog = ref(false)
-const importFile = ref(null)
+const selectedFile = ref(null)
+const isImporting = ref(false)
 
 const filters = ref({
   member_type: null as string | null,
@@ -570,13 +637,106 @@ const deleteSelected = () => {
   })
 }
 
-const importMembers = () => {
-  // TODO: Implement CSV import functionality
-  $q.notify({
-    type: 'info',
-    message: 'Import functionality coming soon'
-  })
-  showImportDialog.value = false
+const importMembers = async () => {
+  if (!selectedFile.value) {
+    $q.notify({
+      type: 'negative',
+      message: 'Please select a CSV file to import'
+    })
+    return
+  }
+
+  const formData = new FormData()
+  formData.append('file', selectedFile.value)
+
+  try {
+    isImporting.value = true
+
+    const response = await api.post('/members/import', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+
+    const result = response.data.data
+
+    $q.notify({
+      type: 'positive',
+      message: `Import completed! ${result.imported} members imported, ${result.skipped} skipped.`,
+      timeout: 5000
+    })
+
+    // Show detailed results if there were errors
+    if (result.errors.length > 0) {
+      $q.dialog({
+        title: 'Import Results',
+        message: `
+          <div>
+            <p><strong>Imported:</strong> ${result.imported} members</p>
+            <p><strong>Skipped:</strong> ${result.skipped} members</p>
+            <p><strong>Errors:</strong></p>
+            <ul>
+              ${result.errors.map(error => `<li>${error}</li>`).join('')}
+            </ul>
+          </div>
+        `,
+        html: true,
+        ok: 'Close'
+      })
+    }
+
+    // Refresh the members list
+    await fetchMembers()
+
+    // Reset form
+    selectedFile.value = null
+    showImportDialog.value = false
+
+  } catch (error) {
+    console.error('Import error:', error)
+
+    let errorMessage = 'Failed to import members'
+    if (error.response?.data?.message) {
+      errorMessage = error.response.data.message
+    }
+
+    $q.notify({
+      type: 'negative',
+      message: errorMessage,
+      timeout: 5000
+    })
+  } finally {
+    isImporting.value = false
+  }
+}
+
+const downloadTemplate = async () => {
+  try {
+    const response = await api.get('/members/import/template', {
+      responseType: 'blob'
+    })
+
+    // Create download link
+    const url = window.URL.createObjectURL(new Blob([response.data]))
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', 'member_import_template.csv')
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+    window.URL.revokeObjectURL(url)
+
+    $q.notify({
+      type: 'positive',
+      message: 'Template downloaded successfully'
+    })
+  } catch (error) {
+    console.error('Download error:', error)
+    $q.notify({
+      type: 'negative',
+      message: 'Failed to download template'
+    })
+  }
 }
 
 // Lifecycle
