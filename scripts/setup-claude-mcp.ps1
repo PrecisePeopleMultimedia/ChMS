@@ -30,13 +30,13 @@ try {
 # Add MCP servers
 Write-Host "🔧 Adding MCP servers..." -ForegroundColor Yellow
 
-# Add Supabase MCP server
-Write-Host "📊 Adding Supabase MCP server..." -ForegroundColor Cyan
+# Add PostgreSQL MCP server
+Write-Host "📊 Adding PostgreSQL MCP server..." -ForegroundColor Cyan
 try {
-    claude mcp add supabase npx @supabase/mcp-server@latest
-    Write-Host "✅ Supabase MCP server added" -ForegroundColor Green
+    claude mcp add postgres npx @modelcontextprotocol/server-postgres@latest
+    Write-Host "✅ PostgreSQL MCP server added" -ForegroundColor Green
 } catch {
-    Write-Host "❌ Failed to add Supabase MCP server" -ForegroundColor Red
+    Write-Host "❌ Failed to add PostgreSQL MCP server" -ForegroundColor Red
 }
 
 # Add Chrome DevTools MCP server
@@ -59,13 +59,13 @@ try {
 # Test MCP servers
 Write-Host "🧪 Testing MCP servers..." -ForegroundColor Yellow
 
-# Test Supabase MCP
-Write-Host "📊 Testing Supabase MCP server..." -ForegroundColor Cyan
+# Test PostgreSQL MCP
+Write-Host "📊 Testing PostgreSQL MCP server..." -ForegroundColor Cyan
 try {
-    claude mcp test supabase
-    Write-Host "✅ Supabase MCP server is working" -ForegroundColor Green
+    claude mcp test postgres
+    Write-Host "✅ PostgreSQL MCP server is working" -ForegroundColor Green
 } catch {
-    Write-Host "❌ Supabase MCP server test failed" -ForegroundColor Red
+    Write-Host "❌ PostgreSQL MCP server test failed" -ForegroundColor Red
 }
 
 # Test Chrome DevTools MCP

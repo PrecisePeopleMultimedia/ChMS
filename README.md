@@ -1,7 +1,7 @@
 # ChurchAfrica - Church Management System
 
 ## Overview
-ChurchAfrica is a modern, mobile-first church management system designed specifically for African churches. Built with Vue 3, Quasar Framework, Laravel 11, and Supabase, it provides comprehensive tools for member management, attendance tracking, and church administration.
+ChurchAfrica is a modern, mobile-first church management system designed specifically for African churches. Built with Vue 3, Quasar Framework, Laravel 11, and PostgreSQL, it provides comprehensive tools for member management, attendance tracking, and church administration.
 
 ## 🏗️ **Architecture Overview**
 
@@ -9,16 +9,16 @@ ChurchAfrica is a modern, mobile-first church management system designed specifi
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Frontend      │    │   Backend       │    │   Database      │
 │   Vue 3 +       │◄──►│   Laravel 11 +  │◄──►│   SQLite/       │
-│   Quasar        │    │   Sanctum       │    │   Supabase      │
+│   Quasar        │    │   Sanctum       │    │   PostgreSQL    │
 │   Framework     │    │   API           │    │   PostgreSQL    │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
 
 ### **Hybrid Database Approach**
 - **Development**: SQLite for fast local development
-- **Production**: Supabase PostgreSQL for scalability
+- **Production**: PostgreSQL for scalability
 - **Migration Compatibility**: Same Laravel migrations work across both environments
-- **Network Resilience**: Automatic fallback to SQLite when Supabase is unreachable
+- **Network Resilience**: Automatic fallback to SQLite when database is unreachable
 
 ## 🚀 **Quick Start**
 
@@ -86,7 +86,7 @@ npm run dev
 ### Technology Stack
 - **Frontend**: Vue 3, Quasar Framework, TypeScript, Tailwind CSS
 - **Backend**: Laravel 11, PHP 8.2, Laravel Sanctum
-- **Database**: Supabase PostgreSQL (production), SQLite (development)
+- **Database**: PostgreSQL (production), SQLite (development)
 - **Testing**: Vitest, Playwright, PHPUnit
 - **Deployment**: Vercel (frontend), Laravel Forge (backend)
 
@@ -194,7 +194,7 @@ APP_DEBUG=true
 APP_URL=http://backend.test
 
 DB_CONNECTION=pgsql
-DB_HOST=db.qqaddmalbzzxxtryekaq.supabase.co
+DB_HOST=postgres
 DB_PORT=5432
 DB_DATABASE=postgres
 DB_USERNAME=postgres
@@ -206,15 +206,15 @@ GOOGLE_REDIRECT_URI=http://backend.test/api/auth/google/callback
 ```
 
 ### Database Configuration
-- **Development**: SQLite (local) or Supabase PostgreSQL
-- **Staging**: Supabase PostgreSQL (staging)
-- **Production**: Supabase PostgreSQL (production)
+- **Development**: SQLite (local) or PostgreSQL via Docker Compose
+- **Staging**: PostgreSQL (staging)
+- **Production**: PostgreSQL (production)
 
 ### **Hybrid Development Workflow**
 - **Local Development**: SQLite for fast iteration
-- **Production Ready**: Supabase PostgreSQL for scalability
+- **Production Ready**: PostgreSQL for scalability
 - **Migration Compatibility**: Same Laravel migrations work across environments
-- **Network Resilience**: Automatic fallback when Supabase is unreachable
+- **Network Resilience**: Automatic fallback when database is unreachable
 - **Data Sync**: Seamless data migration between environments
 
 ## 📚 Documentation
@@ -229,7 +229,7 @@ GOOGLE_REDIRECT_URI=http://backend.test/api/auth/google/callback
 - **Integration System**: `.specify/specs/008-integration-system/`
 
 ### API Documentation
-- **API Reference**: `docs/API.md`
+- **API Reference**: `docs/api/api.md`
 - **Backend Documentation**: `backend/doc/`
 - **Environment Configuration**: `backend/doc/environments.md`
 - **Monitoring Setup**: `backend/doc/monitoring.md`
@@ -258,7 +258,7 @@ GOOGLE_REDIRECT_URI=http://backend.test/api/auth/google/callback
 ### Security Features
 - **Authentication**: Laravel Sanctum with JWT tokens
 - **Authorization**: Role-based access control
-- **Data Protection**: Row Level Security (RLS) on Supabase
+- **Data Protection**: Database-level security and encryption
 - **CSRF Protection**: Laravel CSRF middleware
 - **Input Validation**: Comprehensive input validation
 - **Rate Limiting**: API rate limiting
@@ -351,7 +351,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Laravel Community**: For the excellent Laravel framework
 - **Vue.js Community**: For the amazing Vue.js framework
 - **Quasar Framework**: For the comprehensive UI components
-- **Supabase**: For the powerful backend-as-a-service platform
+- **PostgreSQL Community**: For the robust database system
 
 ---
 

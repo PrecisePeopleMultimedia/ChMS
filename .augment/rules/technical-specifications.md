@@ -35,7 +35,7 @@ ChMS (Church Management System) is a comprehensive solution designed for African
   - API authentication with token management
   - Stateless authentication for mobile apps
   - Built-in CSRF protection
-- **PostgreSQL via Supabase**
+- **PostgreSQL via Docker Compose**
   - Relational database for structured data
   - Real-time subscriptions and live updates
   - Row Level Security for multi-tenant architecture

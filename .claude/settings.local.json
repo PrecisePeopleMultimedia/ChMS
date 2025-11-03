@@ -27,6 +27,6 @@
   "enabledMcpjsonServers": [
     "chms-filesystem",
     "chms-git",
-    "chms-supabase"
+    "chms-postgres"
   ]
 }

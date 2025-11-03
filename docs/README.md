@@ -1,237 +1,139 @@
-# Chrome DevTools MCP Documentation
+# ChMS Documentation
 
-Welcome to the comprehensive documentation for the Chrome DevTools MCP (Model Context Protocol) server. This documentation provides everything you need to get started with browser automation using AI coding agents.
+Comprehensive documentation for the ChMS (Church Management System) project, organized by topic area.
 
 ## 📚 Documentation Structure
 
-### 🚀 [Quick Start Guide](./chrome-devtools-mcp-quickstart.md)
-Get up and running in 5 minutes with basic setup and common usage patterns.
+### 🏗️ [Architecture](./architecture/)
+System architecture, design patterns, and technical overview.
 
-### 📖 [Complete Guide](./chrome-devtools-mcp-guide.md)
-Comprehensive documentation covering all features, configuration options, and advanced usage.
+- **[ChMS Architecture Tutorial](./architecture/chms-architecture-tutorial.md)** - Complete system architecture guide
 
-### 💡 [Practical Examples](./chrome-devtools-mcp-examples.md)
-Real-world use cases and code examples for common scenarios like e-commerce testing, form automation, and performance monitoring.
+### 🚀 [Deployment](./deployment/)
+Deployment guides, production configuration, and infrastructure setup.
 
-## 🎯 What is Chrome DevTools MCP?
+- **[Deployment Checklist](./deployment/checklist.md)** - Pre-production deployment checklist
+- **[Production Server Comparison](./deployment/production-server-comparison.md)** - Apache vs Nginx analysis
+- **[Apache Security Hardening](./deployment/apache-security-hardening.md)** - Apache security best practices
+- **[Docker Best Practices](./deployment/docker-best-practices.md)** - Docker production best practices
+- **[Apache & Docker Checklist](./deployment/apache-docker-implementation-checklist.md)** - Quick security checklist
+- **[Pre-Production Checklist](./deployment/pre-production-checklist.md)** - Tasks before production (documentation only)
+- **[Completion Summary](./deployment/completion-summary.md)** - Implementation completion summary
+- **[Implementation Summary](./deployment/implementation-summary.md)** - Technical implementation details
 
-The Chrome DevTools MCP server is a powerful tool that exposes browser functionality to AI coding agents through Chrome's DevTools API. It enables:
+### 💻 [Development](./development/)
+Development workflow, git practices, and developer guides.
 
-- **Browser Automation**: Navigate, click, fill forms, and interact with web pages
-- **Performance Analysis**: Record and analyze performance traces
-- **Network Monitoring**: Inspect network requests and responses  
-- **Debugging Tools**: Execute JavaScript, take screenshots, and capture snapshots
-- **Emulation**: Test different devices, network conditions, and CPU throttling
+- **[Git Workflow](./development/git-workflow.md)** - Git workflow and branching strategy
+- **[Vue Security & Performance](./development/vue-security-performance.md)** - Vue.js security and performance best practices
+- **[Laravel Security & Performance](./development/laravel-security-performance.md)** - Laravel security and performance best practices
 
-## 🛠️ Key Features
+### 🔧 [Operations](./operations/)
+Monitoring, troubleshooting, security, and operational guides.
 
-| Feature | Description | Use Case |
-|---------|-------------|----------|
-| **Input Automation** | Click, drag, fill forms, handle dialogs | UI testing, form automation |
-| **Navigation** | Navigate pages, manage tabs, browser history | Multi-page workflows |
-| **Performance** | Record traces, analyze performance metrics | Performance testing |
-| **Network** | Monitor requests, analyze network traffic | API testing, debugging |
-| **Debugging** | Execute JavaScript, take screenshots | Web scraping, testing |
-| **Emulation** | Simulate devices, network conditions | Responsive testing |
+- **[Monitoring Setup](./operations/monitoring-setup.md)** - System monitoring and observability
+- **[Troubleshooting](./operations/troubleshooting.md)** - Common issues and solutions
+- **[Security & Credential Rotation](./operations/security-credential-rotation.md)** - Security practices
+- **[Branch Protection](./operations/branch-protection.md)** - GitHub branch protection rules
 
-## 🚀 Quick Start
+### 🌐 [API](./api/)
+API documentation, authentication, and integration guides.
 
-### 1. Install
-Add to your MCP client configuration:
+- **[API Documentation](./api/api.md)** - Complete API documentation and endpoints
+- **[Authentication System](./api/authentication-system.md)** - Authentication and authorization guide
 
-```json
-{
-  "mcpServers": {
-    "chrome-devtools": {
-      "command": "npx",
-      "args": ["-y", "chrome-devtools-mcp@latest"]
-    }
-  }
-}
-```
+### 🗄️ [PostgreSQL](./postgresql/)
+Database configuration, optimization, and best practices.
 
-### 2. Test
-Run this prompt in your MCP client:
-```
-Check the performance of https://developers.chrome.com
-```
+- **[Best Practices Analysis](./postgresql/best-practices-analysis.md)** - PostgreSQL configuration analysis
+- **[Implementation Summary](./postgresql/implementation-summary.md)** - PostgreSQL optimization implementation
+- **[Additional Best Practices](./postgresql/additional-best-practices.md)** - Additional recommendations review
 
-### 3. Basic Usage
-```javascript
-// Navigate to a website
-navigatePage({ url: "https://example.com" })
+### 📈 [Roadmap](./roadmap/)
+Project roadmap, planning, and scalability guides.
 
-// Take a screenshot
-takeScreenshot({ filename: "homepage.png" })
+- **[Roadmap](./roadmap/roadmap.md)** - Project development roadmap
+- **[Priority-Based Roadmap](./roadmap/priority-based-roadmap.md)** - Prioritized feature roadmap
+- **[Scalability Roadmap](./roadmap/scalability-roadmap.md)** - Scaling guide (100k → 1M users)
 
-// Fill a form
-fillForm({
-  fields: [
-    {
-      name: "Email",
-      type: "textbox", 
-      ref: "input[type='email']",
-      value: "user@example.com"
-    }
-  ]
-})
-```
+### 📚 [Tutorials](./tutorials/)
+Step-by-step guides for complex workflows and implementation processes.
 
-## 📋 Requirements
+- **[Tutorial Index](./tutorials/README.md)** - Complete list of available tutorials
+- **Development Environment Setup** - Complete setup guide for new developers
+- **PostgreSQL Optimization Tutorial** - Step-by-step database optimization
+- **Production Deployment Tutorial** - Complete production deployment process
 
-- **Node.js**: v20.19 or newer (latest maintenance LTS)
-- **Chrome**: Current stable version or newer
-- **npm**: For package management
+### 🤖 [AI](./ai/)
+AI-related documentation and prompts.
 
-## 🔧 Configuration Options
-
-### Basic Configuration
-```json
-{
-  "mcpServers": {
-    "chrome-devtools": {
-      "command": "npx",
-      "args": ["chrome-devtools-mcp@latest"]
-    }
-  }
-}
-```
-
-### Advanced Configuration
-```json
-{
-  "mcpServers": {
-    "chrome-devtools": {
-      "command": "npx",
-      "args": [
-        "chrome-devtools-mcp@latest",
-        "--headless=true",
-        "--isolated=true",
-        "--viewport=1920x1080"
-      ]
-    }
-  }
-}
-```
-
-## 🎯 Common Use Cases
-
-### E-commerce Testing
-- Product search and filtering
-- Shopping cart functionality
-- Checkout process validation
-- Payment form testing
-
-### Form Automation
-- Contact form submission
-- User registration flows
-- Data validation testing
-- Multi-step form processes
-
-### Performance Monitoring
-- Page load time analysis
-- Core Web Vitals measurement
-- Network request monitoring
-- Resource optimization
-
-### Mobile Testing
-- Responsive design validation
-- Touch interaction testing
-- Mobile-specific features
-- Cross-device compatibility
-
-## 🛠️ Available Tools
-
-### Input Automation (7 tools)
-- `click` - Click elements or coordinates
-- `drag` - Drag and drop between elements
-- `fill` - Fill form fields
-- `fill_form` - Fill multiple form fields
-- `handle_dialog` - Handle browser dialogs
-- `hover` - Hover over elements
-- `upload_file` - Upload files to forms
-
-### Navigation (7 tools)
-- `navigate_page` - Navigate to URLs
-- `new_page` - Open new tabs
-- `close_page` - Close current page
-- `select_page` - Switch between tabs
-- `list_pages` - List all open pages
-- `navigate_page_history` - Browser history navigation
-- `wait_for` - Wait for conditions or time
-
-### Performance (3 tools)
-- `performance_start_trace` - Start performance recording
-- `performance_stop_trace` - Stop and get performance data
-- `performance_analyze_insight` - Analyze performance metrics
-
-### Network (2 tools)
-- `list_network_requests` - Get all network requests
-- `get_network_request` - Get specific request details
-
-### Debugging (4 tools)
-- `evaluate_script` - Execute JavaScript
-- `take_screenshot` - Capture page screenshots
-- `take_snapshot` - Accessibility snapshot
-- `list_console_messages` - Get console messages
-
-### Emulation (3 tools)
-- `resize_page` - Resize browser window
-- `emulate_network` - Simulate network conditions
-- `emulate_cpu` - Throttle CPU performance
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-#### Chrome Won't Start
-- Update Chrome to latest version
-- Try `--isolated=true` for clean profile
-- Use `--channel=canary` for different Chrome version
-
-#### Elements Not Found
-- Use `takeSnapshot()` to see current page state
-- Wait for elements: `waitFor({ text: "Loading" })`
-- Use more specific selectors
-
-#### Performance Issues
-- Use `--headless=true` for faster execution
-- Close unused pages
-- Use `--isolated=true` for clean state
-
-### Debug Mode
-Enable verbose logging:
-```bash
-DEBUG=* npx chrome-devtools-mcp@latest --logFile=debug.log
-```
-
-## 🔗 Useful Links
-
-- [GitHub Repository](https://github.com/ChromeDevTools/chrome-devtools-mcp)
-- [NPM Package](https://npmjs.org/package/chrome-devtools-mcp)
-- [Chrome DevTools Documentation](https://developer.chrome.com/docs/devtools/)
-- [MCP Protocol](https://modelcontextprotocol.io/)
-
-## 📖 Documentation Navigation
-
-| Document | Purpose | Audience |
-|----------|---------|----------|
-| [Quick Start](./chrome-devtools-mcp-quickstart.md) | Get started quickly | Beginners |
-| [Complete Guide](./chrome-devtools-mcp-guide.md) | Full feature reference | All users |
-| [Examples](./chrome-devtools-mcp-examples.md) | Real-world use cases | Developers |
-
-## 🤝 Contributing
-
-Found an issue or have a suggestion? 
-
-1. Check the [GitHub repository](https://github.com/ChromeDevTools/chrome-devtools-mcp) for existing issues
-2. Create a new issue with detailed description
-3. Follow the contributing guidelines
-
-## 📄 License
-
-This project is licensed under the Apache-2.0 license. See the [LICENSE](https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/LICENSE) file for details.
+- **[Claude Prompt v2](./ai/claude-prompt-v2.md)** - AI assistant prompt configuration
 
 ---
 
-**Need help?** Check the troubleshooting section in the [Complete Guide](./chrome-devtools-mcp-guide.md) or visit the [GitHub repository](https://github.com/ChromeDevTools/chrome-devtools-mcp) for support.
+## 🎯 Quick Navigation
+
+### For Developers
+1. Start with [Development Git Workflow](./development/git-workflow.md) for version control
+2. Review [API Documentation](./api/api.md) for backend integration
+3. Check [Architecture Tutorial](./architecture/chms-architecture-tutorial.md) for system design
+4. Follow [Tutorials](./tutorials/) for step-by-step implementation guides
+5. Use [Troubleshooting](./operations/troubleshooting.md) when issues arise
+
+### For DevOps/System Administrators
+1. Review [Deployment Checklist](./deployment/checklist.md) before production
+2. Check [PostgreSQL Best Practices](./postgresql/best-practices-analysis.md) for database optimization
+3. Set up [Monitoring](./operations/monitoring-setup.md) for system observability
+4. Review [Security Guide](./operations/security-credential-rotation.md) for security practices
+
+### For Project Managers
+1. Review [Project Roadmap](./roadmap/roadmap.md) for development phases
+2. Check [Priority-Based Roadmap](./roadmap/priority-based-roadmap.md) for feature prioritization
+3. Review [Scalability Roadmap](./roadmap/scalability-roadmap.md) for scaling plans
+
+---
+
+## 📝 Document Naming Conventions
+
+All documentation files use lowercase with hyphens for readability:
+- ✅ `deployment-checklist.md`
+- ✅ `api-documentation.md`
+- ❌ `DEPLOYMENT_CHECKLIST.md` (avoid all caps)
+- ❌ `DeploymentChecklist.md` (avoid camelCase)
+
+---
+
+## 🔗 Related Resources
+
+- **Project Root**: [../README.md](../README.md) - Main project overview
+- **Frontend Documentation**: [../frontend/README.md](../frontend/README.md)
+- **Backend Documentation**: [../backend/README.md](../backend/README.md)
+- **Specifications**: [../.specify/specs/](../.specify/specs/) - Feature specifications
+
+---
+
+## 📝 Contributing to Documentation
+
+When adding new documentation:
+
+1. **Choose the right folder**: Place files in the appropriate category folder
+2. **Follow naming conventions**: Use lowercase with hyphens
+3. **Update this README**: Add new documents to the relevant section
+4. **Use clear headings**: Provide practical examples and structure
+5. **Cross-reference**: Link to related documents
+6. **Include troubleshooting**: Add troubleshooting sections where applicable
+
+---
+
+## 🆘 Getting Help
+
+If you can't find what you're looking for:
+
+1. Check [Troubleshooting Guide](./operations/troubleshooting.md) for common issues
+2. Search the project's GitHub issues
+3. Review the [Architecture Tutorial](./architecture/chms-architecture-tutorial.md) for system overview
+4. Contact the development team
+
+---
+
+**Note**: This documentation is actively maintained. Please keep it updated as the project evolves.

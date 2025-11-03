@@ -119,7 +119,7 @@ setup_frontend() {
         
         # Install additional dependencies
         print_status "Installing additional packages..."
-        npm install @supabase/supabase-js @vueuse/core
+        npm install @vueuse/core
         npm install -D tailwindcss @tailwindcss/forms autoprefixer postcss
         
         # Copy environment file
@@ -143,13 +143,13 @@ setup_database() {
     if command -v docker &> /dev/null && command -v docker-compose &> /dev/null; then
         print_status "Docker detected. You can use 'docker-compose up -d db' to start PostgreSQL."
     else
-        print_warning "Docker not found. Please set up PostgreSQL manually or use Supabase."
+        print_warning "Docker not found. Please set up PostgreSQL manually."
     fi
     
     print_status "Database setup instructions:"
-    echo "1. Create a Supabase project at https://supabase.com"
-    echo "2. Get your project URL and anon key"
-    echo "3. Update .env files with your Supabase credentials"
+    echo "1. Install PostgreSQL locally"
+    echo "2. Create a database named 'chms_db'"
+    echo "3. Update .env files with your PostgreSQL credentials"
     echo "4. Run 'php artisan migrate' in the backend directory"
 }
 

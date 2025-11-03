@@ -8,9 +8,19 @@ use App\Http\Controllers\Api\OrganizationSettingsController;
 use App\Http\Controllers\Api\ServiceScheduleController;
 use App\Http\Controllers\Api\MemberController;
 use App\Http\Controllers\Api\MemberAttributeController;
+use App\Http\Controllers\Api\MemberAttributeValueController;
 use App\Http\Controllers\Api\BadgeTypeController;
 use App\Http\Controllers\Api\MemberBadgeController;
 use App\Http\Controllers\Api\MonitoringController;
+
+// Health check endpoint for Docker
+Route::get('/health', function () {
+    return response()->json([
+        'status' => 'ok',
+        'timestamp' => now(),
+        'service' => 'ChMS Laravel API'
+    ]);
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -102,6 +112,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/member-attributes-categories', [MemberAttributeController::class, 'categories']);
     Route::get('/member-attributes-field-types', [MemberAttributeController::class, 'fieldTypes']);
     Route::post('/member-attributes/update-order', [MemberAttributeController::class, 'updateOrder']);
+
+    // Member attribute values routes
+    Route::get('/members/{member}/attributes', [MemberAttributeValueController::class, 'index']);
+    Route::put('/members/{member}/attributes', [MemberAttributeValueController::class, 'update']);
+    Route::post('/member-attributes/bulk-update', [MemberAttributeValueController::class, 'bulkUpdate']);
 
     // Badge type routes
     Route::apiResource('badge-types', BadgeTypeController::class);

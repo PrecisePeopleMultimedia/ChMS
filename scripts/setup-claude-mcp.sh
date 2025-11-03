@@ -32,12 +32,12 @@ fi
 # Add MCP servers
 echo "🔧 Adding MCP servers..."
 
-# Add Supabase MCP server
-echo "📊 Adding Supabase MCP server..."
-if claude mcp add supabase npx @supabase/mcp-server@latest; then
-    echo "✅ Supabase MCP server added"
+# Add PostgreSQL MCP server
+echo "📊 Adding PostgreSQL MCP server..."
+if claude mcp add postgres npx @modelcontextprotocol/server-postgres@latest; then
+    echo "✅ PostgreSQL MCP server added"
 else
-    echo "❌ Failed to add Supabase MCP server"
+    echo "❌ Failed to add PostgreSQL MCP server"
 fi
 
 # Add Chrome DevTools MCP server
@@ -59,12 +59,12 @@ fi
 # Test MCP servers
 echo "🧪 Testing MCP servers..."
 
-# Test Supabase MCP
-echo "📊 Testing Supabase MCP server..."
-if claude mcp test supabase; then
-    echo "✅ Supabase MCP server is working"
+# Test PostgreSQL MCP
+echo "📊 Testing PostgreSQL MCP server..."
+if claude mcp test postgres; then
+    echo "✅ PostgreSQL MCP server is working"
 else
-    echo "❌ Supabase MCP server test failed"
+    echo "❌ PostgreSQL MCP server test failed"
 fi
 
 # Test Chrome DevTools MCP

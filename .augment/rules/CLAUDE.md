@@ -1,7 +1,7 @@
 # ChMS - Claude AI Integration Guide
 
 ## Project Overview
-ChMS (Church Management System) is an Africa-first, offline-capable church management solution built with Vue 3, Laravel, and Supabase. This project follows spec-driven development principles with a focus on minimalist, reliable functionality.
+ChMS (Church Management System) is an Africa-first, offline-capable church management solution built with Vue 3, Laravel, and PostgreSQL. This project follows spec-driven development principles with a focus on minimalist, reliable functionality.
 
 ## Available Slash Commands
 
@@ -58,10 +58,10 @@ Execute all tasks to build the feature according to the plan.
 - **Playwright** - E2E and regression testing
 
 ### Database & Services
-- **Supabase** - Backend-as-a-Service with real-time features
-- **PostgreSQL** - Primary database via Supabase
-- **Real-time subscriptions** - Live data updates
-- **Row Level Security** - Built-in authorization
+- **PostgreSQL** - Primary database via Docker Compose
+- **Database migrations** - Laravel migration system
+- **Database seeding** - Test data and initial setup
+- **Connection pooling** - Efficient database connections
 
 ### PWA & Offline
 - **Service Workers** - Offline functionality
@@ -158,7 +158,7 @@ Execute all tasks to build the feature according to the plan.
 ### Authentication & Authorization
 - Laravel Sanctum for API authentication
 - Role-based access control (RBAC)
-- Supabase Row Level Security
+- Database-level security and encryption
 - Session management and token security
 
 ### Data Protection

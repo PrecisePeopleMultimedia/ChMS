@@ -108,7 +108,7 @@ test.describe('Quasar Prime Theme', () => {
       await expect(sidebar).toHaveClass(/collapsed|mini/)
       
       // Arrow button should disappear
-      await expect(collapseButton).not.toBeVisible()
+      await expect(collapseButton).toBeHidden()
     })
 
     test('should expand sidebar when icon is clicked', async ({ page }) => {
@@ -132,7 +132,7 @@ test.describe('Quasar Prime Theme', () => {
       
       // Sidebar should be hidden
       const sidebar = page.locator('.quasar-prime-sidebar, [data-testid="sidebar"]')
-      await expect(sidebar).not.toBeVisible()
+      await expect(sidebar).toBeHidden()
       
       // Click hamburger again to show
       await hamburgerMenu.click()

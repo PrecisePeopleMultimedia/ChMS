@@ -40,6 +40,7 @@ class MemberAttribute extends Model
         'date' => 'Date',
         'boolean' => 'Boolean',
         'select' => 'Select',
+        'multi-select' => 'Multi-Select',
         'email' => 'Email',
         'phone' => 'Phone',
     ];
@@ -141,6 +142,22 @@ class MemberAttribute extends Model
                     $rules[] = 'in:' . implode(',', $this->field_options['options']);
                 }
                 break;
+            case 'multi-select':
+                $rules[] = 'array';
+                if (isset($this->field_options['options']) && is_array($this->field_options['options'])) {
+                    $rules[] = 'array';
+                    $rules[] = function ($attribute, $value, $fail) {
+                        if (!is_array($value)) return;
+                        $validOptions = $this->field_options['options'] ?? [];
+                        foreach ($value as $selectedValue) {
+                            if (!in_array($selectedValue, $validOptions)) {
+                                $fail("The selected {$attribute} contains invalid options.");
+                                break;
+                            }
+                        }
+                    };
+                }
+                break;
             case 'email':
                 $rules[] = 'email';
                 $rules[] = 'max:255';
@@ -174,6 +191,16 @@ class MemberAttribute extends Model
                 } catch (\Exception $e) {
                     return null;
                 }
+            case 'multi-select':
+                if (is_array($value)) {
+                    return json_encode($value);
+                }
+                if (is_string($value)) {
+                    // Handle JSON string input
+                    $decoded = json_decode($value, true);
+                    return is_array($decoded) ? json_encode($decoded) : json_encode([$value]);
+                }
+                return json_encode([]);
             default:
                 return (string) $value;
         }
@@ -198,6 +225,17 @@ class MemberAttribute extends Model
                     return $value;
                 }
             case 'select':
+                return (string) $value;
+            case 'multi-select':
+                if (is_string($value)) {
+                    $decoded = json_decode($value, true);
+                    if (is_array($decoded)) {
+                        return implode(', ', $decoded);
+                    }
+                }
+                if (is_array($value)) {
+                    return implode(', ', $value);
+                }
                 return (string) $value;
             default:
                 return (string) $value;

@@ -17,13 +17,14 @@ return new class extends Migration
             $table->string('key', 100);
             $table->string('name', 255);
             $table->enum('field_type', [
-                'text', 
-                'textarea', 
-                'number', 
-                'date', 
-                'boolean', 
-                'select', 
-                'email', 
+                'text',
+                'textarea',
+                'number',
+                'date',
+                'boolean',
+                'select',
+                'multi-select',
+                'email',
                 'phone'
             ]);
             $table->string('category', 100)->default('Personal');

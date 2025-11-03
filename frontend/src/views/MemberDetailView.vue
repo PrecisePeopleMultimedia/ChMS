@@ -461,11 +461,18 @@ const deleteMember = () => {
 }
 
 const addNote = () => {
-  // TODO: Implement add note functionality
-  $q.notify({
-    type: 'info',
-    message: 'Add note functionality coming soon'
-  })
+  // Scroll to the notes section and trigger add note
+  const notesSection = document.querySelector('.member-notes')
+  if (notesSection) {
+    notesSection.scrollIntoView({ behavior: 'smooth' })
+    // Trigger the add note button in the MemberNotes component
+    setTimeout(() => {
+      const addNoteBtn = notesSection.querySelector('button[aria-label*="Add Note"], button:has-text("Add Note")')
+      if (addNoteBtn) {
+        (addNoteBtn as HTMLElement).click()
+      }
+    }, 500)
+  }
 }
 
 const assignBadge = () => {

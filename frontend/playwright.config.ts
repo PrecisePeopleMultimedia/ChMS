@@ -28,7 +28,12 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: [
+    ['html', { outputFolder: 'playwright-report' }],
+    ['json', { outputFile: 'test-results/results.json' }],
+    ['junit', { outputFile: 'test-results/results.xml' }],
+    ...(process.env.CI ? [['github']] : [])
+  ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
@@ -49,64 +54,14 @@ export default defineConfig({
     video: 'retain-on-failure',
   },
 
-  /* Configure projects for major browsers */
-  projects: [
-    {
-      name: 'chromium',
-      use: {
-        ...devices['Desktop Chrome'],
-      },
-    },
-    {
-      name: 'firefox',
-      use: {
-        ...devices['Desktop Firefox'],
-      },
-    },
-    {
-      name: 'webkit',
-      use: {
-        ...devices['Desktop Safari'],
-      },
-    },
 
-    /* Test against mobile viewports - Africa-first approach */
-    {
-      name: 'Mobile Chrome',
-      use: {
-        ...devices['Pixel 5'],
-      },
-    },
-    {
-      name: 'Mobile Safari',
-      use: {
-        ...devices['iPhone 12'],
-      },
-    },
-    {
-      name: 'Mobile Chrome Low-End',
-      use: {
-        ...devices['Galaxy S5'], // Lower-end Android device
-      },
-    },
-
-    /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: {
-    //     channel: 'msedge',
-    //   },
-    // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: {
-    //     channel: 'chrome',
-    //   },
-    // },
-  ],
 
   /* Folder for test artifacts such as screenshots, videos, traces, etc. */
-  // outputDir: 'test-results/',
+  outputDir: 'test-results/',
+
+  /* Global setup and teardown */
+  globalSetup: './e2e/regression/utils/global-setup.ts',
+  globalTeardown: './e2e/regression/utils/global-teardown.ts',
 
   /* Run your local dev server before starting the tests */
   webServer: {
@@ -119,4 +74,82 @@ export default defineConfig({
     port: process.env.CI ? 4173 : 1811,
     reuseExistingServer: !process.env.CI,
   },
+
+  /* Test projects for different test suites */
+  projects: [
+    // Setup project for seeding test data
+    {
+      name: 'setup',
+      testMatch: /.*\.setup\.ts/,
+    },
+
+    // Regression test suite
+    {
+      name: 'regression',
+      testDir: './e2e/regression',
+      dependencies: ['setup'],
+      use: {
+        ...devices['Desktop Chrome'],
+        // Store auth state for authenticated tests
+        storageState: 'test-results/.auth/user.json',
+      },
+    },
+
+    // Main E2E tests
+    {
+      name: 'chromium',
+      testIgnore: /.*regression.*|.*\.setup\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+      },
+    },
+    {
+      name: 'firefox',
+      testIgnore: /.*regression.*|.*\.setup\.ts/,
+      use: {
+        ...devices['Desktop Firefox'],
+      },
+    },
+    {
+      name: 'webkit',
+      testIgnore: /.*regression.*|.*\.setup\.ts/,
+      use: {
+        ...devices['Desktop Safari'],
+      },
+    },
+
+    /* Test against mobile viewports - Africa-first approach */
+    {
+      name: 'Mobile Chrome',
+      testIgnore: /.*regression.*|.*\.setup\.ts/,
+      use: {
+        ...devices['Pixel 5'],
+      },
+    },
+    {
+      name: 'Mobile Safari',
+      testIgnore: /.*regression.*|.*\.setup\.ts/,
+      use: {
+        ...devices['iPhone 12'],
+      },
+    },
+    {
+      name: 'Mobile Chrome Low-End',
+      testIgnore: /.*regression.*|.*\.setup\.ts/,
+      use: {
+        ...devices['Galaxy S5'], // Lower-end Android device
+      },
+    },
+
+    // Regression tests on mobile
+    {
+      name: 'regression-mobile',
+      testDir: './e2e/regression',
+      dependencies: ['setup'],
+      use: {
+        ...devices['Pixel 5'],
+        storageState: 'test-results/.auth/user.json',
+      },
+    },
+  ],
 })

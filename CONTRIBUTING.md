@@ -414,7 +414,7 @@ Contributors will be recognized in:
 
 ### **Documentation**
 
-- [Git Workflow](docs/git-workflow.md)
+- [Git Workflow](docs/development/git-workflow.md)
 - [Testing Guide](frontend/README-TESTING.md)
 - [API Documentation](backend/docs/api.md)
 - [Deployment Guide](docs/deployment.md)

@@ -522,6 +522,19 @@ vi.mock('quasar', () => ({
     `,
     props: ['anchor', 'offset', 'delay', 'max-width', 'max-height', 'class', 'style'],
   },
+  QChip: {
+    name: 'QChip',
+    template: `
+      <div class="q-chip">
+        <q-icon v-if="icon" :name="icon" />
+        <span v-if="label">{{ label }}</span>
+        <slot />
+        <q-icon v-if="removable" name="cancel" @click="$emit('remove')" />
+      </div>
+    `,
+    props: ['label', 'icon', 'color', 'text-color', 'size', 'square', 'outline', 'clickable', 'removable', 'selected'],
+    emits: ['remove', 'click'],
+  },
   // useQuasar composable
   useQuasar: () => ({
     notify: vi.fn(),
@@ -616,15 +629,18 @@ export const createTestPinia = () => {
   return pinia
 }
 
+// Initialize global Pinia instance for tests
+const globalPinia = createTestPinia()
+
 // Global test helpers
 export const createTestApp = (component: any, options: any = {}) => {
   const { router, pinia, ...otherOptions } = options
-  
+
   return {
     global: {
       plugins: [
         router || createTestRouter(),
-        pinia || createTestPinia(),
+        pinia || globalPinia,
       ],
       stubs: {
         'router-link': true,

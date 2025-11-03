@@ -88,7 +88,7 @@ test.describe('Theme Switching (Light/Dark Mode)', () => {
       const themeToggle = page.locator('[data-testid="theme-toggle"]').first()
 
       // Get initial icon
-      const initialIcon = await themeToggle.locator('.q-icon').textContent()
+      const initialIcon = themeToggle.locator('.q-icon')
 
       // Toggle theme
       await themeToggle.click()
@@ -96,7 +96,7 @@ test.describe('Theme Switching (Light/Dark Mode)', () => {
 
       // Icon should change
       const afterToggleIcon = await themeToggle.locator('.q-icon').textContent()
-      expect(initialIcon).not.toBe(afterToggleIcon)
+      await expect(initialIcon).not.toHaveText(afterToggleIcon)
     })
 
     test('should apply theme colors correctly', async ({ page }) => {
@@ -136,8 +136,8 @@ test.describe('Theme Switching (Light/Dark Mode)', () => {
 
       // Should change theme
       const htmlElement = page.locator('html')
-      const htmlClass = await htmlElement.getAttribute('class')
-      expect(htmlClass).toBeTruthy()
+      const htmlClass = htmlElement
+      await expect(htmlClass).toHaveAttribute('class', )
     })
 
     test('should maintain theme when navigating between auth pages', async ({ page }) => {
@@ -148,7 +148,7 @@ test.describe('Theme Switching (Light/Dark Mode)', () => {
       await themeToggle.click()
       await page.waitForTimeout(500)
 
-      const loginTheme = await page.locator('html').getAttribute('class')
+      const loginTheme = page.locator('html')
 
       // Navigate to register
       await page.click('a:has-text("Sign up")')
@@ -157,7 +157,7 @@ test.describe('Theme Switching (Light/Dark Mode)', () => {
 
       // Theme should persist
       const registerTheme = await page.locator('html').getAttribute('class')
-      expect(loginTheme).toBe(registerTheme)
+      await expect(loginTheme).toHaveAttribute('class', registerTheme)
 
       // Navigate to forgot password
       await page.goto('/forgot-password')
@@ -186,7 +186,7 @@ test.describe('Theme Switching (Light/Dark Mode)', () => {
 
     test('should toggle theme on dashboard', async ({ page }) => {
       const htmlElement = page.locator('html')
-      const initialClass = await htmlElement.getAttribute('class')
+      const initialClass = htmlElement
 
       // Toggle theme
       const themeToggle = page.locator('[data-testid="theme-toggle"]').first()
@@ -194,7 +194,7 @@ test.describe('Theme Switching (Light/Dark Mode)', () => {
       await page.waitForTimeout(500)
 
       const afterToggleClass = await htmlElement.getAttribute('class')
-      expect(initialClass).not.toBe(afterToggleClass)
+      await expect(initialClass).not.toHaveAttribute('class', afterToggleClass)
     })
 
     test('should maintain theme after logout and login', async ({ page }) => {
@@ -203,7 +203,7 @@ test.describe('Theme Switching (Light/Dark Mode)', () => {
       await themeToggle.click()
       await page.waitForTimeout(500)
 
-      const dashboardTheme = await page.locator('html').getAttribute('class')
+      const dashboardTheme = page.locator('html')
 
       // Logout
       await page.click('button:has-text("Logout")')
@@ -212,7 +212,7 @@ test.describe('Theme Switching (Light/Dark Mode)', () => {
 
       // Theme should persist to login page
       const loginTheme = await page.locator('html').getAttribute('class')
-      expect(dashboardTheme).toBe(loginTheme)
+      await expect(dashboardTheme).toHaveAttribute('class', loginTheme)
 
       // Login again
       await page.fill('input[type="email"]', testUser.email)
@@ -255,13 +255,13 @@ test.describe('Theme Switching (Light/Dark Mode)', () => {
       if (foundToggle) {
         // Press Enter or Space to toggle
         const htmlElement = page.locator('html')
-        const beforeToggle = await htmlElement.getAttribute('class')
+        const beforeToggle = htmlElement
 
         await page.keyboard.press('Enter')
         await page.waitForTimeout(500)
 
         const afterToggle = await htmlElement.getAttribute('class')
-        expect(beforeToggle).not.toBe(afterToggle)
+        await expect(beforeToggle).not.toHaveAttribute('class', afterToggle)
       }
     })
 
@@ -357,8 +357,8 @@ test.describe('Theme Switching (Light/Dark Mode)', () => {
 
       // Theme should change
       const htmlElement = page.locator('html')
-      const htmlClass = await htmlElement.getAttribute('class')
-      expect(htmlClass).toBeTruthy()
+      const htmlClass = htmlElement
+      await expect(htmlClass).toHaveAttribute('class', )
     })
 
     test('should respect system preference on mobile', async ({ page, context }) => {
@@ -418,11 +418,11 @@ test.describe('Theme Switching (Light/Dark Mode)', () => {
       await page.waitForTimeout(500)
 
       // Form values should persist
-      const emailValue = await page.locator('input[type="email"]').inputValue()
-      const passwordValue = await page.locator('input[type="password"]').inputValue()
+      const emailValue = page.locator('input[type="email"]')
+      const passwordValue = page.locator('input[type="password"]')
 
-      expect(emailValue).toBe(testUser.email)
-      expect(passwordValue).toBe(testUser.password)
+      await expect(emailValue).toHaveValue(testUser.email)
+      await expect(passwordValue).toHaveValue(testUser.password)
 
       // Should still be able to submit
       await page.click('button:has-text("Sign In")')
@@ -463,7 +463,7 @@ test.describe('Theme Switching (Light/Dark Mode)', () => {
       await themeToggle.click()
       await page.waitForTimeout(500)
 
-      const themeBeforeError = await page.locator('html').getAttribute('class')
+      const themeBeforeError = page.locator('html')
 
       // Trigger validation error
       await page.fill('input[type="email"]', 'invalid@example.com')
@@ -475,7 +475,7 @@ test.describe('Theme Switching (Light/Dark Mode)', () => {
 
       // Theme should not change
       const themeAfterError = await page.locator('html').getAttribute('class')
-      expect(themeBeforeError).toBe(themeAfterError)
+      await expect(themeBeforeError).toHaveAttribute('class', themeAfterError)
     })
 
     test('should maintain theme during loading states', async ({ page }) => {
@@ -486,7 +486,7 @@ test.describe('Theme Switching (Light/Dark Mode)', () => {
       await themeToggle.click()
       await page.waitForTimeout(500)
 
-      const themeBefore = await page.locator('html').getAttribute('class')
+      const themeBefore = page.locator('html')
 
       // Mock slow API
       await page.route('**/api/auth/login', async route => {
@@ -509,7 +509,7 @@ test.describe('Theme Switching (Light/Dark Mode)', () => {
       // Check theme during loading
       await page.waitForTimeout(1000)
       const themeDuringLoading = await page.locator('html').getAttribute('class')
-      expect(themeBefore).toBe(themeDuringLoading)
+      await expect(themeBefore).toHaveAttribute('class', themeDuringLoading)
     })
   })
 })

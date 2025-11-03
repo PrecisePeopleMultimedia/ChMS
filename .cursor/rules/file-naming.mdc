@@ -1,0 +1,42 @@
+# File Naming Convention Rule
+
+## ALWAYS USE LOWERCASE WITH HYPHENS
+
+**CRITICAL RULE**: When creating or renaming files, ALWAYS use lowercase with hyphens.
+
+### ✅ **CORRECT Naming:**
+- `vue-security-performance.md`
+- `git-workflow.md`
+- `api-documentation.md`
+- `organization-summary.md`
+
+### ❌ **INCORRECT Naming (DO NOT USE):**
+- `ORGANIZATION-SUMMARY.md` ❌ (ALL CAPS)
+- `OrganizationSummary.md` ❌ (camelCase)
+- `Organization_Summary.md` ❌ (underscores)
+- `vueSecurityPerformance.md` ❌ (camelCase)
+
+### **Exceptions:**
+- `README.md` - Standard convention (uppercase)
+- `.gitignore` - Standard convention
+- `.env` files - Standard convention
+
+### **File Types:**
+- **Markdown files** (.md): Always lowercase with hyphens
+- **TypeScript/JavaScript** (.ts, .js): Follow project conventions (typically camelCase for files)
+- **Vue components** (.vue): PascalCase (standard Vue convention)
+- **Config files** (.json, .yaml, .yml): Typically kebab-case
+
+### **Why This Rule?**
+1. **Consistency** - Easier to find and reference files
+2. **Cross-platform** - Works on all file systems (Windows, Linux, macOS)
+3. **URL-friendly** - Lowercase-hyphen names work well in URLs
+4. **Professional** - Industry standard for documentation
+
+### **When Creating Files:**
+Before creating any file, ask yourself:
+- ✅ Is it lowercase?
+- ✅ Does it use hyphens, not underscores or camelCase?
+- ✅ Is it descriptive and clear?
+
+**REMINDER**: If you create a file with ALL CAPS or mixed case, the user will need to fix it. Always use lowercase with hyphens for documentation files.

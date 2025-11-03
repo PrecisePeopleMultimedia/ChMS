@@ -64,20 +64,20 @@ class MemberAttributeController extends Controller
             'field_type' => ['required', Rule::in(array_keys(MemberAttribute::FIELD_TYPES))],
             'category' => ['required', 'string', 'max:100'],
             'field_options' => 'nullable|array',
-            'field_options.options' => 'required_if:field_type,select|array',
-            'field_options.options.*' => 'required_if:field_type,select|string|max:255',
+            'field_options.options' => 'required_if:field_type,select,multi-select|array',
+            'field_options.options.*' => 'required_if:field_type,select,multi-select|string|max:255',
             'is_required' => 'boolean',
             'display_order' => 'integer|min:0',
         ]);
 
         $validated['organization_id'] = $request->user()->organization_id;
 
-        // Validate field options for select fields
-        if ($validated['field_type'] === 'select') {
+        // Validate field options for select and multi-select fields
+        if (in_array($validated['field_type'], ['select', 'multi-select'])) {
             if (!isset($validated['field_options']['options']) || empty($validated['field_options']['options'])) {
                 return response()->json([
-                    'message' => 'Select fields must have at least one option',
-                    'errors' => ['field_options.options' => ['Select fields must have at least one option']]
+                    'message' => 'Select and multi-select fields must have at least one option',
+                    'errors' => ['field_options.options' => ['Select and multi-select fields must have at least one option']]
                 ], 422);
             }
         }
@@ -127,19 +127,19 @@ class MemberAttributeController extends Controller
             'field_type' => ['sometimes', Rule::in(array_keys(MemberAttribute::FIELD_TYPES))],
             'category' => 'sometimes|string|max:100',
             'field_options' => 'nullable|array',
-            'field_options.options' => 'required_if:field_type,select|array',
-            'field_options.options.*' => 'required_if:field_type,select|string|max:255',
+            'field_options.options' => 'required_if:field_type,select,multi-select|array',
+            'field_options.options.*' => 'required_if:field_type,select,multi-select|string|max:255',
             'is_required' => 'boolean',
             'display_order' => 'integer|min:0',
             'is_active' => 'boolean',
         ]);
 
-        // Validate field options for select fields
-        if (isset($validated['field_type']) && $validated['field_type'] === 'select') {
+        // Validate field options for select and multi-select fields
+        if (isset($validated['field_type']) && in_array($validated['field_type'], ['select', 'multi-select'])) {
             if (!isset($validated['field_options']['options']) || empty($validated['field_options']['options'])) {
                 return response()->json([
-                    'message' => 'Select fields must have at least one option',
-                    'errors' => ['field_options.options' => ['Select fields must have at least one option']]
+                    'message' => 'Select and multi-select fields must have at least one option',
+                    'errors' => ['field_options.options' => ['Select and multi-select fields must have at least one option']]
                 ], 422);
             }
         }

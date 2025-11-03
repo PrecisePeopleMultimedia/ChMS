@@ -39,6 +39,11 @@
 - **Documentation**: Inline comments and README files for all modules
 - **Testing coverage**: Minimum 80% test coverage for critical paths
 
+### Naming & Module Boundaries
+- **Domain-focused stores and modules**: Prefer names like `notes`, `badges`, `members` over feature-narrow names like `member_notes` to maximise reuse across domains (members, events, organisations).
+- **Single responsibility**: Keep controllers thin; move business logic into services/models.
+- **Stable API contracts**: Backend responses should be predictable and documented; avoid breaking changes.
+
 ### Architecture Decisions
 - **Laravel 11**: Backend API framework for reliability and community support
 - **Vue 3 Composition API**: Frontend framework for reactive, maintainable UI

@@ -1,0 +1,57 @@
+{
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["chrome-devtools-mcp@latest"],
+      "description": "Chrome DevTools for testing and debugging ChMS frontend",
+      "env": {}
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-filesystem@latest", "/mnt/c/Users/Username/Documents/github/ChMS"],
+      "description": "File system operations for ChMS project",
+      "env": {}
+    },
+    "git": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-git@latest", "/mnt/c/Users/Username/Documents/github/ChMS"],
+      "description": "Git operations for ChMS version control",
+      "env": {}
+    },
+    "postgres": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-postgres@latest"],
+      "description": "PostgreSQL database operations for ChMS",
+      "env": {
+        "POSTGRES_CONNECTION_STRING": "${DATABASE_URL}"
+      }
+    },
+    "docker": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-docker@latest"],
+      "description": "Docker container management for ChMS development",
+      "env": {}
+    }
+  },
+  "project": {
+    "name": "ChMS",
+    "description": "Church Management System - Africa-first, offline-capable solution",
+    "tech_stack": [
+      "Vue 3",
+      "Laravel 11",
+      "PostgreSQL",
+      "Quasar Framework",
+      "TypeScript"
+    ],
+    "environments": {
+      "development": {
+        "api_url": "http://localhost:8000/api",
+        "frontend_url": "http://localhost:9000"
+      },
+      "production": {
+        "api_url": "https://api.churchafrica.com",
+        "frontend_url": "https://app.churchafrica.com"
+      }
+    }
+  }
+}

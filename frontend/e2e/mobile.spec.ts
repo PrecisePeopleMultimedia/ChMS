@@ -9,7 +9,7 @@ const testUser = {
 // Africa-first mobile testing - focusing on common devices in African markets
 // Pixel 5 Tests
 test.describe('Mobile Authentication - Pixel 5', () => {
-  test.use(devices['Pixel 5'])
+  // Device configuration moved to playwright.config.ts projects
 
   test.beforeEach(async ({ page }) => {
     await page.goto('/')
@@ -258,7 +258,7 @@ test.describe('Mobile Authentication - Pixel 5', () => {
 
 // Additional mobile-specific tests
 test.describe('Mobile-Specific Features', () => {
-  test.use(devices['Pixel 5'])
+  // Device configuration moved to playwright.config.ts projects
 
   test('should handle mobile keyboard types correctly', async ({ page }) => {
     await page.goto('/register')

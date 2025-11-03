@@ -20,6 +20,20 @@ export default defineConfigWithVueTs(
 
   pluginVue.configs['flat/essential'],
   vueTsConfigs.recommended,
+
+  // Vue.js security rules
+  {
+    name: 'app/vue-security',
+    files: ['**/*.vue'],
+    rules: {
+      // Require :key in v-for loops (security & performance)
+      'vue/require-v-for-key': 'error',
+      // Prevent v-if with v-for on same element (performance)
+      'vue/no-use-v-if-with-v-for': 'error',
+      // Prevent v-html with user input (XSS prevention)
+      'vue/no-v-html': 'warn',
+    },
+  },
   
   {
     ...pluginVitest.configs.recommended,

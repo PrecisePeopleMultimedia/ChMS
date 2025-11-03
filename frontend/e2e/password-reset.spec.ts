@@ -45,7 +45,7 @@ test.describe('Password Reset Flow', () => {
 
       // Enter valid email
       await page.fill('input[type="email"]', resetEmail)
-      await expect(submitButton).not.toBeDisabled()
+      await expect(submitButton).toBeEnabled()
     })
 
     test('should submit forgot password request successfully', async ({ page }) => {
@@ -259,7 +259,7 @@ test.describe('Password Reset Flow', () => {
       await passwordInputs.nth(1).fill('ValidPass123')
 
       // Submit button should be enabled
-      await expect(submitButton).not.toBeDisabled()
+      await expect(submitButton).toBeEnabled()
     })
 
     test('should toggle password visibility', async ({ page }) => {

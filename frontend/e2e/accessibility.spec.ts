@@ -128,9 +128,9 @@ test.describe('Accessibility Tests', () => {
     
     for (let i = 0; i < count; i++) {
       const image = images.nth(i)
-      const alt = await image.getAttribute('alt')
+      const alt = image
       expect(alt).not.toBeNull()
-      expect(alt).not.toBe('')
+      await expect(alt).not.toHaveAttribute('alt', '')
     }
   })
 
