@@ -439,4 +439,28 @@ class Member extends Model
     {
         return $user->organization_id === $this->organization_id;
     }
+
+    /**
+     * Get attendance records for this member.
+     */
+    public function attendanceRecords(): HasMany
+    {
+        return $this->hasMany(AttendanceRecord::class);
+    }
+
+    /**
+     * Get QR codes for this member.
+     */
+    public function qrCodes(): HasMany
+    {
+        return $this->hasMany(MemberQrCode::class);
+    }
+
+    /**
+     * Get active QR code for this member.
+     */
+    public function activeQrCode(): HasMany
+    {
+        return $this->hasMany(MemberQrCode::class)->active();
+    }
 }

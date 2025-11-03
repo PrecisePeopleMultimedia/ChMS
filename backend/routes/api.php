@@ -11,7 +11,10 @@ use App\Http\Controllers\Api\MemberAttributeController;
 use App\Http\Controllers\Api\MemberAttributeValueController;
 use App\Http\Controllers\Api\BadgeTypeController;
 use App\Http\Controllers\Api\MemberBadgeController;
+use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\MonitoringController;
+use App\Http\Controllers\Api\ServiceController;
+use App\Http\Controllers\Api\AttendanceController;
 
 // Health check endpoint for Docker
 Route::get('/health', function () {
@@ -86,10 +89,30 @@ Route::middleware('auth:sanctum')->group(function () {
     // Service schedule routes
     Route::apiResource('service-schedules', ServiceScheduleController::class);
 
+    // Service routes (individual service instances)
+    Route::apiResource('services', ServiceController::class);
+    Route::get('/services/{id}/attendance-stats', [ServiceController::class, 'attendanceStats']);
+
+    // Attendance routes
+    Route::prefix('attendance')->group(function () {
+        Route::get('/', [AttendanceController::class, 'index']);
+        Route::post('/', [AttendanceController::class, 'store']);
+        Route::post('/qr-checkin', [AttendanceController::class, 'qrCheckin']);
+        Route::post('/family-checkin', [AttendanceController::class, 'familyCheckin']);
+        Route::get('/reports', [AttendanceController::class, 'reports']);
+    });
+
+    // QR Code routes
+    Route::prefix('qr-codes')->group(function () {
+        Route::get('/members/{member}/generate', [AttendanceController::class, 'generateMemberQrCode']);
+        Route::get('/families/{family}/generate', [AttendanceController::class, 'generateFamilyQrCode']);
+    });
+
     // Member routes
     Route::apiResource('members', MemberController::class);
     Route::get('/members/options', [MemberController::class, 'options']);
     Route::post('/members/bulk-update', [MemberController::class, 'bulkUpdate']);
+    Route::get('/members/{member}/qr-code', [AttendanceController::class, 'generateMemberQrCode']);
     
     // Member notes routes
     Route::prefix('members/{member}/notes')->group(function () {
@@ -134,6 +157,29 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/member-badges/bulk-assign', [MemberBadgeController::class, 'bulkAssign']);
     Route::post('/member-badges/bulk-remove', [MemberBadgeController::class, 'bulkRemove']);
     Route::get('/member-badges/expiring', [MemberBadgeController::class, 'expiringBadges']);
+
+    // Attendance routes
+    Route::prefix('attendance')->group(function () {
+        // Services
+        Route::get('/services', [AttendanceController::class, 'services']);
+        Route::post('/services', [AttendanceController::class, 'createService']);
+        Route::get('/services/{service}', [AttendanceController::class, 'showService']);
+        
+        // Check-in methods
+        Route::post('/qr-checkin', [AttendanceController::class, 'qrCheckIn']);
+        Route::post('/manual-checkin', [AttendanceController::class, 'manualCheckIn']);
+        Route::post('/family-checkin', [AttendanceController::class, 'familyCheckIn']);
+        
+        // Records and statistics
+        Route::get('/records', [AttendanceController::class, 'attendanceRecords']);
+        Route::get('/statistics', [AttendanceController::class, 'statistics']);
+        
+        // QR Code generation
+        Route::post('/members/{member}/qr-code', [AttendanceController::class, 'generateQrCode']);
+        
+        // Offline sync
+        Route::post('/sync-offline', [AttendanceController::class, 'syncOffline']);
+    });
 });
 
 // Monitoring routes

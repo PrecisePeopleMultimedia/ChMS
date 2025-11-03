@@ -166,6 +166,28 @@ const router = createRouter({
             requiresAuth: true,
             title: 'Edit Member - ChurchAfrica'
           }
+        },
+        {
+<<<<<<< Current (Your changes)
+          path: '/attendance',
+=======
+          path: '/attendance/checkin',
+>>>>>>> Incoming (Background Agent changes)
+          name: 'AttendanceCheckIn',
+          component: () => import('@/views/AttendanceCheckInView.vue'),
+          meta: {
+            requiresAuth: true,
+            title: 'Attendance Check-In - ChurchAfrica'
+          }
+        },
+        {
+          path: '/attendance/reports',
+          name: 'AttendanceReports',
+          component: () => import('@/views/AttendanceReportsView.vue'),
+          meta: {
+            requiresAuth: true,
+            title: 'Attendance Reports - ChurchAfrica'
+          }
         }
       ]
     },

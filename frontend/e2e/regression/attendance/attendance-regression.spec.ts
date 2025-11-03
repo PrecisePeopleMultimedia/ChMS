@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
-import { loginUser, setupTestEnvironment, cleanupTestData } from '../../utils/test-helpers'
-import { setupTestEnvironment as setupDB, cleanupTestData as cleanupDB } from '../../utils/database-helpers'
-import TEST_CONFIG from '../../utils/test-config'
+import { loginUser } from '../utils/test-helpers'
+import { setupTestEnvironment as setupDB, cleanupTestData as cleanupDB } from '../utils/database-helpers'
+import TEST_CONFIG from '../utils/test-config'
 
 /**
  * Attendance System Regression Test Suite

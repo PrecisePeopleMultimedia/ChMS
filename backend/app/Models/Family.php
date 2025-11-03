@@ -70,4 +70,28 @@ class Family extends Model
     {
         return $this->activeMembers()->count();
     }
+
+    /**
+     * Get QR codes for this family.
+     */
+    public function qrCodes(): HasMany
+    {
+        return $this->hasMany(MemberQrCode::class);
+    }
+
+    /**
+     * Get active QR code for this family.
+     */
+    public function activeQrCode(): HasMany
+    {
+        return $this->hasMany(MemberQrCode::class)->active()->ofType('family');
+    }
+
+    /**
+     * Get attendance records for this family.
+     */
+    public function attendanceRecords(): HasMany
+    {
+        return $this->hasMany(AttendanceRecord::class);
+    }
 }

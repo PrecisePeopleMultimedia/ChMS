@@ -213,7 +213,8 @@ class OfflineSyncService {
       users: '/api/users',
       organizations: '/api/organizations',
       members: '/api/members',
-      attendance: '/api/attendance'
+      attendance: '/api/attendance',
+      attendance_records: '/api/attendance'
     }
 
     const endpoint = endpoints[table]

@@ -26,9 +26,22 @@ async function globalSetup(config: FullConfig) {
     // Create authenticated session for tests
     await page.goto(TEST_CONFIG.urls.frontend + '/login')
     
-    // Login as test user
-    await page.fill('input[type="email"]', TEST_CONFIG.users.member.email)
-    await page.fill('input[type="password"]', TEST_CONFIG.users.member.password)
+    // Wait for login form to be ready
+    await page.waitForSelector('input[type="email"]', { state: 'visible' })
+    await page.waitForSelector('input[type="password"]', { state: 'visible' })
+    
+    // Clear and fill email field (ensure it triggers validation)
+    await page.fill('input[type="email"]', '')
+    await page.type('input[type="email"]', TEST_CONFIG.users.member.email, { delay: 50 })
+    
+    // Clear and fill password field
+    await page.fill('input[type="password"]', '')
+    await page.type('input[type="password"]', TEST_CONFIG.users.member.password, { delay: 50 })
+    
+    // Wait for form validation to complete and button to be enabled
+    await page.waitForSelector('button:has-text("Sign In"):not([disabled])', { timeout: 10000 })
+    
+    // Click Sign In button
     await page.click('button:has-text("Sign In")')
     
     // Wait for successful login

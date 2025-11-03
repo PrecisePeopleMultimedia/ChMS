@@ -1,0 +1,25 @@
+{
+  "name": "chms",
+  "version": "1.0.0",
+  "description": "ChurchAfrica is a modern, mobile-first church management system designed specifically for African churches. Built with Vue 3, Quasar Framework, Laravel 11, and PostgreSQL, it provides comprehensive tools for member management, attendance tracking, and church administration.",
+  "main": "debug-auth-test.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PrecisePeopleMultimedia/ChMS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PrecisePeopleMultimedia/ChMS/issues"
+  },
+  "homepage": "https://github.com/PrecisePeopleMultimedia/ChMS#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "@types/node": "^24.10.0"
+  }
+}

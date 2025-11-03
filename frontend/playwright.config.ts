@@ -124,6 +124,7 @@ export default defineConfig({
       testIgnore: /.*regression.*|.*\.setup\.ts/,
       use: {
         ...devices['Pixel 5'],
+        hasTouch: true,
       },
     },
     {
@@ -131,6 +132,7 @@ export default defineConfig({
       testIgnore: /.*regression.*|.*\.setup\.ts/,
       use: {
         ...devices['iPhone 12'],
+        hasTouch: true,
       },
     },
     {
@@ -138,6 +140,7 @@ export default defineConfig({
       testIgnore: /.*regression.*|.*\.setup\.ts/,
       use: {
         ...devices['Galaxy S5'], // Lower-end Android device
+        hasTouch: true,
       },
     },
 
@@ -148,6 +151,7 @@ export default defineConfig({
       dependencies: ['setup'],
       use: {
         ...devices['Pixel 5'],
+        hasTouch: true,
         storageState: 'test-results/.auth/user.json',
       },
     },

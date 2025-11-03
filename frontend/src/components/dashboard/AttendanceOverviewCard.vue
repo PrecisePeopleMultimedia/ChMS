@@ -142,11 +142,11 @@ const refresh = async () => {
 }
 
 const goToAttendance = () => {
-  router.push({ name: 'Attendance' })
+  router.push({ name: 'AttendanceCheckIn' })
 }
 
 const goToReports = () => {
-  router.push({ name: 'Reports' })
+  router.push({ name: 'AttendanceReports' })
 }
 </script>
 
