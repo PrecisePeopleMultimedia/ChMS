@@ -483,8 +483,7 @@ class MemberController extends Controller
 
             fclose($handle);
         }, $filename, [
-            'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename=' . $filename,
+            'Content-Type' => 'text/csv; charset=UTF-8',
         ]);
     }
 }

@@ -262,4 +262,192 @@ test.describe('Members Management Regression Tests', () => {
       await expect(page.locator('text=Email already exists')).toBeVisible()
     })
   })
+
+  test.describe('CSV Import Functionality', () => {
+    test('should open import dialog and download template', async ({ page }) => {
+      // Click import button
+      await page.click('button:has-text("Import")')
+
+      // Verify import dialog opens
+      await expect(page.locator('text=Import Members')).toBeVisible()
+      await expect(page.locator('text=Upload a CSV file to import multiple members')).toBeVisible()
+
+      // Test download template button
+      const downloadPromise = page.waitForDownload()
+      await page.click('button:has-text("Download Template")')
+      const download = await downloadPromise
+
+      // Verify download
+      expect(download.suggestedFilename()).toBe('member_import_template.csv')
+
+      // Close dialog
+      await page.click('button:has-text("Cancel")')
+      await expect(page.locator('text=Import Members')).not.toBeVisible()
+    })
+
+    test('should show import instructions', async ({ page }) => {
+      // Open import dialog
+      await page.click('button:has-text("Import")')
+
+      // Expand import instructions
+      await page.click('text=Import Instructions')
+
+      // Verify instructions content
+      await expect(page.locator('text=Required columns:')).toBeVisible()
+      await expect(page.locator('text=first_name')).toBeVisible()
+      await expect(page.locator('text=last_name')).toBeVisible()
+      await expect(page.locator('text=email')).toBeVisible()
+      await expect(page.locator('text=Optional columns:')).toBeVisible()
+      await expect(page.locator('text=Duplicate emails will be skipped')).toBeVisible()
+      await expect(page.locator('text=Maximum file size: 10MB')).toBeVisible()
+    })
+
+    test('should validate file selection', async ({ page }) => {
+      // Open import dialog
+      await page.click('button:has-text("Import")')
+
+      // Try to import without selecting file
+      await page.click('button:has-text("Import")')
+
+      // Should show validation message
+      await expect(page.locator('text=Please select a CSV file to import')).toBeVisible()
+
+      // Import button should be disabled when no file selected
+      const importButton = page.locator('button:has-text("Import")')
+      await expect(importButton).toBeDisabled()
+    })
+
+    test('should handle successful CSV import', async ({ page }) => {
+      // Create test CSV content
+      const csvContent = `first_name,last_name,email,phone,gender
+Test,User1,test.user1@example.com,+234-804-123-4567,male
+Test,User2,test.user2@example.com,+234-804-123-4568,female`
+
+      // Open import dialog
+      await page.click('button:has-text("Import")')
+
+      // Upload CSV file
+      const fileInput = page.locator('input[type="file"]')
+      await fileInput.setInputFiles({
+        name: 'test-members.csv',
+        mimeType: 'text/csv',
+        buffer: Buffer.from(csvContent)
+      })
+
+      // Verify file is selected
+      await expect(page.locator('text=test-members.csv')).toBeVisible()
+
+      // Import button should be enabled
+      const importButton = page.locator('button:has-text("Import")')
+      await expect(importButton).toBeEnabled()
+
+      // Click import
+      await importButton.click()
+
+      // Wait for import to complete
+      await expect(page.locator('text=Import completed!')).toBeVisible({ timeout: 10000 })
+
+      // Verify success message
+      await expect(page.locator('text=2 members imported')).toBeVisible()
+
+      // Verify dialog closes
+      await expect(page.locator('text=Import Members')).not.toBeVisible()
+
+      // Verify new members appear in list
+      await expect(page.locator('text=Test User1')).toBeVisible()
+      await expect(page.locator('text=Test User2')).toBeVisible()
+      await expect(page.locator('text=test.user1@example.com')).toBeVisible()
+      await expect(page.locator('text=test.user2@example.com')).toBeVisible()
+    })
+
+    test('should handle CSV import errors', async ({ page }) => {
+      // Create invalid CSV content (missing required headers)
+      const csvContent = `name,contact
+Invalid User,invalid@example.com`
+
+      // Open import dialog
+      await page.click('button:has-text("Import")')
+
+      // Upload invalid CSV file
+      const fileInput = page.locator('input[type="file"]')
+      await fileInput.setInputFiles({
+        name: 'invalid-members.csv',
+        mimeType: 'text/csv',
+        buffer: Buffer.from(csvContent)
+      })
+
+      // Click import
+      await page.click('button:has-text("Import")')
+
+      // Wait for error message
+      await expect(page.locator('text=Missing required headers')).toBeVisible({ timeout: 10000 })
+
+      // Verify specific error details
+      await expect(page.locator('text=first_name, last_name')).toBeVisible()
+    })
+
+    test('should handle duplicate email detection', async ({ page }) => {
+      // Create CSV with duplicate email (john.doe@example.com already exists)
+      const csvContent = `first_name,last_name,email
+John,Doe,john.doe@example.com
+New,User,new.user@example.com`
+
+      // Open import dialog
+      await page.click('button:has-text("Import")')
+
+      // Upload CSV file
+      const fileInput = page.locator('input[type="file"]')
+      await fileInput.setInputFiles({
+        name: 'duplicate-test.csv',
+        mimeType: 'text/csv',
+        buffer: Buffer.from(csvContent)
+      })
+
+      // Click import
+      await page.click('button:has-text("Import")')
+
+      // Wait for import to complete
+      await expect(page.locator('text=Import completed!')).toBeVisible({ timeout: 10000 })
+
+      // Should show 1 imported, 1 skipped
+      await expect(page.locator('text=1 members imported, 1 skipped')).toBeVisible()
+
+      // Should show detailed results dialog
+      await expect(page.locator('text=Import Results')).toBeVisible()
+      await expect(page.locator('text=already exists')).toBeVisible()
+
+      // Close results dialog
+      await page.click('button:has-text("Close")')
+    })
+
+    test('should show loading state during import', async ({ page }) => {
+      // Create large CSV to test loading state
+      let csvContent = 'first_name,last_name,email\n'
+      for (let i = 1; i <= 50; i++) {
+        csvContent += `User${i},Test${i},user${i}@example.com\n`
+      }
+
+      // Open import dialog
+      await page.click('button:has-text("Import")')
+
+      // Upload CSV file
+      const fileInput = page.locator('input[type="file"]')
+      await fileInput.setInputFiles({
+        name: 'large-import.csv',
+        mimeType: 'text/csv',
+        buffer: Buffer.from(csvContent)
+      })
+
+      // Click import
+      const importButton = page.locator('button:has-text("Import")')
+      await importButton.click()
+
+      // Verify loading state
+      await expect(importButton).toHaveAttribute('loading', '')
+      await expect(page.locator('button:has-text("Cancel")')).toBeDisabled()
+
+      // Wait for completion
+      await expect(page.locator('text=Import completed!')).toBeVisible({ timeout: 15000 })
+    })
+  })
 })

@@ -8,7 +8,7 @@ import { test, expect } from '@playwright/test'
  * 
  * Test Organization:
  * - auth/: Authentication and authorization tests
- * - members/: Member management functionality tests  
+ * - members/: Member management functionality tests (includes CSV import)
  * - dashboard/: Dashboard and main UI tests
  * - navigation/: Navigation and routing tests
  * 

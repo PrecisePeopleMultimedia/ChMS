@@ -162,10 +162,14 @@ class MemberImportTest extends TestCase
 
         $response->assertStatus(200)
             ->assertHeader('Content-Type', 'text/csv; charset=UTF-8')
-            ->assertHeader('Content-Disposition', 'attachment; filename="member_import_template.csv"');
+            ->assertHeader('Content-Disposition', 'attachment; filename=member_import_template.csv');
 
+        // For streamed responses, capture the output using output buffering
+        ob_start();
+        $response->send();
+        $content = ob_get_clean();
+        
         // Verify CSV content contains headers
-        $content = $response->getContent();
         $this->assertStringContainsString('first_name,last_name,email', $content);
         $this->assertStringContainsString('John,Doe,john.doe@example.com', $content);
     }
