@@ -20,11 +20,25 @@ use App\Http\Controllers\Api\RelationshipTypeController;
 
 // Health check endpoint for Docker
 Route::get('/health', function () {
-    return response()->json([
-        'status' => 'ok',
-        'timestamp' => now(),
-        'service' => 'ChMS Laravel API'
-    ]);
+    try {
+        // Simple database check
+        \DB::connection()->getPdo();
+
+        return response()->json([
+            'status' => 'ok',
+            'timestamp' => now(),
+            'service' => 'ChMS Laravel API',
+            'database' => 'connected'
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'timestamp' => now(),
+            'service' => 'ChMS Laravel API',
+            'database' => 'disconnected',
+            'error' => $e->getMessage()
+        ], 500);
+    }
 });
 
 /*
@@ -188,15 +202,7 @@ Route::prefix('monitoring')->group(function () {
     Route::get('/security', [MonitoringController::class, 'security']);
 });
 
-// Legacy health check route for backward compatibility
-Route::get('/health', function () {
-    $monitoringService = app(\App\Services\MonitoringService::class);
-    $healthData = $monitoringService->checkHealth();
-    
-    $httpStatus = $healthData['status'] === 'healthy' ? 200 : 503;
-    
-    return response()->json($healthData, $httpStatus);
-});
+
 
 // Monitoring and observability routes
 Route::prefix('monitoring')->group(function () {

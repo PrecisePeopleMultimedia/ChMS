@@ -41,11 +41,10 @@ RUN echo '<VirtualHost *:80>\n\
 # Copy application files
 COPY . /var/www/html
 
-# Set permissions and create storage symlink
+# Set permissions
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
-    && chmod -R 755 /var/www/html/bootstrap/cache \
-    && php artisan storage:link || true
+    && chmod -R 755 /var/www/html/bootstrap/cache
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
