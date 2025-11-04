@@ -7,12 +7,21 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'Landing',
-      component: () => import('@/pages/LandingPage.vue'),
+      component: () => import('@/layouts/LandingLayout.vue'),
       meta: {
-        requiresGuest: true,
-        title: 'ChurchAfrica - Church Management Made Simple'
-      }
+        requiresGuest: true
+      },
+      children: [
+        {
+          path: '',
+          name: 'Landing',
+          component: () => import('@/pages/LandingPage.vue'),
+          meta: {
+            requiresGuest: true,
+            title: 'ChurchAfrica - Church Management Made Simple'
+          }
+        }
+      ]
     },
     {
       path: '/auth',

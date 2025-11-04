@@ -29,9 +29,27 @@ class PWAService {
       return
     }
 
+    // In development, VitePWA may not generate service worker
+    // Only register in production or if service worker file exists
+    if (import.meta.env.DEV) {
+      // Check if service worker file exists before registering
+      try {
+        const response = await fetch('/sw.js', { method: 'HEAD' })
+        if (!response.ok || response.headers.get('content-type')?.includes('text/html')) {
+          console.log('⚠️ Service Worker not available in development mode')
+          return
+        }
+      } catch (error) {
+        console.log('⚠️ Service Worker not available in development mode')
+        return
+      }
+    }
+
     try {
       // Initialize Workbox
-      this.wb = new Workbox('/sw.js')
+      // VitePWA generates service worker at root
+      const swPath = '/sw.js'
+      this.wb = new Workbox(swPath)
 
       // Listen for service worker events
       this.setupEventListeners()
@@ -43,8 +61,14 @@ class PWAService {
       this.registration = await this.wb.register() || null
       console.log('✅ Service Worker registered successfully')
 
-    } catch (error) {
-      console.error('❌ Service Worker registration failed:', error)
+    } catch (error: any) {
+      // Don't block app initialization if service worker fails
+      // This is expected in development mode
+      if (import.meta.env.DEV) {
+        console.log('⚠️ Service Worker registration skipped in development')
+      } else {
+        console.error('❌ Service Worker registration failed:', error)
+      }
     }
   }
 

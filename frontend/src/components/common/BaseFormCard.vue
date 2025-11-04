@@ -3,7 +3,6 @@
     class="modern-form-card animate-in"
     :class="[
       'w-full max-w-md mx-auto',
-      'bg-card/95 backdrop-blur-xl border border-border/50',
       'rounded-2xl shadow-modern-lg',
       'p-8 space-y-6',
       variant === 'glass' && 'glass-effect',
@@ -70,10 +69,12 @@ const props = withDefaults(defineProps<Props>(), {
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-/* Glass effect variant */
+/* Glass effect variant - dark theme for auth pages */
+/* Always use dark theme for auth forms regardless of global theme */
 .glass-effect {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: hsl(330, 35%, 10%) !important;
+  border: 1px solid hsl(330, 25%, 15%) !important;
+  color: hsl(330, 20%, 95%) !important;
 }
 
 /* Dark mode adjustments */
@@ -83,22 +84,29 @@ const props = withDefaults(defineProps<Props>(), {
 }
 
 /* Enhanced Quasar component styling */
+/* Don't apply modern-input styles to Quasar fields - they have their own styling */
 :deep(.q-field) {
-  @apply modern-input;
+  /* Remove any conflicting styles */
 }
 
-:deep(.q-field__control) {
-  @apply bg-background/50 border border-input rounded-md;
-  backdrop-filter: blur(8px);
-  transition: all 0.2s ease-in-out;
+/* Remove duplicate borders - Quasar outlined inputs use .q-field__outline for borders */
+:deep(.q-field--outlined .q-field__control) {
+  background: transparent !important;
+  border: none !important;
+  backdrop-filter: none;
+}
+
+/* Ensure Quasar's outline is visible and not duplicated */
+:deep(.q-field--outlined .q-field__outline) {
+  /* Quasar handles this - don't override */
 }
 
 :deep(.q-field--focused .q-field__control) {
-  @apply ring-2 ring-ring ring-offset-2 border-primary;
+  /* Quasar handles focus borders, don't add extra */
 }
 
 :deep(.q-field__control:hover) {
-  @apply border-primary/50;
+  /* Quasar handles hover states */
 }
 
 :deep(.q-btn) {
@@ -139,14 +147,21 @@ const props = withDefaults(defineProps<Props>(), {
   transform: translateY(-1px);
 }
 
-/* Input enhancements */
-:deep(.garnet-input .q-field__control) {
-  @apply bg-background/60 border-input;
-  backdrop-filter: blur(12px);
+/* Input enhancements - remove duplicate borders */
+:deep(.garnet-input.q-field--outlined .q-field__control) {
+  background: transparent !important;
+  border: none !important;
+  backdrop-filter: none;
 }
 
-:deep(.garnet-input .q-field--focused .q-field__control) {
-  @apply border-primary ring-2 ring-primary/20;
+/* Let Quasar handle the outlined input borders */
+:deep(.garnet-input.q-field--outlined .q-field__native) {
+  background: transparent;
+}
+
+/* Focus state - Quasar handles this with outlined inputs */
+:deep(.garnet-input.q-field--focused .q-field__control) {
+  /* Quasar's outlined input already has focus border */
 }
 
 /* Notification/banner styling */

@@ -28,8 +28,9 @@ class LogFailedLogin
         ]);
 
         // Track failed attempts per IP
-        $attempts = Cache::increment("login_attempts:$ip", 1);
-        Cache::expire("login_attempts:$ip", 300); // 5 minutes
+        $key = "login_attempts:$ip";
+        $attempts = Cache::get($key, 0) + 1;
+        Cache::put($key, $attempts, 300); // 5 minutes
 
         // Check for brute force attack
         if ($attempts > 5) {
@@ -57,8 +58,9 @@ class LogFailedLogin
         }
 
         // Track failed attempts per email
-        $emailAttempts = Cache::increment("login_attempts_email:{$credentials['email']}", 1);
-        Cache::expire("login_attempts_email:{$credentials['email']}", 900); // 15 minutes
+        $emailKey = "login_attempts_email:{$credentials['email']}";
+        $emailAttempts = Cache::get($emailKey, 0) + 1;
+        Cache::put($emailKey, $emailAttempts, 900); // 15 minutes
 
         if ($emailAttempts > 3) {
             Log::warning('Multiple failed login attempts for email', [

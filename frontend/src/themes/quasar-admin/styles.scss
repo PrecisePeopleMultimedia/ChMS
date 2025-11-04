@@ -93,19 +93,27 @@ html[data-theme="quasar-admin"] {
   }
 
   // === INPUT COMPONENTS ===
+  // DO NOT add borders to .q-field__control - Quasar's outlined prop handles borders via .q-field__outline
   .qa-input,
   .q-field {
     .q-field__control {
-      background-color: var(--qa-surface);
-      border: 1px solid var(--qa-border);
+      background-color: transparent;
+      border: none !important; // Remove conflicting border
       border-radius: $qa-button-border-radius;
       height: 40px;
+    }
 
-      &:hover {
+    // Style the Quasar outline instead (for outlined inputs)
+    &.q-field--outlined {
+      .q-field__outline {
+        border-color: var(--qa-border);
+      }
+
+      &:hover .q-field__outline {
         border-color: var(--qa-primary);
       }
 
-      &:focus-within {
+      &.q-field--focused .q-field__outline {
         border-color: var(--qa-primary);
         box-shadow: 0 0 0 2px rgba(54, 54, 54, 0.2);
       }

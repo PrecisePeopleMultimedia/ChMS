@@ -65,7 +65,11 @@ Route::prefix('auth')->middleware(\App\Http\Middleware\RateLimitMiddleware::clas
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
     Route::post('/reset-password', [AuthController::class, 'resetPassword']);
-    
+
+    // Email verification routes
+    Route::post('/verify-email', [AuthController::class, 'verifyEmail']);
+    Route::post('/resend-verification', [AuthController::class, 'resendVerification']);
+
     // Google OAuth routes
     Route::get('/google', [AuthController::class, 'googleLogin']);
     Route::get('/google/callback', [AuthController::class, 'googleCallback']);

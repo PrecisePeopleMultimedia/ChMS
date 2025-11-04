@@ -361,9 +361,8 @@
   @apply modern-button-ghost;
 }
 
-.q-input .q-field__control {
-  @apply modern-input;
-}
+/* DO NOT apply modern-input to q-field__control - it conflicts with Quasar's outlined prop */
+/* Quasar's outlined inputs use .q-field__outline for borders, not .q-field__control */
 
 .q-banner {
   @apply modern-alert;

@@ -27,7 +27,16 @@ class AuthController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => [
+                'required',
+                'string',
+                'min:12',
+                'confirmed',
+                'regex:/[A-Z]/',      // At least one uppercase letter
+                'regex:/[a-z]/',      // At least one lowercase letter
+                'regex:/[0-9]/',      // At least one number
+                'regex:/[!@#$%^&*(),.?":{}|<>]/', // At least one special character
+            ],
             'phone' => 'nullable|string|max:20',
             'organization_name' => 'nullable|string|max:255',
             'role' => 'nullable|in:admin,staff,member'
@@ -48,16 +57,41 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
             'phone' => $request->phone,
             'role' => $request->role ?? 'member',
+            'email_verified_at' => null, // User must verify email
             // TODO: Handle organization creation/assignment
         ]);
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        // Generate verification token
+        $token = Str::random(64);
+
+        // Store verification token in database
+        DB::table('email_verifications')->insert([
+            'email' => $user->email,
+            'token' => Hash::make($token),
+            'created_at' => now(),
+            'expires_at' => now()->addHours(24)
+        ]);
+
+        // Send verification email
+        try {
+            $verificationUrl = config('app.frontend_url') . '/verify-email?token=' . $token . '&email=' . urlencode($user->email);
+
+            Mail::send('emails.verify-email', [
+                'user' => $user,
+                'verificationUrl' => $verificationUrl
+            ], function ($message) use ($user) {
+                $message->to($user->email, $user->name)
+                        ->subject('Verify Your Email - ChurchAfrica');
+            });
+        } catch (\Exception $e) {
+            // Log error but don't fail registration
+            \Log::error('Failed to send verification email: ' . $e->getMessage());
+        }
 
         return response()->json([
-            'message' => 'User registered successfully',
+            'message' => 'Registration successful! Please check your email to verify your account.',
             'user' => $user,
-            'token' => $token,
-            'expires_at' => now()->addDays(30)->toISOString()
+            'email_verification_required' => true
         ], 201);
     }
 
@@ -86,6 +120,16 @@ class AuthController extends Controller
         }
 
         $user = Auth::user();
+
+        // Check if email is verified
+        if (!$user->email_verified_at) {
+            return response()->json([
+                'message' => 'Please verify your email address before logging in. Check your inbox for the verification link.',
+                'email_verification_required' => true,
+                'email' => $user->email
+            ], 403);
+        }
+
         $tokenName = $request->remember ? 'remember_token' : 'auth_token';
         $expiresAt = $request->remember ? now()->addDays(30) : now()->addDay();
 
@@ -183,7 +227,16 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'current_password' => 'required|string',
-            'password' => 'required|string|min:8|confirmed'
+            'password' => [
+                'required',
+                'string',
+                'min:12',
+                'confirmed',
+                'regex:/[A-Z]/',      // At least one uppercase letter
+                'regex:/[a-z]/',      // At least one lowercase letter
+                'regex:/[0-9]/',      // At least one number
+                'regex:/[!@#$%^&*(),.?":{}|<>]/', // At least one special character
+            ]
         ]);
 
         if ($validator->fails()) {
@@ -393,6 +446,128 @@ class AuthController extends Controller
             return response()->json([
                 'message' => 'Google OAuth authentication failed',
                 'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Verify email address
+     */
+    public function verifyEmail(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email',
+            'token' => 'required|string'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        // Find verification record
+        $verification = DB::table('email_verifications')
+            ->where('email', $request->email)
+            ->first();
+
+        if (!$verification) {
+            return response()->json([
+                'message' => 'Invalid verification link'
+            ], 400);
+        }
+
+        // Check if token is expired
+        if (now()->greaterThan($verification->expires_at)) {
+            return response()->json([
+                'message' => 'Verification link has expired. Please request a new one.',
+                'expired' => true
+            ], 400);
+        }
+
+        // Verify token
+        if (!Hash::check($request->token, $verification->token)) {
+            return response()->json([
+                'message' => 'Invalid verification link'
+            ], 400);
+        }
+
+        // Update user's email_verified_at
+        $user = User::where('email', $request->email)->first();
+        $user->email_verified_at = now();
+        $user->save();
+
+        // Delete verification record
+        DB::table('email_verifications')
+            ->where('email', $request->email)
+            ->delete();
+
+        return response()->json([
+            'message' => 'Email verified successfully! You can now log in.',
+            'verified' => true
+        ]);
+    }
+
+    /**
+     * Resend verification email
+     */
+    public function resendVerification(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $user = User::where('email', $request->email)->first();
+
+        // Check if already verified
+        if ($user->email_verified_at) {
+            return response()->json([
+                'message' => 'Email is already verified'
+            ], 400);
+        }
+
+        // Delete old verification tokens
+        DB::table('email_verifications')
+            ->where('email', $user->email)
+            ->delete();
+
+        // Generate new verification token
+        $token = Str::random(64);
+
+        // Store verification token in database
+        DB::table('email_verifications')->insert([
+            'email' => $user->email,
+            'token' => Hash::make($token),
+            'created_at' => now(),
+            'expires_at' => now()->addHours(24)
+        ]);
+
+        // Send verification email
+        try {
+            $verificationUrl = config('app.frontend_url') . '/verify-email?token=' . $token . '&email=' . urlencode($user->email);
+
+            Mail::send('emails.verify-email', [
+                'user' => $user,
+                'verificationUrl' => $verificationUrl
+            ], function ($message) use ($user) {
+                $message->to($user->email, $user->name)
+                        ->subject('Verify Your Email - ChurchAfrica');
+            });
+
+            return response()->json([
+                'message' => 'Verification email sent successfully. Please check your inbox.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to send verification email. Please try again later.'
             ], 500);
         }
     }

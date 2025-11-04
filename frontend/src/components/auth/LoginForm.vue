@@ -1,24 +1,7 @@
 <template>
   <BaseFormCard
-    title="Welcome to ChurchAfrica"
-    subtitle="Sign in to your account"
     class="fade-in-up login-card"
   >
-    <template #header>
-      <div class="row items-center justify-between">
-        <div>
-          <h1 class="text-2xl font-bold text-foreground tracking-tight">
-            Welcome to ChurchAfrica
-          </h1>
-          <p class="text-sm text-muted-foreground">
-            Sign in to your account
-          </p>
-        </div>
-        <div class="col-auto">
-          <ThemeSwitcher />
-        </div>
-      </div>
-    </template>
     <template #content>
       <q-form
         @submit="handleLogin"
@@ -35,6 +18,7 @@
           type="email"
           label="Email Address"
           outlined
+          dark
           required
           autocomplete="email"
           :rules="emailRules"
@@ -60,6 +44,7 @@
           :type="showPassword ? 'text' : 'password'"
           label="Password"
           outlined
+          dark
           required
           autocomplete="current-password"
           :rules="passwordRules"

@@ -78,6 +78,7 @@
               dark
               :rules="passwordRules"
               class="garnet-input"
+              @input="updatePasswordStrength"
             >
               <template v-slot:prepend>
                 <q-icon name="lock" color="primary" />
@@ -90,7 +91,45 @@
                   @click="showPassword = !showPassword"
                 />
               </template>
+              <template v-slot:hint>
+                <div class="text-caption">
+                  <div :class="{ 'text-positive': hasMinLength, 'text-grey-5': !hasMinLength }">
+                    <q-icon :name="hasMinLength ? 'check_circle' : 'radio_button_unchecked'" size="xs" />
+                    At least 12 characters
+                  </div>
+                  <div :class="{ 'text-positive': hasUppercase, 'text-grey-5': !hasUppercase }">
+                    <q-icon :name="hasUppercase ? 'check_circle' : 'radio_button_unchecked'" size="xs" />
+                    One uppercase letter
+                  </div>
+                  <div :class="{ 'text-positive': hasLowercase, 'text-grey-5': !hasLowercase }">
+                    <q-icon :name="hasLowercase ? 'check_circle' : 'radio_button_unchecked'" size="xs" />
+                    One lowercase letter
+                  </div>
+                  <div :class="{ 'text-positive': hasNumber, 'text-grey-5': !hasNumber }">
+                    <q-icon :name="hasNumber ? 'check_circle' : 'radio_button_unchecked'" size="xs" />
+                    One number
+                  </div>
+                  <div :class="{ 'text-positive': hasSpecialChar, 'text-grey-5': !hasSpecialChar }">
+                    <q-icon :name="hasSpecialChar ? 'check_circle' : 'radio_button_unchecked'" size="xs" />
+                    One special character (!@#$%^&*)
+                  </div>
+                </div>
+              </template>
             </q-input>
+
+            <!-- Password Strength Indicator -->
+            <div v-if="form.password" class="q-mt-sm">
+              <div class="text-caption text-grey-5 q-mb-xs">Password Strength</div>
+              <q-linear-progress
+                :value="passwordStrength / 100"
+                :color="passwordStrengthColor"
+                size="8px"
+                rounded
+              />
+              <div class="text-caption q-mt-xs" :class="`text-${passwordStrengthColor}`">
+                {{ passwordStrengthLabel }}
+              </div>
+            </div>
 
             <!-- Confirm Password -->
             <q-input
@@ -168,6 +207,16 @@ const showPassword = ref(false)
 const showConfirmPassword = ref(false)
 const isLoading = ref(false)
 
+// Password strength indicators
+const hasMinLength = ref(false)
+const hasUppercase = ref(false)
+const hasLowercase = ref(false)
+const hasNumber = ref(false)
+const hasSpecialChar = ref(false)
+const passwordStrength = ref(0)
+const passwordStrengthLabel = ref('')
+const passwordStrengthColor = ref('grey')
+
 // Validation rules
 const nameRules = [
   (val: string) => !!val || 'This field is required',
@@ -179,15 +228,59 @@ const emailRules = [
   (val: string) => /.+@.+\..+/.test(val) || 'Please enter a valid email'
 ]
 
+// Industry-standard password requirements (NIST/OWASP)
 const passwordRules = [
   (val: string) => !!val || 'Password is required',
-  (val: string) => val.length >= 8 || 'Password must be at least 8 characters'
+  (val: string) => val.length >= 12 || 'Password must be at least 12 characters',
+  (val: string) => /[A-Z]/.test(val) || 'Must contain at least one uppercase letter',
+  (val: string) => /[a-z]/.test(val) || 'Must contain at least one lowercase letter',
+  (val: string) => /\d/.test(val) || 'Must contain at least one number',
+  (val: string) => /[!@#$%^&*(),.?":{}|<>]/.test(val) || 'Must contain at least one special character (!@#$%^&*)'
 ]
 
 const confirmPasswordRules = [
   (val: string) => !!val || 'Please confirm your password',
   (val: string) => val === form.value.password || 'Passwords do not match'
 ]
+
+// Update password strength indicators
+const updatePasswordStrength = () => {
+  const password = form.value.password
+
+  hasMinLength.value = password.length >= 12
+  hasUppercase.value = /[A-Z]/.test(password)
+  hasLowercase.value = /[a-z]/.test(password)
+  hasNumber.value = /\d/.test(password)
+  hasSpecialChar.value = /[!@#$%^&*(),.?":{}|<>]/.test(password)
+
+  // Calculate strength (0-100)
+  let strength = 0
+  if (hasMinLength.value) strength += 20
+  if (hasUppercase.value) strength += 20
+  if (hasLowercase.value) strength += 20
+  if (hasNumber.value) strength += 20
+  if (hasSpecialChar.value) strength += 20
+
+  passwordStrength.value = strength
+
+  // Set label and color
+  if (strength === 0) {
+    passwordStrengthLabel.value = ''
+    passwordStrengthColor.value = 'grey'
+  } else if (strength <= 40) {
+    passwordStrengthLabel.value = 'Weak'
+    passwordStrengthColor.value = 'negative'
+  } else if (strength <= 60) {
+    passwordStrengthLabel.value = 'Fair'
+    passwordStrengthColor.value = 'warning'
+  } else if (strength <= 80) {
+    passwordStrengthLabel.value = 'Good'
+    passwordStrengthColor.value = 'info'
+  } else {
+    passwordStrengthLabel.value = 'Strong'
+    passwordStrengthColor.value = 'positive'
+  }
+}
 
 const isFormValid = computed(() => {
   return form.value.first_name &&
@@ -197,7 +290,7 @@ const isFormValid = computed(() => {
          form.value.password_confirmation &&
          form.value.password === form.value.password_confirmation &&
          /.+@.+\..+/.test(form.value.email) &&
-         form.value.password.length >= 8
+         passwordStrength.value === 100 // All password requirements met
 })
 
 const handleRegister = async () => {

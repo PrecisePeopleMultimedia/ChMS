@@ -278,17 +278,20 @@ onMounted(() => {
   border: 1px solid rgba(184, 51, 106, 0.2)
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3)
 
+// DO NOT add borders to .q-field__control - Quasar's outlined prop handles borders
+// This was causing double borders
 .garnet-input
-  .q-field__control
-    background: rgba(45, 27, 36, 0.5)
-    border-color: rgba(184, 51, 106, 0.3)
-    
-  .q-field__control:hover
-    border-color: rgba(184, 51, 106, 0.5)
-    
-  .q-field--focused .q-field__control
-    border-color: #B8336A
-    box-shadow: 0 0 0 1px rgba(184, 51, 106, 0.3)
+  // Quasar's outlined inputs use .q-field__outline for borders, not .q-field__control
+  &.q-field--outlined
+    .q-field__outline
+      border-color: rgba(184, 51, 106, 0.3)
+
+    &:hover .q-field__outline
+      border-color: rgba(184, 51, 106, 0.5)
+
+    &.q-field--focused .q-field__outline
+      border-color: #B8336A
+      box-shadow: 0 0 0 1px rgba(184, 51, 106, 0.3)
 
 .garnet-btn
   background: linear-gradient(135deg, #8B1538 0%, #B8336A 100%)

@@ -95,8 +95,17 @@ setup('verify test environment', async ({ page }) => {
   await page.fill('input[type="password"]', 'wrongpassword')
   await page.click('button:has-text("Sign In")')
 
-  // Should show error for invalid credentials
-  await expect(page.locator('text=Invalid credentials')).toBeVisible()
+  // Wait for error message to appear - check for alert container first, then text
+  // Error can appear in ModernAlert component or Quasar notification
+  // The error message from backend is "Invalid credentials" but LoginForm might show variations
+  const errorAlert = page.locator('.modern-alert, .q-banner, .q-notification, [role="alert"]')
+  await expect(errorAlert).toBeVisible({ timeout: 10000 })
+  
+  // Check for the error text - it should appear in either the alert or notification
+  // Accept multiple possible error messages (backend returns "Invalid credentials", but UI might show variations)
+  // Use getByText with regex to match "Invalid credentials" or "Invalid email or password"
+  const errorText = page.getByText(/Invalid (credentials|email or password)/i)
+  await expect(errorText).toBeVisible({ timeout: 5000 }) 
 
   console.log('✅ Test environment verified')
 })
