@@ -306,8 +306,10 @@ const handleRegister = async () => {
   try {
     isLoading.value = true
 
-    // Call backend API to register user
-    const response = await api.post('/auth/register', form.value)
+    // Call backend API to register user (with extended timeout for email sending)
+    const response = await api.post('/auth/register', form.value, {
+      timeout: 30000 // 30 seconds for email sending
+    })
 
     $q.notify({
       type: 'positive',
@@ -320,6 +322,19 @@ const handleRegister = async () => {
     router.push('/login')
   } catch (error: any) {
     console.error('Registration error:', error)
+
+    // Handle timeout errors gracefully
+    if (error.code === 'ECONNABORTED') {
+      $q.notify({
+        type: 'warning',
+        message: 'Registration is taking longer than expected. Please check your email in a few moments.',
+        position: 'top',
+        timeout: 7000
+      })
+      // Still redirect to login since registration likely succeeded
+      router.push('/login')
+      return
+    }
 
     const errorMessage = error.response?.data?.message ||
                         error.response?.data?.errors?.email?.[0] ||
