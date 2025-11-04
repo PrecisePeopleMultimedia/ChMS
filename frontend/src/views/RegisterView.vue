@@ -91,34 +91,37 @@
                   @click="showPassword = !showPassword"
                 />
               </template>
-              <template v-slot:hint>
-                <div class="text-caption">
-                  <div :class="{ 'text-positive': hasMinLength, 'text-grey-5': !hasMinLength }">
-                    <q-icon :name="hasMinLength ? 'check_circle' : 'radio_button_unchecked'" size="xs" />
-                    At least 12 characters
-                  </div>
-                  <div :class="{ 'text-positive': hasUppercase, 'text-grey-5': !hasUppercase }">
-                    <q-icon :name="hasUppercase ? 'check_circle' : 'radio_button_unchecked'" size="xs" />
-                    One uppercase letter
-                  </div>
-                  <div :class="{ 'text-positive': hasLowercase, 'text-grey-5': !hasLowercase }">
-                    <q-icon :name="hasLowercase ? 'check_circle' : 'radio_button_unchecked'" size="xs" />
-                    One lowercase letter
-                  </div>
-                  <div :class="{ 'text-positive': hasNumber, 'text-grey-5': !hasNumber }">
-                    <q-icon :name="hasNumber ? 'check_circle' : 'radio_button_unchecked'" size="xs" />
-                    One number
-                  </div>
-                  <div :class="{ 'text-positive': hasSpecialChar, 'text-grey-5': !hasSpecialChar }">
-                    <q-icon :name="hasSpecialChar ? 'check_circle' : 'radio_button_unchecked'" size="xs" />
-                    One special character (!@#$%^&*)
-                  </div>
-                </div>
-              </template>
             </q-input>
 
+            <!-- Password Requirements Checklist -->
+            <div v-if="form.password" class="q-mt-sm q-mb-md q-pa-sm" style="background: rgba(184, 51, 106, 0.1); border-radius: 8px; border-left: 3px solid #B8336A;">
+              <div class="text-caption text-weight-medium text-grey-3 q-mb-xs">Password Requirements:</div>
+              <div class="text-caption q-gutter-y-xs">
+                <div :class="{ 'text-positive': hasMinLength, 'text-grey-5': !hasMinLength }">
+                  <q-icon :name="hasMinLength ? 'check_circle' : 'radio_button_unchecked'" size="xs" />
+                  At least 12 characters
+                </div>
+                <div :class="{ 'text-positive': hasUppercase, 'text-grey-5': !hasUppercase }">
+                  <q-icon :name="hasUppercase ? 'check_circle' : 'radio_button_unchecked'" size="xs" />
+                  One uppercase letter
+                </div>
+                <div :class="{ 'text-positive': hasLowercase, 'text-grey-5': !hasLowercase }">
+                  <q-icon :name="hasLowercase ? 'check_circle' : 'radio_button_unchecked'" size="xs" />
+                  One lowercase letter
+                </div>
+                <div :class="{ 'text-positive': hasNumber, 'text-grey-5': !hasNumber }">
+                  <q-icon :name="hasNumber ? 'check_circle' : 'radio_button_unchecked'" size="xs" />
+                  One number
+                </div>
+                <div :class="{ 'text-positive': hasSpecialChar, 'text-grey-5': !hasSpecialChar }">
+                  <q-icon :name="hasSpecialChar ? 'check_circle' : 'radio_button_unchecked'" size="xs" />
+                  One special character (!@#$%^&*)
+                </div>
+              </div>
+            </div>
+
             <!-- Password Strength Indicator -->
-            <div v-if="form.password" class="q-mt-sm">
+            <div v-if="form.password" class="q-mb-md">
               <div class="text-caption text-grey-5 q-mb-xs">Password Strength</div>
               <q-linear-progress
                 :value="passwordStrength / 100"
@@ -186,11 +189,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import type { RegisterCredentials } from '@/types/auth'
 import BaseFormCard from '@/components/common/BaseFormCard.vue'
+import api from '@/services/api'
 
 const router = useRouter()
 const $q = useQuasar()
@@ -282,6 +286,11 @@ const updatePasswordStrength = () => {
   }
 }
 
+// Watch password field and update strength indicators in real-time
+watch(() => form.value.password, () => {
+  updatePasswordStrength()
+})
+
 const isFormValid = computed(() => {
   return form.value.first_name &&
          form.value.last_name &&
@@ -296,22 +305,31 @@ const isFormValid = computed(() => {
 const handleRegister = async () => {
   try {
     isLoading.value = true
-    
-    // Simulate registration (backend not ready yet)
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    
+
+    // Call backend API to register user
+    const response = await api.post('/auth/register', form.value)
+
     $q.notify({
       type: 'positive',
-      message: 'Account created successfully! Please sign in.',
-      position: 'top'
+      message: response.data.message || 'Registration successful! Please check your email to verify your account.',
+      position: 'top',
+      timeout: 5000
     })
-    
+
+    // Redirect to login page
     router.push('/login')
-  } catch (error) {
+  } catch (error: any) {
+    console.error('Registration error:', error)
+
+    const errorMessage = error.response?.data?.message ||
+                        error.response?.data?.errors?.email?.[0] ||
+                        'Registration failed. Please try again.'
+
     $q.notify({
       type: 'negative',
-      message: 'Registration failed. Please try again.',
-      position: 'top'
+      message: errorMessage,
+      position: 'top',
+      timeout: 5000
     })
   } finally {
     isLoading.value = false

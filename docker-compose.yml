@@ -108,6 +108,17 @@ services:
       timeout: 10s
       retries: 3
 
+  # MailHog - Email testing for development
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: chms_mailhog
+    restart: unless-stopped
+    ports:
+      - "1025:1025"  # SMTP server
+      - "8025:8025"  # Web UI at http://localhost:8025
+    networks:
+      - chms-network
+
 volumes:
   postgres_data:
   redis_data:
