@@ -54,3 +54,9 @@ build/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+# Debug files (keep locally but don't track)
+frontend/tests/e2e/debug-*.spec.ts
+frontend/debug-*.png
+frontend/**/debug-*.png
+*.debug.*
