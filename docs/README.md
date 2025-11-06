@@ -24,6 +24,7 @@ Deployment guides, production configuration, and infrastructure setup.
 ### 💻 [Development](./development/)
 Development workflow, git practices, and developer guides.
 
+- **[Developer Reference](./development/developer-reference.md)** - ⭐ **Comprehensive feature implementation status and developer guide**
 - **[Git Workflow](./development/git-workflow.md)** - Git workflow and branching strategy
 - **[Vue Security & Performance](./development/vue-security-performance.md)** - Vue.js security and performance best practices
 - **[Laravel Security & Performance](./development/laravel-security-performance.md)** - Laravel security and performance best practices
@@ -57,6 +58,13 @@ Database configuration, optimization, and best practices.
 - **[Best Practices Analysis](./postgresql/best-practices-analysis.md)** - PostgreSQL configuration analysis
 - **[Implementation Summary](./postgresql/implementation-summary.md)** - PostgreSQL optimization implementation
 - **[Additional Best Practices](./postgresql/additional-best-practices.md)** - Additional recommendations review
+
+### 📋 [Project Management](./project-management/)
+Project management documentation, MVP scope, and planning documents.
+
+- **[MVP Scope](./project-management/mvp-scope.md)** - Core MVP features and requirements
+- **[Security & Privacy Policy](./project-management/security-policy.md)** - Comprehensive security and privacy policy
+- **[Tech Stack Evaluation](./project-management/tech-stack-evaluation.md)** - Technology stack analysis and decisions
 
 ### 📈 [Roadmap](./roadmap/)
 Project roadmap, planning, and scalability guides.

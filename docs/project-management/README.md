@@ -1,4 +1,4 @@
-# PM Folder - ChMS
+# Project Management - ChMS
 
 This folder contains all project management documentation for the ChMS MVP. Only essential documents for the MVP are tracked here:
 

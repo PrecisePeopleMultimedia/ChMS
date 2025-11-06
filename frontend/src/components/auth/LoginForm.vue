@@ -188,7 +188,10 @@
 
     <template #footer>
       <div class="text-grey-5">
-        <router-link to="/forgot-password" class="text-primary text-decoration-none">
+        <router-link 
+          :to="forgotPasswordLink" 
+          class="text-primary text-decoration-none"
+        >
           Forgot your password?
         </router-link>
       </div>
@@ -284,6 +287,21 @@ const isFormValid = computed(() => {
   const passwordValid = passwordRules.every(rule => rule(form.value.password) === true)
 
   return emailValid && passwordValid
+})
+
+// Forgot password link with email pre-population
+// UX Enhancement: If user has entered a valid email in the login form,
+// it will be pre-populated in the forgot password form when they click the link
+const forgotPasswordLink = computed(() => {
+  const basePath = '/forgot-password'
+  // If email is entered and valid, pass it as query parameter
+  if (form.value.email && emailRules.every(rule => rule(form.value.email) === true)) {
+    return {
+      path: basePath,
+      query: { email: form.value.email }
+    }
+  }
+  return basePath
 })
 
 // Methods

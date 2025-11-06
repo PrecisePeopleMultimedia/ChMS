@@ -55,6 +55,52 @@ The Dashboard System provides church administrators with a comprehensive overvie
 - Swipe gestures work for navigation between dashboard sections
 - Dashboard works offline with cached data
 
+## Acceptance Criteria 🎯 **CRITICAL - DEFINES "DONE"**
+
+### Functional Acceptance
+- [ ] Dashboard displays member count, recent attendance, and upcoming events accurately
+- [ ] Metrics update in real-time when underlying data changes
+- [ ] Quick action buttons function correctly (add members, record attendance, create events)
+- [ ] Actions are contextually relevant based on user role (Admin, Staff, Member)
+- [ ] Activity feed shows recent member additions, attendance records, and profile updates
+- [ ] Activities are timestamped and include user information
+- [ ] Activity feed is paginated for performance (20 items per page)
+- [ ] Dashboard customization allows drag-and-drop widget rearrangement
+- [ ] Widget show/hide toggle works correctly
+- [ ] Role-based default layouts apply correctly (Pastor, Admin, Staff)
+
+### Technical Acceptance
+- [ ] Dashboard loads within 3 seconds on 3G connection
+- [ ] Works completely offline with cached data (24+ hours offline capability)
+- [ ] Syncs data automatically when online connection restored
+- [ ] Works on Android devices (Android 8+, 2GB RAM minimum)
+- [ ] Passes accessibility tests (WCAG AA compliance)
+- [ ] Has 80%+ test coverage for dashboard components
+- [ ] Real-time updates have < 500ms latency
+- [ ] Cache hit rate > 80% for dashboard data
+- [ ] Mobile performance maintains 60fps on mid-range devices
+
+### Africa-First Acceptance 🌍
+- [ ] Functions without internet connection (24+ hours offline with cached data)
+- [ ] Optimized for low-bandwidth usage (<50MB/month for typical dashboard usage)
+- [ ] Touch-friendly on mobile devices (48px minimum touch targets)
+- [ ] Works on mid-range Android phones (Android 8+, 2GB RAM minimum)
+- [ ] Minimal data usage (<3 seconds load time on 3G)
+- [ ] Dashboard data cached intelligently for offline access
+- [ ] Sync indicators clearly show data freshness and sync status
+- [ ] Offline actions queued and executed when connection restored
+- [ ] Data freshness timestamps visible to users
+
+### User Experience Acceptance
+- [ ] Dashboard is fully responsive (desktop, tablet, mobile layouts)
+- [ ] Key metrics prominently displayed on mobile screens
+- [ ] Swipe gestures work for navigation between dashboard sections
+- [ ] Quick actions work offline with queued synchronization
+- [ ] Loading states show skeleton screens during data fetch
+- [ ] Error states display clear messages with recovery options
+- [ ] Dashboard customization persists across sessions
+- [ ] Role-based defaults provide appropriate widgets per user type
+
 ## Functional Requirements
 
 ### Prompt Integration (AI-Assisted Design)

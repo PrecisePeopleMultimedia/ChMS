@@ -67,28 +67,47 @@ CREATE TABLE [table_name] (
 - **Feedback:** [Loading states, success/error messages]
 - **Accessibility:** [Screen reader, keyboard navigation requirements]
 
-## Acceptance Criteria
+## Acceptance Criteria 🎯 **CRITICAL - DEFINES "DONE"**
+
+**⚠️ ACCEPTANCE CRITERIA ARE REQUIRED - NOT OPTIONAL**
+
+Acceptance criteria define when a feature is complete and ready for testing. They are **critical** for:
+- ✅ **Definition of Done** - Clear criteria for completion
+- ✅ **Testing & QA** - Testable conditions for verification
+- ✅ **Stakeholder Alignment** - Shared understanding of requirements
+- ✅ **Progress Tracking** - Measurable completion criteria
+- ✅ **Quality Assurance** - Ensures features meet expectations
+
+**Each criterion must be:**
+- ✅ **Testable** - Can be verified through testing (automated or manual)
+- ✅ **Specific** - Clear, measurable condition with numbers/metrics where applicable
+- ✅ **Required** - Must pass for feature to be considered complete
+- ✅ **Measurable** - Includes performance targets, thresholds, or success rates
 
 ### Functional Acceptance
-- [ ] User can [perform core action]
-- [ ] System validates [input/data]
-- [ ] Error handling works for [error scenarios]
-- [ ] Data persists correctly
+- [ ] User can [perform core action with specific outcome]
+- [ ] System validates [specific input/data types and formats]
+- [ ] Error handling works for [specific error scenarios with expected responses]
+- [ ] Data persists correctly [describe where and how]
+- [ ] [Add 3-5 more specific functional criteria based on feature scope]
 
 ### Technical Acceptance
-- [ ] Works offline (core functionality)
-- [ ] Syncs data when online
-- [ ] Loads in < 3 seconds on 3G
-- [ ] Works on Android devices
-- [ ] Passes accessibility tests
-- [ ] Has comprehensive test coverage
+- [ ] Works offline (core functionality for 24+ hours)
+- [ ] Syncs data when online (automatic conflict resolution)
+- [ ] Loads in < 3 seconds on 3G connection
+- [ ] Works on Android devices (Android 8+, 2GB RAM minimum)
+- [ ] Passes accessibility tests (WCAG AA compliance)
+- [ ] Has 80%+ test coverage for critical paths
+- [ ] [Add performance/security criteria as needed - response times, throughput, etc.]
 
-### Africa-First Acceptance
-- [ ] Functions without internet connection
-- [ ] Optimized for low-bandwidth usage
-- [ ] Touch-friendly on mobile devices
-- [ ] Works on mid-range Android phones
-- [ ] Minimal data usage
+### Africa-First Acceptance 🌍
+- [ ] Functions without internet connection (24+ hours offline capability)
+- [ ] Optimized for low-bandwidth usage (<50MB/month total for typical usage)
+- [ ] Touch-friendly on mobile devices (48px minimum touch targets, larger than standard)
+- [ ] Works on mid-range Android phones (Android 8+, 2GB RAM minimum)
+- [ ] Minimal data usage (<3 seconds load time on 3G networks)
+- [ ] Multi-language support ready (English, Yoruba, Hausa, Igbo)
+- [ ] Affordable data consumption (works efficiently with 500MB/month plans)
 
 ## Testing Strategy
 

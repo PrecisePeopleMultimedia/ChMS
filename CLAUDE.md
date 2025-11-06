@@ -51,7 +51,7 @@ ChMS/
 │   ├── templates/               # Templates for specs, plans, tasks
 │   └── scripts/                 # Automation scripts
 ├── legacy-backup-original-state/ # Backup of original project state
-├── pm/                          # Project management documentation
+├── docs/project-management/     # Project management documentation
 │   ├── mvp-scope.md            # MVP feature scope
 │   └── security-policy.md      # Security guidelines
 ├── backend/                     # Laravel backend (to be created)

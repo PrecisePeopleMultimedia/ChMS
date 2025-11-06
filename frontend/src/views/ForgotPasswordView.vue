@@ -80,12 +80,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, computed, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { useQuasar } from 'quasar'
 import axios from 'axios'
 
 const router = useRouter()
+const route = useRoute()
 const $q = useQuasar()
 
 const email = ref('')
@@ -99,6 +100,16 @@ const emailRules = [
 
 const isFormValid = computed(() => {
   return email.value && /.+@.+\..+/.test(email.value)
+})
+
+// Pre-populate email from query parameter (if coming from login form)
+// UX Enhancement: If user navigated from login form with an email entered,
+// pre-populate the email field so they don't have to type it again
+onMounted(() => {
+  const emailParam = route.query.email as string | undefined
+  if (emailParam && /.+@.+\..+/.test(emailParam)) {
+    email.value = emailParam
+  }
 })
 
 const handleForgotPassword = async () => {
