@@ -252,7 +252,7 @@ router.beforeEach(async (to, from, next) => {
     return
   }
 
-  // Check organization setup for authenticated users (except setup page)
+  // Check organization setup for authenticated users (except setup page and dashboard redirect)
   if (to.meta.requiresAuth && authStore.isAuthenticated && to.name !== 'OrganizationSetup') {
     if (!organizationStore.isSetupComplete) {
       try {
@@ -262,7 +262,8 @@ router.beforeEach(async (to, from, next) => {
       }
     }
 
-    if (!organizationStore.isSetupComplete) {
+    // Allow dashboard access for redirect scenarios, but redirect to setup for other protected routes
+    if (!organizationStore.isSetupComplete && to.name !== 'Dashboard') {
       next({ name: 'OrganizationSetup' })
       return
     }

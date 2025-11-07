@@ -319,8 +319,16 @@ const handleLogin = async () => {
       message: 'Welcome back!',
       position: 'top'
     })
-    
-    router.push('/dashboard')
+
+    // Handle redirect after successful login
+    const redirectPath = router.currentRoute.value.query.redirect as string
+    if (redirectPath && redirectPath.startsWith('/')) {
+      console.log('Redirecting to:', redirectPath)
+      await router.push(redirectPath)
+    } else {
+      console.log('Redirecting to dashboard')
+      await router.push('/dashboard')
+    }
   } catch (error: any) {
     console.error('Login error:', error)
 
