@@ -281,7 +281,7 @@ test.describe('Theme Switching (Light/Dark Mode)', () => {
       await page.goto('/login')
 
       // Check text is visible in dark mode
-      const welcomeTextDark = page.locator('text=Welcome to ChurchAfrica')
+      const welcomeTextDark = page.locator('.brand-title')
       await expect(welcomeTextDark).toBeVisible()
 
       // Toggle to light mode
@@ -290,7 +290,7 @@ test.describe('Theme Switching (Light/Dark Mode)', () => {
       await page.waitForTimeout(500)
 
       // Check text is still visible in light mode
-      const welcomeTextLight = page.locator('text=Welcome to ChurchAfrica')
+      const welcomeTextLight = page.locator('.brand-title')
       await expect(welcomeTextLight).toBeVisible()
 
       // Check form inputs are visible in both modes
@@ -401,7 +401,7 @@ test.describe('Theme Switching (Light/Dark Mode)', () => {
       }
 
       // Page should still be responsive
-      await expect(page.locator('text=Welcome to ChurchAfrica')).toBeVisible()
+      await expect(page.locator('.brand-title')).toBeVisible()
       await expect(page.locator('input[type="email"]')).toBeVisible()
     })
 
