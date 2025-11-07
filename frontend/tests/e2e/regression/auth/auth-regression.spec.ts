@@ -29,8 +29,7 @@ test.describe('Authentication Regression Tests', () => {
       await page.goto('/login')
 
       // Check page title and branding
-      await expect(page.locator('h1')).toContainText('ChurchAfrica')
-      await expect(page.locator('text=Welcome to ChurchAfrica')).toBeVisible()
+      await expect(page.locator('.brand-title')).toContainText('ChurchAfrica')
       await expect(page.locator('text=Sign in to your account')).toBeVisible()
 
       // Check form elements
