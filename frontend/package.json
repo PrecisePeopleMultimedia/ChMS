@@ -43,7 +43,7 @@
     "@sentry/vite-plugin": "^4.3.0",
     "@sentry/vue": "^10.18.0",
     "@vueuse/core": "^13.9.0",
-    "axios": "^1.12.2",
+    "axios": "^1.13.2",
     "idb": "^8.0.3",
     "pinia": "^3.0.3",
     "qrcode": "^1.5.4",
