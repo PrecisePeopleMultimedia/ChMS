@@ -1,0 +1,28 @@
+{
+  "_comment": "Optional MCP servers - enable only when needed",
+  "optionalServers": {
+    "postgres": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-postgres@latest"],
+      "description": "PostgreSQL database operations - Use Laravel tinker or psql instead",
+      "env": {
+        "POSTGRES_CONNECTION_STRING": "${DATABASE_URL}"
+      },
+      "when_to_use": "Only when you need to query DB directly without Laravel"
+    },
+    "docker": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-docker@latest"],
+      "description": "Docker container management - Use docker-compose commands instead",
+      "env": {},
+      "when_to_use": "Only when you need programmatic container management"
+    },
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["chrome-devtools-mcp@latest"],
+      "description": "Chrome DevTools - Use browser DevTools directly instead",
+      "env": {},
+      "when_to_use": "Only when debugging complex frontend issues programmatically"
+    }
+  }
+}

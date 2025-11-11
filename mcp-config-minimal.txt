@@ -1,0 +1,37 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-filesystem@latest", "/mnt/c/Users/Username/Documents/github/ChMS"],
+      "description": "File system operations for ChMS project",
+      "env": {}
+    },
+    "git": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-git@latest", "/mnt/c/Users/Username/Documents/github/ChMS"],
+      "description": "Git operations for ChMS version control",
+      "env": {}
+    }
+  },
+  "project": {
+    "name": "ChMS",
+    "description": "Church Management System - Africa-first, offline-capable solution",
+    "tech_stack": [
+      "Vue 3",
+      "Laravel 11",
+      "PostgreSQL",
+      "Quasar Framework",
+      "TypeScript"
+    ],
+    "environments": {
+      "development": {
+        "api_url": "http://localhost:8000/api",
+        "frontend_url": "http://localhost:9000"
+      },
+      "production": {
+        "api_url": "https://api.churchafrica.com",
+        "frontend_url": "https://app.churchafrica.com"
+      }
+    }
+  }
+}
