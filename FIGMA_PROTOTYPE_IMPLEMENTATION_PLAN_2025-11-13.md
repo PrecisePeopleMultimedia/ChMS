@@ -527,6 +527,94 @@ After reviewing the prototype against the 18 specifications, the following specs
 
 ---
 
+## Pre-Implementation: Specification Updates
+
+**⚠️ IMPORTANT**: Before starting Phase 1, update the specification documents as decided.
+
+### Task 0.1: Update Spec 004 (UI/UX System)
+**Priority**: P0 (Critical - Must do before Phase 1)
+**Estimated Time**: 2-3 hours
+
+**Subtasks:**
+1. **Review Current Spec 004**
+   - Read `.specify/specs/005-ui-ux-system/spec.md`
+   - Document current requirements
+   - Identify what needs updating
+
+2. **Update with TweakCN Theme Requirements**
+   - Add OKLCH color space specification
+   - Add Geist font specification
+   - Add Tailwind v4 CSS-first configuration
+   - Add design tokens (shadows, border radius, letter spacing)
+   - Add 3-column layout specification
+   - Add mobile bottom navigation specification
+
+3. **Update Color System Section**
+   - Replace old color system with OKLCH
+   - Add fallback strategy for older browsers
+   - Document OKLCH color values
+   - Add chart colors specification
+
+4. **Update Typography Section**
+   - Replace font specification with Geist
+   - Add global light font weights for headings
+   - Update base font size to 15px
+   - Add letter spacing specification
+
+5. **Update Layout Section**
+   - Add 3-column layout specification
+   - Add collapsible sidebar specification
+   - Add mobile bottom navigation specification
+   - Add responsive breakpoints
+
+6. **Update Component Patterns**
+   - Add ShadCN-style component patterns
+   - Document Quasar adaptation strategy
+   - Add component library decision rationale
+
+**Files to Modify:**
+- `.specify/specs/005-ui-ux-system/spec.md`
+
+**Acceptance Criteria:**
+- [ ] Spec 004 updated with TweakCN theme requirements
+- [ ] OKLCH color system documented
+- [ ] Geist font documented
+- [ ] Layout system documented
+- [ ] Component library strategy documented
+- [ ] All design decisions reflected in spec
+
+---
+
+### Task 0.2: Update Spec 005 (Dashboard System) - Merge Best of Both
+**Priority**: P1 (High - Should do before Phase 3)
+**Estimated Time**: 1-2 hours
+
+**Subtasks:**
+1. **Review Current Spec 005**
+   - Read `.specify/specs/006-dashboard-system/spec.md`
+   - Document current functional requirements
+
+2. **Review Prototype Dashboard**
+   - Document prototype dashboard features
+   - Document prototype dashboard design
+
+3. **Merge Requirements**
+   - Keep all functional requirements from spec
+   - Add visual design requirements from prototype
+   - Document any conflicts and resolutions
+   - Create unified dashboard specification
+
+**Files to Modify:**
+- `.specify/specs/006-dashboard-system/spec.md`
+
+**Acceptance Criteria:**
+- [ ] Spec 005 updated with prototype design requirements
+- [ ] All functional requirements preserved
+- [ ] Visual design requirements added
+- [ ] Conflicts resolved and documented
+
+---
+
 ## Implementation Tasks
 
 ### Phase 1: Design System Foundation (CRITICAL - Do First)
@@ -561,9 +649,36 @@ After reviewing the prototype against the 18 specifications, the following specs
    - **Chart colors in OKLCH** (5 distinct colors for data visualization)
    - **Sidebar colors in OKLCH** (if applicable)
 
-3. **Set Up Tailwind v4 CSS-First Configuration**
+3. **Add Fallbacks for Older Browsers**
+   - Create hex/RGB fallback values for all OKLCH colors
+   - Use `@supports` queries to provide fallbacks
+   - Test in browsers without OKLCH support
+   - Ensure graceful degradation
+   - **Fallback Strategy:**
+     ```css
+     :root {
+       /* Fallback for older browsers */
+       --primary: #1CE479;
+       --background: #0A0A0F;
+       --card: #1A1A20;
+       /* ... other fallbacks ... */
+     }
+     
+     @supports (color: oklch(0 0 0)) {
+       :root {
+         /* OKLCH for modern browsers */
+         --primary: oklch(0.4365 0.1044 156.7556);
+         --background: oklch(0.1822 0 0);
+         --card: oklch(0.2046 0 0);
+         /* ... other OKLCH colors ... */
+       }
+     }
+     ```
+
+4. **Set Up Tailwind v4 CSS-First Configuration**
    - Use `@theme inline` directive (Tailwind v4)
    - Map all OKLCH CSS variables to Tailwind utilities
+   - Map fallback colors to Tailwind utilities
    - No JavaScript config needed for colors
    - Ensure OKLCH support in build process
 
@@ -612,6 +727,8 @@ After reviewing the prototype against the 18 specifications, the following specs
 **Acceptance Criteria:**
 - [ ] ALL old colors removed
 - [ ] OKLCH color space implemented (not hex/RGB)
+- [ ] Fallback colors (hex/RGB) implemented for older browsers
+- [ ] `@supports` queries used for OKLCH detection
 - [ ] Primary color is `oklch(0.4365 0.1044 156.7556)` throughout app
 - [ ] Background is `oklch(0.1822 0 0)` everywhere (equivalent to `#0A0A0F`)
 - [ ] Cards use `oklch(0.2046 0 0)` background (equivalent to `#1A1A20`)
@@ -619,7 +736,9 @@ After reviewing the prototype against the 18 specifications, the following specs
 - [ ] Chart colors implemented (5 OKLCH colors)
 - [ ] NO hardcoded old colors remain
 - [ ] Visual match with prototype color system
-- [ ] OKLCH colors render correctly in browsers
+- [ ] OKLCH colors render correctly in modern browsers
+- [ ] Fallback colors render correctly in older browsers
+- [ ] Tested in browsers without OKLCH support
 
 ---
 
@@ -636,16 +755,29 @@ After reviewing the prototype against the 18 specifications, the following specs
    - Remove current line height settings
    - Document what was removed
 
-2. **Implement Geist Font System**
+2. **Implement Geist Font System (Global Application)**
    - **Import Geist font from Google Fonts:**
      ```css
      @import url('https://fonts.googleapis.com/css2?family=Geist:wght@100;200;300;400;500;600;700;800&display=swap');
      ```
    - Set font family: `'Geist', sans-serif` (NOT Inter, NOT system fonts)
    - Base font size: **15px** (not 14px - prototype uses 15px)
-   - Font weights: Light (300) for headings, Regular (400) for body
+   - **Apply light font weights globally for ALL headings:**
+     - H1: `font-weight: 300` (light)
+     - H2: `font-weight: 300` (light)
+     - H3: `font-weight: 300` (light)
+     - H4: `font-weight: 300` (light)
+     - H5: `font-weight: 300` (light)
+     - H6: `font-weight: 300` (light)
+   - Body text: `font-weight: 400` (regular)
    - Letter spacing: `0.025em` (normal), with tight/wide variants
    - Line heights: Tight (1.0-1.2) for headings, Normal (1.5) for body
+   - **Global CSS rule:**
+     ```css
+     h1, h2, h3, h4, h5, h6 {
+       font-weight: 300; /* Light weight globally */
+     }
+     ```
 
 3. **Configure Font Rendering**
    - Enable antialiasing: `-webkit-font-smoothing: antialiased`
@@ -694,16 +826,50 @@ After reviewing the prototype against the 18 specifications, the following specs
 - [ ] Geist font imported from Google Fonts
 - [ ] Font family is `'Geist', sans-serif` throughout
 - [ ] Base font size is 15px (not 14px)
-- [ ] Headings use light font weights (300)
+- [ ] **ALL headings (H1-H6) use light font weight (300) globally**
 - [ ] Body text uses regular weight (400)
 - [ ] Letter spacing is `0.025em` (normal)
 - [ ] Line heights match prototype exactly
 - [ ] Font rendering is optimized (antialiased, etc.)
 - [ ] Visual match with prototype typography
+- [ ] Global heading styles applied (no component-specific overrides needed)
 
 ---
 
 #### Task 1.3: Replace Layout System (Complete Overhaul)
+**Priority**: P0 (Critical)
+**Estimated Time**: 10-12 hours
+
+**⚠️ CRITICAL**: This is a COMPLETE REPLACEMENT. Remove current layout and replace with prototype's 3-column layout.
+
+**Subtasks:**
+1. **Remove Current Layout**
+   - Remove current layout components
+   - Remove current layout styles
+   - Document what was removed
+   - Backup current layout (for reference)
+
+2. **Implement 3-Column Layout (Complete Replacement)**
+   - **Left Sidebar**: 280px fixed width, collapsible
+   - **Main Content**: Flexible width, responsive
+   - **Right Sidebar** (optional): 320px, collapsible
+   - **Mobile**: Bottom navigation bar (always visible)
+   - **Breakpoints**: Match prototype exactly
+   - **Collapsible Sidebars**: Smooth animations
+   - **State Persistence**: Use localStorage for sidebar state
+
+3. **Implement Mobile Bottom Navigation (Always Visible)**
+   - **Always show on mobile** (no configuration needed)
+   - Fixed position at bottom
+   - Icon + label design
+   - Active state indicators
+   - Smooth transitions
+   - Touch-friendly sizing (min 44px height)
+
+4. **Remove Layout Configuration Options**
+   - Remove any layout configuration
+   - Remove layout switching options
+   - Use prototype layout as single source of truth
 **Priority**: P0 (Critical)
 **Estimated Time**: 10-12 hours
 
@@ -887,7 +1053,38 @@ After reviewing the prototype against the 18 specifications, the following specs
 
 ### Phase 3: Feature Components
 
-#### Task 3.1: Dashboard Components
+#### Task 3.1: Dashboard Components (Merge Best of Both Worlds)
+**Priority**: P1 (High)
+**Estimated Time**: 15-20 hours
+
+**⚠️ Dashboard Strategy**: Merge prototype design with existing spec requirements:
+- Use prototype as visual design reference
+- Keep all functional requirements from Spec 005
+- Combine best features from both
+
+**Charting Library**: Use **ECharts for Vue** (`vue-echarts`)
+- Feature-rich, good performance
+- Excellent mobile support
+- Bundle size: ~150KB gzipped (acceptable)
+- Replace all chart placeholders with ECharts components
+
+**Subtasks:**
+1. **Install Charting Library**
+   - Install `vue-echarts` and `echarts`
+   - Configure ECharts with OKLCH colors
+   - Create chart wrapper components
+   - Test bundle size impact
+
+2. **Create Dashboard Chart Components**
+**Priority**: P1 (High)
+**Estimated Time**: 15-20 hours
+
+**⚠️ Dashboard Strategy**: Merge prototype design with existing spec requirements:
+- Use prototype as visual design reference
+- Keep all functional requirements from Spec 005
+- Combine best features from both
+
+**Subtasks:**
 **Priority**: P1 (High)
 **Estimated Time**: 16-20 hours
 
@@ -1686,56 +1883,76 @@ Before starting implementation, ensure:
 
 ## Questions & Clarifications
 
-### Design Questions
+### ✅ Design Questions - ANSWERED
 
-1. **Color System**: The prototype uses **OKLCH color space** (`oklch(0.4365 0.1044 156.7556)`) not hex. Should we:
-   - Completely replace with OKLCH system?
-   - Add fallbacks for older browsers?
-   - Or maintain both and allow switching?
+1. **Color System**: ✅ **DECIDED**
+   - ✅ Completely replace with OKLCH system
+   - ✅ Add fallbacks for older browsers (hex/RGB fallbacks)
+   - **Implementation**: Use OKLCH as primary, with `@supports` fallbacks for older browsers
 
-2. **Typography**: The prototype uses very light font weights (200-300) for headings. Should we:
-   - Apply this globally?
-   - Or only to specific components?
+2. **Typography**: ✅ **DECIDED**
+   - ✅ Apply light font weights (200-300) globally for headings
+   - **Implementation**: Global typography system with light weights for all headings
 
-3. **Layout**: The prototype has a 3-column layout with collapsible sidebars. Should we:
-   - Replace the current layout completely?
-   - Or make it configurable?
+3. **Layout**: ✅ **DECIDED**
+   - ✅ Replace the current layout completely
+   - **Implementation**: Complete 3-column layout replacement with collapsible sidebars
 
-4. **Mobile Navigation**: The prototype has a bottom navigation bar for mobile. Should we:
-   - Always show it on mobile?
-   - Or make it configurable?
+4. **Mobile Navigation**: ✅ **DECIDED**
+   - ✅ Always show bottom navigation bar on mobile
+   - **Implementation**: Persistent mobile bottom nav (no configuration needed)
 
-### Technical Questions
+### ✅ Technical Questions - ANSWERED
 
-1. **Component Library**: Should we:
-   - Create new base components matching ShadCN?
-   - Or style existing Quasar components to match?
+1. **Component Library**: ✅ **DECIDED**
+   - **Decision**: Use ShadCN-style components if no performance impact, otherwise adapt Quasar components
+   - **Analysis Required**: Need to evaluate bundle size impact
+   - **Recommendation**: 
+     - **Phase 1**: Adapt Quasar components to match ShadCN styling (better performance, smaller bundle)
+     - **Phase 2**: Create custom ShadCN-style components only where Quasar can't match the design
+   - **Bundle Size Target**: Keep under 500KB initial load
+   - **Performance Check**: Test bundle size before/after component library decision
 
-2. **State Management**: The prototype uses React Context. Should we:
-   - Migrate all state to Pinia stores?
-   - Or use a hybrid approach?
+2. **State Management**: ✅ **DECIDED**
+   - ✅ Migrate all state to Pinia stores
+   - **Implementation**: Convert all React Context to Pinia stores, no hybrid approach
 
-3. **Routing**: The prototype uses tab-based navigation in some areas. Should we:
-   - Use Vue Router with nested routes?
-   - Or use a custom tab system?
+3. **Routing**: ✅ **DECIDED**
+   - **Decision**: Use best practices for performance, SEO, and UX
+   - **Recommendation**: 
+     - Use Vue Router with nested routes for tab-based navigation
+     - Implement route-based code splitting for performance
+     - Use meta tags for SEO
+     - Implement proper loading states for UX
+   - **Implementation**: Vue Router nested routes with lazy loading
 
-4. **Charts**: The prototype uses Recharts. Should we:
-   - Use a Vue charting library (e.g., ECharts, Chart.js)?
-   - Or create custom chart components?
+4. **Charts**: ✅ **DECIDED**
+   - ✅ Use a Vue charting library
+   - **Recommendation**: 
+     - **Option 1**: **ECharts for Vue** (`vue-echarts`) - Most feature-rich, good performance
+     - **Option 2**: **Chart.js with vue-chartjs** - Lighter weight, simpler API
+     - **Option 3**: **ApexCharts Vue** - Modern, good mobile support
+   - **Selected**: **ECharts for Vue** (`vue-echarts`)
+   - **Why**: Best balance of features, performance, and mobile support
+   - **Bundle Size**: ~150KB gzipped (acceptable for our 500KB target)
+   - **Installation**: `npm install vue-echarts echarts`
+   - **Configuration**: Use OKLCH colors from design system
 
-### Specification Questions
+### ✅ Specification Questions - ANSWERED
 
-1. **Spec 004 (UI/UX)**: This spec needs major updates. Should we:
-   - Update the spec document first?
-   - Or update it as we implement?
+1. **Spec 004 (UI/UX)**: ✅ **DECIDED**
+   - ✅ Update the spec document first
+   - **Implementation**: Update Spec 004 before starting Phase 1 implementation
+   - **Task Added**: See "Pre-Implementation: Specification Updates" section
 
-2. **Spec 005 (Dashboard)**: The dashboard spec may not match the prototype. Should we:
-   - Update the spec to match prototype?
-   - Or follow the existing spec?
+2. **Spec 005 (Dashboard)**: ✅ **DECIDED**
+   - ✅ Merge the best of both worlds
+   - **Implementation**: Combine prototype design with existing spec requirements
+   - **Approach**: Use prototype as visual reference, keep spec functional requirements
 
-3. **Priority**: Which features should be implemented first?
-   - Design system foundation (Phase 1)?
-   - Or specific feature components?
+3. **Priority**: ✅ **DECIDED**
+   - ✅ Design system foundation (Phase 1) first
+   - **Implementation Order**: Phase 1 → Phase 2 → Phase 3 → Phase 4 → Phase 5
 
 ---
 
