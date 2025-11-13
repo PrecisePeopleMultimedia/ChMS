@@ -12,6 +12,8 @@ This document provides a comprehensive, step-by-step implementation plan to **CO
 
 **⚠️ BRANCH STRATEGY**: This major update will be carried out on a **separate feature branch** to maintain integrity of the current codebase. The current main/master branch will remain stable and functional while this overhaul is in progress.
 
+**⚠️ PIXEL-PERFECT REQUIREMENT**: The React prototype (`ChMS-by-Make`) is the **SINGLE SOURCE OF TRUTH** for all visual design. Every component, layout, color, spacing, typography, and animation must match **EXACTLY**. No creative interpretations, no "improvements", no deviations. See `docs/migration/PIXEL_PERFECT_IMPLEMENTATION_GUIDE.md` for complete pixel-perfect implementation strategy.
+
 **Prototype Source**: 
 - Figma: https://www.figma.com/make/RFzrbbFTveD3cc2wlJ6571/ChMS-by-Make
 - Web Preview: https://cast-bloom-55985635.figma.site
@@ -365,6 +367,107 @@ For each component being replaced:
 - Small font size (0.75rem)
 - Background with opacity (e.g., `bg-warning/20`)
 
+### Component Variant Mapping
+
+**Base Components with All Variants:**
+
+1. **Button Component** (24 total variants)
+   - **Variants** (6): default, outline, ghost, destructive, secondary, link
+   - **Sizes** (4): sm (32px), default (40px), lg (48px), icon (32px)
+   - **States** (4): default, hover, active, disabled
+   - **Total Combinations**: 6 × 4 × 4 = 96 variants (many will be handled by CSS)
+
+2. **Card Component** (6 total variants)
+   - **Types** (3): default, elevated, outlined
+   - **Sizes** (2): default (p-6), compact (p-4)
+   - **States** (2): default, hover
+   - **Features**: Optional header, optional footer, optional actions
+
+3. **Badge Component** (10 total variants)
+   - **Variants** (5): default, outline, success, warning, destructive
+   - **Sizes** (2): sm (0.75rem), default (0.875rem)
+   - **States** (2): default, removable (with × icon)
+
+4. **Input Component** (6 total variants)
+   - **States** (3): default, error, disabled
+   - **Sizes** (2): sm (36px), default (44px)
+   - **Types**: text, email, password, number, tel, search
+   - **Features**: Optional label, optional helper text, optional error message
+
+5. **Select Component** (8 total variants)
+   - **States** (3): default, error, disabled
+   - **Sizes** (2): sm, default
+   - **Types**: single-select, multi-select
+   - **Features**: Searchable, clearable, creatable
+
+6. **Dialog/Modal Component** (4 total variants)
+   - **Sizes** (4): sm (400px), default (600px), lg (800px), fullscreen
+   - **Features**: Optional header, custom footer, close button, backdrop click handling
+
+7. **Tabs Component** (6 total variants)
+   - **Types** (3): default, underline, pills
+   - **Sizes** (2): sm, default
+   - **Features**: Icons, vertical orientation, disabled tabs
+
+**Total Estimated Variants**: ~50-60 across all base components
+
+**Variant Implementation Strategy:**
+- Use CSS custom properties for dynamic variant handling
+- Create utility classes for combinations (e.g., `btn-primary-sm`, `card-elevated`)
+- Maintain Quasar component functionality with custom styling
+- Document all variants in component prop definitions
+
+### Animation Requirements
+
+**Animation System:**
+- **Timing**: Consistent easing functions
+  - Ease-in-out: `cubic-bezier(0.4, 0, 0.2, 1)` (standard)
+  - Ease-out: `cubic-bezier(0, 0, 0.2, 1)` (exiting)
+  - Ease-in: `cubic-bezier(0.4, 0, 1, 1)` (entering)
+
+- **Durations** (in milliseconds):
+  - Fast: 150ms (button hover, tooltip)
+  - Standard: 200ms (modal, dropdown)
+  - Slow: 300ms (sidebar, page transitions)
+  - Extra Slow: 500ms (complex animations)
+
+**Required Animations:**
+1. **Sidebar Transitions**
+   - Collapse/Expand: 300ms ease-in-out
+   - Overlay fade: 200ms ease-out
+   - Content slide: 300ms ease-in-out
+
+2. **Button Interactions**
+   - Hover state: 150ms ease-out
+   - Active/Pressed: 100ms ease-in-out
+   - Focus ring: 200ms ease-out
+
+3. **Modal/Dialog Animations**
+   - Backdrop fade: 200ms ease-out
+   - Content scale/fade: 200ms ease-out
+   - Exit: 150ms ease-in
+
+4. **Page/Route Transitions**
+   - Fade: 200ms ease-in-out
+   - Slide (mobile): 300ms ease-in-out
+   - No animation on reduced motion preference
+
+5. **Loading States**
+   - Spinner: 1s linear rotation (infinite)
+   - Skeleton: 1.5s ease-in-out pulse
+   - Progress bar: 300ms ease-out
+
+6. **Toast Notifications**
+   - Slide in: 200ms ease-out
+   - Auto-dismiss after 5s
+   - Slide out: 150ms ease-in
+
+**Performance Considerations:**
+- Use CSS `transform` and `opacity` for 60fps animations
+- Avoid animating `width`, `height`, `margin`, `padding`
+- Respect `prefers-reduced-motion` media query
+- Use `will-change` sparingly and only when needed
+
 ---
 
 ## Component Mapping Strategy
@@ -531,7 +634,71 @@ After reviewing the prototype against the 18 specifications, the following specs
 
 **⚠️ IMPORTANT**: Before starting Phase 1, update the specification documents as decided.
 
-### Task 0.1: Update Spec 004 (UI/UX System)
+**⚠️ PIXEL-PERFECT VALIDATION**: All implementation tasks must follow the pixel-perfect requirements:
+- **Reference Documents**: 
+  - `docs/migration/PIXEL_PERFECT_IMPLEMENTATION_GUIDE.md` - Complete pixel-perfect strategy
+  - `docs/migration/PIXEL_PERFECT_VALIDATION_CHECKLIST.md` - Step-by-step validation process
+  - `docs/migration/REACT_VUE_COMPONENT_MAPPING.md` - Exact component conversions
+  - `docs/testing/VISUAL_REGRESSION_SETUP.md` - Visual testing infrastructure
+- **Validation Process**: 
+  1. Analyze React component (screenshot, measurements)
+  2. Implement Vue component matching exactly
+  3. Visual comparison (side-by-side, image diff)
+  4. Measurement verification (DevTools)
+  5. Visual regression test
+  6. Cross-browser verification
+- **Acceptance Criteria**: Component is complete ONLY when:
+  - Visual screenshot matches React prototype exactly (pixel-perfect)
+  - All states (default, hover, active, disabled) match exactly
+  - All measurements match exactly (verified with DevTools)
+  - All colors match exactly (OKLCH values verified)
+  - Visual regression test passes
+- **Critical Principle**: The React prototype is the SINGLE SOURCE OF TRUTH. No deviations, no "improvements", no creative interpretations.
+
+### Task 0.1: Component Complexity Matrix & Audit
+**Priority**: P0 (Critical - Must do before Phase 1)
+**Estimated Time**: 3-4 hours
+
+**Subtasks:**
+1. **Categorize All Components**
+   - Simple: Basic UI components (Button, Badge, Input) - 4-6 hours each
+   - Moderate: Feature components (MemberCard, ServiceCard) - 8-12 hours each
+   - Complex: Interactive components (Dashboard, CheckInKiosk) - 16-24 hours each
+
+2. **Prioritize by User Impact**
+   - High Impact: Dashboard, Member Management, Attendance (used daily)
+   - Medium Impact: Settings, Reports, Events (used weekly)
+   - Low Impact: Admin utilities, optional features (used monthly)
+
+3. **Prioritize by Usage Frequency**
+   - Daily: Layout components, Navigation, Dashboard, Member List
+   - Weekly: Attendance, Reports, Settings
+   - Monthly: Admin features, advanced settings
+
+4. **Document Component Dependencies**
+   - Identify which components depend on which stores/composables
+   - Document component composition patterns
+   - Create migration dependency graph
+
+5. **Create Migration Priority Matrix**
+   - High Priority: High Impact + High Frequency (migrate first)
+   - Medium Priority: High Impact + Medium Frequency OR Medium Impact + High Frequency
+   - Low Priority: Medium Impact + Low Frequency OR Low Impact + Any Frequency
+
+**Files to Create:**
+- `docs/migration/COMPONENT_COMPLEXITY_MATRIX.md` - Detailed component analysis
+- `docs/migration/MIGRATION_PRIORITY_MATRIX.md` - Migration order and dependencies
+
+**Acceptance Criteria:**
+- [ ] All components categorized by complexity
+- [ ] All components prioritized by impact and frequency
+- [ ] Component dependencies documented
+- [ ] Migration order established
+- [ ] Complexity estimates validated
+
+---
+
+### Task 0.2: Update Spec 004 (UI/UX System)
 **Priority**: P0 (Critical - Must do before Phase 1)
 **Estimated Time**: 2-3 hours
 
@@ -612,6 +779,139 @@ After reviewing the prototype against the 18 specifications, the following specs
 - [ ] All functional requirements preserved
 - [ ] Visual design requirements added
 - [ ] Conflicts resolved and documented
+
+---
+
+### Task 0.3: Update Additional Specifications
+**Priority**: P1 (High - Should do before Phase 1)
+**Estimated Time**: 3-4 hours
+
+**⚠️ IMPORTANT**: Based on prototype analysis, 7 additional specifications need updates beyond Spec 004 and 005.
+
+**Subtasks:**
+
+**1. Update Spec 001 (Organization Setup)**
+- Add AppHeader component specification
+- Document church branding display format (3-line format)
+- Add church logo component requirements
+- Update organization display patterns from prototype
+
+**2. Update Spec 003 (Attendance System)**
+- Add CheckInKiosk component (fullscreen mode) specification
+- Document attendance management header design
+- Add service card design with green accent
+- Add QR code scanner UI requirements
+- Update check-in interface to match prototype
+
+**3. Update Spec 006 (Communication System)**
+- Update chat interface design
+- Document secondary sidebar patterns
+- Update message styling to match prototype
+- Add notification UI patterns
+
+**4. Update Spec 008 (Admin Settings System)**
+- Update settings page design
+- Document color palette component patterns
+- Add settings navigation structure
+- Update form styling for settings
+
+**5. Update Spec 010 (Financial Management System)**
+- Update giving dashboard design
+- Document donation form styling
+- Add campaign manager UI patterns
+- Update financial display components
+
+**6. Update Spec 014 (Chat System)**
+- If separate from Spec 006, update chat-specific UI patterns
+- Document chat sidebar design
+- Update message component styling
+- Add chat state management patterns
+
+**7. Update Spec 018 (AI Assistant System)**
+- Update AI dashboard design
+- Document insights display components
+- Add churn predictions UI patterns
+- Update AI feature styling
+
+**Files to Modify:**
+- `.specify/specs/002-organization-setup/spec.md`
+- `.specify/specs/004-attendance-system/spec.md`
+- `.specify/specs/007-communication-system/spec.md`
+- `.specify/specs/009-admin-settings-system/spec.md`
+- `.specify/specs/011-financial-management-system/spec.md`
+- `.specify/specs/015-chat-system/spec.md` (if exists)
+- `.specify/specs/019-ai-assistant-system/spec.md`
+
+**Acceptance Criteria:**
+- [ ] All 7 specifications updated with prototype design requirements
+- [ ] Visual design requirements added to each spec
+- [ ] Component requirements documented
+- [ ] UI patterns extracted from prototype
+- [ ] Conflicts with existing requirements resolved
+- [ ] Each spec marked as updated with version/date
+
+---
+
+## Pre-Migration Documentation Tasks
+
+### Task 0.4: Create Design Tokens Document
+**Priority**: P0 (Critical - Must do before Phase 1)
+**Estimated Time**: 2-3 hours
+
+**Subtasks:**
+1. **Extract Design Tokens from Prototype**
+   - Document all OKLCH color values with fallbacks
+   - Extract typography scale (font sizes, weights, line heights)
+   - Document spacing system (4px base scale)
+   - Extract shadow system values
+   - Document border radius system
+   - Extract animation timings and easing functions
+
+2. **Create Design Tokens Document**
+   - Create `docs/design/DESIGN_TOKENS.md`
+   - Organize tokens by category
+   - Include usage examples
+   - Document implementation approach
+
+**Files to Create:**
+- `docs/design/DESIGN_TOKENS.md` - Complete design token reference
+
+**Acceptance Criteria:**
+- [ ] All design tokens extracted from prototype
+- [ ] Document organized by category
+- [ ] OKLCH colors with fallbacks documented
+- [ ] Typography system documented
+- [ ] Spacing system documented
+- [ ] Implementation guidance provided
+
+---
+
+### Task 0.5: Create Component Inventory
+**Priority**: P0 (Critical - Must do before Phase 1)
+**Estimated Time**: 2-3 hours
+
+**Subtasks:**
+1. **Inventory All Components**
+   - List every component in current codebase
+   - Document component props and events
+   - Note which stores/composables each uses
+   - Mark component complexity (Simple/Moderate/Complex)
+
+2. **Create Component Dependency Map**
+   - Document component composition patterns
+   - Identify shared utilities
+   - Map component migration order
+
+**Files to Create:**
+- `docs/migration/COMPONENT_INVENTORY.md` - Complete component listing
+- `docs/migration/COMPONENT_DEPENDENCIES.md` - Dependency mapping
+
+**Acceptance Criteria:**
+- [ ] All components inventoried
+- [ ] Component complexity documented
+- [ ] Dependencies mapped
+- [ ] Migration order suggested
+- [ ] Props and events documented
 
 ---
 
@@ -724,6 +1024,12 @@ After reviewing the prototype against the 18 specifications, the following specs
 - `ChMS-by-Make/src/styles/globals.css` - Copy entire TweakCN theme
 - `ChMS-by-Make/src/DESIGN_SYSTEM_UPDATE_NOV_12_2025.md` - Design system documentation
 
+**⚠️ PIXEL-PERFECT VALIDATION**:
+- **Reference**: `docs/migration/PIXEL_PERFECT_IMPLEMENTATION_GUIDE.md` - Color fidelity checklist
+- **Visual Comparison**: Take screenshots of React prototype and Vue implementation side-by-side
+- **Color Matching**: Use browser DevTools to verify exact OKLCH values match prototype
+- **Testing**: Run visual regression tests comparing color implementation
+
 **Acceptance Criteria:**
 - [ ] ALL old colors removed
 - [ ] OKLCH color space implemented (not hex/RGB)
@@ -735,10 +1041,12 @@ After reviewing the prototype against the 18 specifications, the following specs
 - [ ] All semantic colors use OKLCH format
 - [ ] Chart colors implemented (5 OKLCH colors)
 - [ ] NO hardcoded old colors remain
-- [ ] Visual match with prototype color system
+- [ ] **Visual screenshot matches React prototype exactly** (pixel-perfect)
+- [ ] **Side-by-side comparison shows identical colors**
 - [ ] OKLCH colors render correctly in modern browsers
 - [ ] Fallback colors render correctly in older browsers
 - [ ] Tested in browsers without OKLCH support
+- [ ] **Visual regression test passes** (see `docs/testing/VISUAL_REGRESSION_SETUP.md`)
 
 ---
 
@@ -842,6 +1150,17 @@ After reviewing the prototype against the 18 specifications, the following specs
 
 **⚠️ CRITICAL**: This is a COMPLETE REPLACEMENT. Remove current layout and replace with prototype's 3-column layout.
 
+**⚠️ PIXEL-PERFECT VALIDATION**:
+- **Reference**: 
+  - `docs/migration/PIXEL_PERFECT_IMPLEMENTATION_GUIDE.md` - Layout specifications
+  - `docs/migration/REACT_VUE_COMPONENT_MAPPING.md` - Exact layout conversion
+- **Measurement Requirements**: 
+  - Left sidebar: **EXACTLY 280px** (not 275px, not 285px)
+  - Right sidebar: **EXACTLY 320px** (not 315px, not 325px)
+  - Header: **EXACTLY 64px height** (not 60px, not 68px)
+- **Visual Comparison**: Screenshot React prototype layout and Vue implementation, compare pixel-by-pixel
+- **Component Mapping**: Use `REACT_VUE_COMPONENT_MAPPING.md` for exact component structure
+
 **Subtasks:**
 1. **Remove Current Layout**
    - Remove current layout components
@@ -871,13 +1190,16 @@ After reviewing the prototype against the 18 specifications, the following specs
    - Remove layout switching options
    - Use prototype layout as single source of truth
 
-5. **Create Prototype Header Component**
-   - Church branding: Acronym + City (line 1)
-   - Full church name + Campus badge (line 2)
-   - Address (line 3)
-   - Logo display (right side)
-   - Progress badge (optional, right side)
-   - Match prototype's 3-line header format exactly
+5. **Create Prototype Header Component** (PIXEL-PERFECT MATCH REQUIRED)
+   - **Reference**: `ChMS-by-Make/src/components/layout/AppHeader.tsx` - Copy structure exactly
+   - Church branding: Acronym + City (line 1) - **EXACT font size: 2.4em, line-height: 1, font-weight: 300, margin-bottom: 0.25em**
+   - Full church name + Campus badge (line 2) - **EXACT divider above (h-px bg-border mb-1.5), gap-2, text-muted-foreground**
+   - Address (line 3) - **EXACT text-sm, text-muted-foreground**
+   - Logo display (right side) - **EXACT positioning and sizing**
+   - Progress badge (optional, right side) - **EXACT styling (variant="secondary", gap-1)**
+   - **Visual Validation**: Screenshot React header (`AppHeader.tsx`) and Vue header, compare side-by-side
+   - **Measurement**: Use browser DevTools to verify exact pixel measurements match
+   - **Component Mapping**: Use `docs/migration/REACT_VUE_COMPONENT_MAPPING.md` for exact conversion
 
 6. **Replace Layout in Router**
    - Update router to use new layout
@@ -902,12 +1224,14 @@ After reviewing the prototype against the 18 specifications, the following specs
 
 **Acceptance Criteria:**
 - [ ] Current layout completely removed/replaced
-- [ ] 3-column layout matches prototype exactly
-- [ ] Sidebars match prototype design and behavior
-- [ ] Header matches prototype's 3-line format exactly
-- [ ] Mobile navigation matches prototype
+- [ ] **3-column layout matches prototype EXACTLY** (280px left, flexible main, 320px right - verified with DevTools)
+- [ ] **Sidebars match prototype design and behavior EXACTLY** (pixel-perfect match)
+- [ ] **Header matches prototype's 3-line format EXACTLY** (pixel-perfect match, verified with screenshots)
+- [ ] **Mobile navigation matches prototype EXACTLY** (always visible, exact styling)
 - [ ] Layout is fully responsive
 - [ ] All routes work with new layout
+- [ ] **Visual regression test passes** (layout screenshot matches React prototype exactly)
+- [ ] **Side-by-side comparison shows identical layout** (React vs Vue)
 
 ---
 
@@ -1001,11 +1325,32 @@ After reviewing the prototype against the 18 specifications, the following specs
 - `frontend/src/components/ui/BaseDialog.vue`
 - `frontend/src/components/ui/BaseTabs.vue`
 
+**⚠️ PIXEL-PERFECT VALIDATION**:
+- **Reference**: 
+  - `docs/migration/PIXEL_PERFECT_IMPLEMENTATION_GUIDE.md` - Visual fidelity checklist
+  - `docs/migration/REACT_VUE_COMPONENT_MAPPING.md` - Exact component conversions
+- **For Each Component**:
+  1. Open React component in `ChMS-by-Make/src/components/ui/`
+  2. Take screenshot of React component in all states (default, hover, active, disabled)
+  3. Implement Vue component matching exactly
+  4. Take screenshot of Vue component in same states
+  5. Compare side-by-side using image diff tool
+  6. Adjust until pixel-perfect match
+  7. Run visual regression test (see `docs/testing/VISUAL_REGRESSION_SETUP.md`)
+- **Measurement Requirements**: Use browser DevTools to verify exact pixel measurements match prototype
+- **Color Matching**: Verify OKLCH values match exactly using DevTools
+- **Typography Matching**: Verify font, size, weight, line-height, letter-spacing match exactly
+
 **Acceptance Criteria:**
-- [ ] All components match prototype styling exactly
+- [ ] **Visual screenshot matches React prototype exactly** (pixel-perfect for each component)
+- [ ] **All states (default, hover, active, disabled) match prototype exactly**
+- [ ] **All variants and sizes match prototype exactly**
+- [ ] **Side-by-side comparison shows identical appearance**
+- [ ] **Visual regression test passes** (see `docs/testing/VISUAL_REGRESSION_SETUP.md`)
 - [ ] Components are reusable and well-documented
 - [ ] Dark theme styling is consistent
 - [ ] Accessibility features are included (ARIA labels, keyboard navigation)
+- [ ] **Exact measurements verified** (padding, margins, border-radius, shadows)
 
 ---
 
@@ -1559,69 +1904,351 @@ After reviewing the prototype against the 18 specifications, the following specs
 
 ### 🧪 Testing Strategy
 
-#### Pre-Migration Testing
-1. **Functional Test Suite**
-   - Document all current user flows
-   - Create test cases for each feature
-   - Test on target devices (Android phones)
-   - Test offline functionality
+**⚠️ CRITICAL**: Testing infrastructure must be set up BEFORE any implementation begins. Do not start Phase 1 until Phase 0 is complete.
 
-2. **Visual Baseline**
-   - Screenshot all current pages
-   - Document current UI patterns
-   - Create visual regression baseline
+#### Phase 0: Test Baseline Setup (Before ANY Implementation)
+**Priority**: P0 (Critical - Must complete first)
+**Estimated Time**: 8-12 hours
 
-3. **Performance Baseline**
-   - Measure current bundle size
-   - Measure current load times
-   - Measure current runtime performance
-   - Document performance metrics
+**0.1 Visual Regression Baseline**
+- Set up Playwright with visual regression testing (Percy/Chromatic)
+- Take baseline screenshots of ALL current pages/views
+- Document current UI patterns and components
+- Create visual regression test suite
+- Set up automated visual testing in CI/CD
 
-#### During Migration Testing
-1. **Component-Level Testing**
-   - Test each new component in isolation
-   - Test component with real data from stores
-   - Test component interactions
-   - Visual comparison with prototype
+**0.2 Performance Baseline**
+- Install and configure Lighthouse CI
+- Measure current bundle size (gzipped and uncompressed)
+- Measure performance metrics:
+  - First Contentful Paint (FCP)
+  - Largest Contentful Paint (LCP)
+  - Time to Interactive (TTI)
+  - Cumulative Layout Shift (CLS)
+  - First Input Delay (FID)
+- Document performance budget (current state)
+- Set up performance monitoring in CI/CD
 
-2. **Integration Testing**
-   - Test component integration with stores
-   - Test component integration with composables
-   - Test routing with new components
-   - Test API integration
+**0.3 Accessibility Audit**
+- Run axe-core automated accessibility tests
+- Manual keyboard navigation testing
+- Screen reader testing (NVDA, VoiceOver)
+- Color contrast verification
+- Document all accessibility issues
+- Create accessibility test suite
 
-3. **Regression Testing**
-   - Run functional tests after each component replacement
-   - Verify no features broke
-   - Verify data flow still works
-   - Verify offline functionality still works
+**0.4 Functional Test Suite**
+- Document all current user flows
+- Create comprehensive test cases for each feature
+- Test offline functionality thoroughly
+- Test on target Android devices
+- Ensure all tests are passing before migration
 
-#### Post-Migration Testing
-1. **Complete Functional Testing**
-   - Test all user flows end-to-end
-   - Test on all target devices
-   - Test offline/online scenarios
-   - Test error handling
+**Files to Create:**
+- `tests/visual/baseline.spec.ts` - Visual regression tests
+- `tests/performance/budget.spec.ts` - Performance budget tests
+- `tests/accessibility/accessibility.spec.ts` - Accessibility tests
+- `tests/functional/user-flows.spec.ts` - End-to-end user flow tests
 
-2. **Visual Regression Testing**
-   - Compare with prototype screenshots
-   - Verify design system consistency
-   - Check responsive behavior
-   - Verify accessibility
+#### Phases 1-5: Continuous Testing
+**Testing after EACH component replacement:**
 
-3. **Performance Testing**
-   - Measure bundle size (target: < 500KB)
-   - Measure load time (target: < 3s on 3G)
-   - Measure runtime performance
-   - Compare with baseline
+**1. Component-Level Testing**
+- Unit tests for new component logic
+- Visual comparison with prototype
+- Accessibility testing (axe-core + manual)
+- Performance impact measurement
+- Cross-browser testing (Chrome, Firefox, Safari)
 
-4. **User Acceptance Testing**
-   - Test with actual users (if possible)
-   - Gather feedback on new design
-   - Verify usability improvements
-   - Check mobile experience
+**2. Integration Testing**
+- Component integration with stores/composables
+- Routing functionality with new component
+- API integration testing
+- Offline functionality verification
+- State management consistency
 
-### 📊 Success Metrics
+**3. Visual Regression Testing**
+- Automated visual tests after EACH phase
+- Compare with prototype screenshots
+- Document any intentional differences
+- Ensure design system consistency
+
+**Phase 1-5 Testing Checklist (after each phase):**
+- [ ] All new components have unit tests
+- [ ] All components pass visual regression tests
+- [ ] No accessibility regressions
+- [ ] Bundle size still under budget
+- [ ] All user flows still work
+- [ ] Offline functionality preserved
+- [ ] Performance metrics maintained
+
+#### Phase 6: Release Validation
+**Priority**: P1 (High - Must complete before release)
+**Estimated Time**: 16-20 hours
+
+**6.1 Cross-Device Testing Matrix**
+| Device | OS/Browser | Test Coverage | Priority |
+|--------|------------|----------------|----------|
+| Pixel 5 | Android 12/Chrome | Full testing | Critical |
+| Galaxy A5 | Android 10/Chrome | Full testing | Critical |
+| iPhone 12 | iOS 16/Safari | Full testing | High |
+| iPad Air | iPadOS 16/Safari | Tablet testing | Medium |
+| Desktop | Win10/Chrome | Desktop testing | Medium |
+
+**6.2 Network Condition Testing**
+- 3G simulation (1.6 Mbps down, 750 Kbps up, 300ms latency)
+- 4G simulation (5 Mbps down, 2 Mbps up, 100ms latency)
+- Offline mode testing
+- Intermittent connectivity testing
+
+**6.3 Performance Validation**
+- Full Lighthouse audit (> 90 score)
+- Bundle size verification (< 500KB gzipped)
+- Real user monitoring simulation
+- Memory usage testing on low-end devices
+
+**6.4 User Acceptance Testing**
+- Test with actual target users (if possible)
+- Gather feedback on design changes
+- Verify task completion rates
+- Check mobile usability improvements
+
+**6.5 Security Testing**
+- OWASP security checklist
+- Input validation testing
+- XSS and injection testing
+- Authentication flow testing
+
+#### Continuous Testing in CI/CD
+
+**Automated Test Pipeline:**
+```yaml
+# On every PR
+- Unit Tests (Jest/Vitest)
+- Component Tests
+- Visual Regression Tests
+- Accessibility Tests (axe-core)
+- Bundle Size Check
+- Lighthouse Performance
+
+# On merge to main
+- All above tests
+- Full E2E Test Suite
+- Cross-Browser Testing
+- Performance Budget Validation
+```
+
+**Test Success Criteria:**
+- ✅ All tests passing (100% pass rate)
+- ✅ No visual regressions
+- ✅ No accessibility violations
+- ✅ Bundle size < 500KB gzipped
+- ✅ Lighthouse score > 90
+- ✅ All user flows working
+- ✅ Offline functionality preserved
+
+**Rollback Triggers:**
+- Any test failure
+- Bundle size exceeds 550KB
+- Lighthouse score drops below 85
+- Critical accessibility violation
+- Performance regression > 10%
+
+**Monitoring Dashboard:**
+Track these metrics throughout implementation:
+- Test pass rate
+- Bundle size trends
+- Performance scores
+- Accessibility violations count
+- Visual regression failures
+- User feedback scores
+
+## Bundle Size Strategy & Performance Optimization
+
+### 🎯 Bundle Size Budgets
+
+**Critical Targets:**
+- **Initial Load (gzipped)**: < 500KB
+- **Initial Load (uncompressed)**: < 1.5MB
+- **First Contentful Paint**: < 1.5s on 3G
+- **Time to Interactive**: < 3s on 3G
+- **JavaScript Heap**: < 50MB on mid-range Android
+
+### 📦 Progressive Loading Strategy
+
+**Priority 1: Critical (Must Load First)**
+- Bundle Size Target: < 200KB gzipped
+- Components:
+  - Layout system (PrototypeLayout, AppHeader, Sidebars)
+  - Navigation (MobileBottomNav, router)
+  - Core UI (Button, Input, Card)
+  - Authentication logic
+- Loading: Synchronous, non-lazy
+
+**Priority 2: High-Impact Features**
+- Bundle Size Target: < 150KB gzipped
+- Components:
+  - Dashboard (KPICards, Charts)
+  - Member Management (MemberList, MemberCard)
+  - Basic Forms (AddMemberForm)
+- Loading: Lazy after initial render
+
+**Priority 3: Medium-Impact Features**
+- Bundle Size Target: < 100KB gzipped
+- Components:
+  - Attendance System (CheckInKiosk, ServiceCard)
+  - Giving (DonationForm, CampaignManager)
+  - Settings (Settings components)
+- Loading: Lazy on route access
+
+**Priority 4: Low-Impact Features**
+- Bundle Size Target: < 50KB gzipped
+- Components:
+  - Reports (complex charts)
+  - Analytics (dashboards)
+  - Admin utilities
+- Loading: Lazy on demand
+
+### 🖼️ Asset Optimization Strategy
+
+**Font Optimization:**
+- **Geist Font**: Subset to Latin + common characters (~30KB vs 150KB full)
+- **Font Loading**: `font-display: swap` for better perceived performance
+- **Preload Critical Fonts**: Only if above-the-fold text needs them immediately
+
+**Icon Optimization:**
+- **Critical Icons**: Inline SVG for navigation, actions (~5KB)
+- **Non-Critical Icons**: SVG sprite loaded on demand (~15KB)
+- **Fallback**: Use Quasar icons where suitable (already in bundle)
+
+**Image Optimization:**
+- **Format**: WebP with JPEG/PNG fallbacks
+- **Compression**: 80% quality for photos, 90% for graphics
+- **Loading**: Lazy load all images below fold
+- **Responsive**: Serve appropriate sizes per device
+
+**Chart Library Optimization:**
+- **ECharts**: Load only when charts are needed (~100KB gzipped)
+- **Tree Shaking**: Import only chart types used
+- **Dynamic Loading**: `() => import('echarts/lib/chart/line')` pattern
+
+### ⚡ Code Splitting Strategy
+
+**Route-Based Splitting:**
+```javascript
+// Critical routes - eager loaded
+const Dashboard = () => import('./views/Dashboard.vue')
+const Members = () => import('./views/Members.vue')
+
+// Medium priority - lazy loaded
+const Attendance = () => import('./views/Attendance.vue')
+const Giving = () => import('./views/Giving.vue')
+
+// Low priority - lazy loaded
+const Reports = () => import('./views/Reports.vue')
+const Analytics = () => import('./views/Analytics.vue')
+```
+
+**Component-Based Splitting:**
+- Heavy components (charts, complex forms) lazy-loaded
+- Modal/dialog components loaded on demand
+- Large utility functions split into separate chunks
+
+**Third-Party Library Splitting:**
+- ECharts: Dynamic import per chart type
+- Date libraries: Only import what's needed
+- Validation libraries: Tree-shake unused validators
+
+### 📊 Bundle Analysis & Monitoring
+
+**Tools to Use:**
+- **Webpack Bundle Analyzer**: `webpack-bundle-analyzer`
+- **Lighthouse CI**: Automated performance monitoring
+- **Bundlephobia**: Analyze library sizes before adding
+- **Chrome DevTools**: Runtime performance analysis
+
+**Monitoring Strategy:**
+1. **Pre-Migration**: Establish baseline bundle size
+2. **During Development**: Monitor with each major component addition
+3. **Before Release**: Full bundle analysis and optimization
+4. **Production**: Monitor real-world loading times
+
+**Alert Thresholds:**
+- **Warning**: Bundle exceeds 450KB gzipped
+- **Critical**: Bundle exceeds 500KB gzipped
+- **Action Required**: Any regression > 5% from baseline
+
+### 🚀 Performance Optimization Techniques
+
+**JavaScript Optimization:**
+- **Tree Shaking**: Remove unused code
+- **Minification**: Terser with aggressive settings
+- **Compression**: Brotli + Gzip (Brotli preferred)
+- **Code Splitting**: As described above
+
+**CSS Optimization:**
+- **PurgeCSS**: Remove unused CSS
+- **CSS Modules**: Scoped styles to prevent bloat
+- **Critical CSS**: Inline critical styles for first paint
+- **Non-Critical CSS**: Load asynchronously
+
+**Caching Strategy:**
+- **Static Assets**: 1-year cache with content hash
+- **HTML**: No cache or short cache (1 hour)
+- **API Responses**: Vary by endpoint, short cache (5 minutes)
+- **Service Worker**: Cache-first for static, network-first for API
+
+### 📱 Device-Specific Optimizations
+
+**Low-End Devices (< 2GB RAM):**
+- Reduce animation complexity
+- Disable non-essential animations
+- Simplify chart rendering
+- Use lighter-weight components
+
+**Slow Networks (3G/2G):**
+- Aggressive lazy loading
+- Data compression
+- Offline-first strategies
+- Reduced quality images
+
+### 🔄 Bundle Size Budget Tracking
+
+**Budget Categories:**
+- **Framework (Vue, Quasar)**: ~150KB gzipped
+- **UI Components**: ~100KB gzipped
+- **Business Logic**: ~100KB gzipped
+- **Charts/Visualization**: ~100KB gzipped
+- **Utilities (date, validation)**: ~50KB gzipped
+- **Total Target**: < 500KB gzipped
+
+**Weekly Bundle Review Checklist:**
+- [ ] Bundle size under 500KB gzipped?
+- [ ] No unused dependencies?
+- [ ] Tree shaking working correctly?
+- [ ] Code splitting optimized?
+- [ ] Images optimized?
+- [ ] No performance regressions?
+- [ ] Lighthouse score > 90?
+
+### 📋 Bundle Size Decision Matrix
+
+| Component | Complexity | Usage | Bundle Impact | Priority |
+|-----------|------------|-------|---------------|----------|
+| Dashboard | High | Daily | High | Critical |
+| Charts | Medium | Weekly | High | High |
+| Modals | Low | Daily | Medium | Medium |
+| Forms | Medium | Daily | Medium | High |
+| Settings | Low | Monthly | Low | Low |
+
+### 🎯 Success Metrics
+
+**Bundle Metrics:**
+- ✅ Initial bundle < 500KB gzipped
+- ✅ Largest chunk < 200KB gzipped
+- ✅ Total chunks < 10 for initial load
+- ✅ Time to Interactive < 3s on 3G
+- ✅ Lighthouse Performance > 90
 
 **Functional Metrics:**
 - ✅ All existing features work
@@ -2010,18 +2637,29 @@ Based on dependencies and criticality, I recommend this order:
 
 ## Estimated Timeline
 
-**Total Estimated Time**: 150-200 hours
+**Total Estimated Time**: 154-205 hours
 
-**Breakdown:**
-- Phase 1: 12-17 hours
-- Phase 2: 20-26 hours
-- Phase 3: 52-68 hours
-- Phase 4: 30-40 hours
-- Phase 5: 26-34 hours
+**Updated Breakdown** (includes Phase 0 pre-migration tasks):
+- **Phase 0**: 14-19 hours (pre-migration setup and documentation)
+- **Phase 1**: 12-17 hours (design system foundation)
+- **Phase 2**: 20-26 hours (core component library)
+- **Phase 3**: 52-68 hours (feature components)
+- **Phase 4**: 30-40 hours (integration & polish)
+- **Phase 5**: 26-34 hours (testing & validation)
+
+**Phase 0 Breakdown (NEW):**
+- Task 0.1 (Component Complexity Matrix): 3-4 hours
+- Task 0.2 (Update Spec 004): 2-3 hours
+- Task 0.3 (Update Additional Specs): 3-4 hours
+- Task 0.4 (Design Tokens Document): 2-3 hours
+- Task 0.5 (Component Inventory): 2-3 hours
+- Test Baseline Setup (from reorganized testing): 8-12 hours
 
 **With a team of 2-3 developers**: 4-6 weeks
 
 **With a single developer**: 8-10 weeks
+
+**Note**: Timeline includes comprehensive Phase 0 setup which ensures smoother implementation and reduces risks during migration phases.
 
 ---
 
