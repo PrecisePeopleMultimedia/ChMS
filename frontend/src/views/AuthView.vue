@@ -11,7 +11,7 @@
             </div>
           </div>
           <div class="church-info">
-            <div class="church-name">{{ organizationStore.organization?.name || 'ChurchAfrica' }}</div>
+            <div class="church-name">ChurchAfrica</div>
             <div class="church-subtitle">ChMS</div>
           </div>
         </div>
