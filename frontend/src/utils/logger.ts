@@ -37,34 +37,57 @@ class Logger {
   }
 
   private initializeErrorHandlers() {
-    // Capture unhandled errors
-    window.addEventListener('error', (event) => {
-      this.error('Unhandled Error', {
-        message: event.message,
-        filename: event.filename,
-        lineno: event.lineno,
-        colno: event.colno,
-        error: event.error?.stack,
+    try {
+      // Capture unhandled errors
+      window.addEventListener('error', (event) => {
+        try {
+          this.error('Unhandled Error', {
+            message: event.message,
+            filename: event.filename,
+            lineno: event.lineno,
+            colno: event.colno,
+            error: event.error?.stack,
+          })
+        } catch (e) {
+          // Fallback to console if logger fails
+          console.error('Unhandled Error:', event)
+        }
       })
-    })
 
-    // Capture unhandled promise rejections
-    window.addEventListener('unhandledrejection', (event) => {
-      this.error('Unhandled Promise Rejection', {
-        reason: event.reason,
-        stack: event.reason?.stack,
+      // Capture unhandled promise rejections
+      window.addEventListener('unhandledrejection', (event) => {
+        try {
+          this.error('Unhandled Promise Rejection', {
+            reason: event.reason,
+            stack: event.reason?.stack,
+          })
+        } catch (e) {
+          // Fallback to console if logger fails
+          console.error('Unhandled Promise Rejection:', event.reason)
+        }
       })
-    })
 
-    // Capture Vue errors if available
-    if (window.__VUE_DEVTOOLS_GLOBAL_HOOK__) {
-      window.__VUE_DEVTOOLS_GLOBAL_HOOK__.on('component:error', (err: any) => {
-        this.error('Vue Component Error', {
-          componentName: err.componentName,
-          message: err.message,
-          stack: err.stack,
-        })
-      })
+      // Capture Vue errors if available
+      if (window.__VUE_DEVTOOLS_GLOBAL_HOOK__) {
+        try {
+          window.__VUE_DEVTOOLS_GLOBAL_HOOK__.on('component:error', (err: any) => {
+            try {
+              this.error('Vue Component Error', {
+                componentName: err.componentName,
+                message: err.message,
+                stack: err.stack,
+              })
+            } catch (e) {
+              console.error('Vue Component Error:', err)
+            }
+          })
+        } catch (e) {
+          // Vue devtools hook might not be available
+        }
+      }
+    } catch (error) {
+      // If error handler initialization fails, just log to console
+      console.warn('Logger error handlers could not be initialized:', error)
     }
   }
 
@@ -238,37 +261,42 @@ class Logger {
   }
 }
 
-// Create singleton instance
-let loggerInstance: Logger | null = null
+// Create singleton instance with safe initialization
+let loggerInstance: Logger
 
-// Initialize logger instance safely
+// Initialize logger instance safely - never fail, always provide a working logger
 try {
   loggerInstance = new Logger()
 } catch (error) {
-  console.error('Failed to create logger instance:', error)
-  // Create a minimal fallback logger
-  loggerInstance = {
-    debug: () => {},
-    info: () => {},
-    warn: () => {},
-    error: () => {},
-    auth: () => {},
-    authError: () => {},
-    api: () => {},
-    apiError: () => {},
-    navigation: () => {},
-    vue: () => {},
-    vueError: () => {},
-    getLogs: () => [],
-    getRecentLogs: () => [],
-    getErrorLogs: () => [],
-    getAuthLogs: () => [],
-    exportLogs: () => '{}',
-    downloadLogs: () => {},
-    clearLogs: () => {},
-    setEnabled: () => {},
-    getSessionInfo: () => ({ sessionId: '', totalLogs: 0, errorCount: 0, authLogCount: 0 }),
-  } as any
+  console.error('Failed to create logger instance, using fallback:', error)
+  // Create a minimal fallback logger that matches the Logger interface
+  class FallbackLogger {
+    private logs: LogEntry[] = []
+    
+    debug() {}
+    info() {}
+    warn() {}
+    error() {}
+    auth() {}
+    authError() {}
+    api() {}
+    apiError() {}
+    navigation() {}
+    vue() {}
+    vueError() {}
+    getLogs() { return [] }
+    getRecentLogs() { return [] }
+    getErrorLogs() { return [] }
+    getAuthLogs() { return [] }
+    exportLogs() { return '{}' }
+    downloadLogs() {}
+    clearLogs() {}
+    setEnabled() {}
+    getSessionInfo() {
+      return { sessionId: 'fallback', totalLogs: 0, errorCount: 0, authLogCount: 0 }
+    }
+  }
+  loggerInstance = new FallbackLogger() as any
 }
 
 // Make logger available globally for debugging
