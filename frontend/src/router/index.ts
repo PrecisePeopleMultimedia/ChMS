@@ -25,58 +25,39 @@ const router = createRouter({
     },
     {
       path: '/auth',
-      component: () => import('@/layouts/AuthLayout.vue'),
-      children: [
-        {
-          path: '',
-          redirect: '/auth/login'
-        },
-        {
-          path: 'login',
-          name: 'Login',
-          component: () => import('@/views/LoginView.vue'),
-          meta: {
-            requiresGuest: true,
-            title: 'Sign In - ChurchAfrica'
-          }
-        },
-        {
-          path: 'register',
-          name: 'Register',
-          component: () => import('@/views/RegisterView.vue'),
-          meta: {
-            requiresGuest: true,
-            title: 'Sign Up - ChurchAfrica'
-          }
-        },
-        {
-          path: 'forgot-password',
-          name: 'ForgotPassword',
-          component: () => import('@/views/ForgotPasswordView.vue'),
-          meta: {
-            requiresGuest: true,
-            title: 'Forgot Password - ChurchAfrica'
-          }
-        },
-        {
-          path: 'reset-password',
-          name: 'ResetPassword',
-          component: () => import('@/views/ResetPasswordView.vue'),
-          meta: {
-            requiresGuest: true,
-            title: 'Reset Password - ChurchAfrica'
-          }
-        }
-      ]
+      name: 'Auth',
+      component: () => import('@/views/AuthView.vue'),
+      meta: {
+        requiresGuest: true,
+        title: 'Sign In - ChurchAfrica'
+      }
+    },
+    {
+      path: '/forgot-password',
+      name: 'ForgotPassword',
+      component: () => import('@/views/ForgotPasswordView.vue'),
+      meta: {
+        requiresGuest: true,
+        title: 'Forgot Password - ChurchAfrica'
+      }
+    },
+    {
+      path: '/reset-password',
+      name: 'ResetPassword',
+      component: () => import('@/views/ResetPasswordView.vue'),
+      meta: {
+        requiresGuest: true,
+        title: 'Reset Password - ChurchAfrica'
+      }
     },
     // Legacy routes for backward compatibility
     {
       path: '/login',
-      redirect: '/auth/login'
+      redirect: '/auth'
     },
     {
       path: '/register',
-      redirect: '/auth/register'
+      redirect: '/auth?register=true'
     },
     {
       path: '/forgot-password',
@@ -177,6 +158,15 @@ const router = createRouter({
           }
         },
         {
+          path: '/attendance',
+          name: 'Attendance',
+          component: () => import('@/views/AttendanceView.vue'),
+          meta: {
+            requiresAuth: true,
+            title: 'Attendance - ChurchAfrica'
+          }
+        },
+        {
           path: '/attendance/checkin',
           name: 'AttendanceCheckIn',
           component: () => import('@/views/AttendanceCheckInView.vue'),
@@ -229,7 +219,7 @@ router.beforeEach(async (to, from, next) => {
 
   // Check authentication requirements
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-    next({ path: '/auth/login', query: { redirect: to.fullPath } })
+    next({ path: '/auth', query: { redirect: to.fullPath } })
     return
   }
 

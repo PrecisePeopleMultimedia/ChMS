@@ -29,8 +29,8 @@ export const primaryNavigation: NavigationItem[] = [
   {
     id: 'attendance',
     label: 'Attendance',
-    href: '/attendance',
-    icon: 'check_circle'
+    to: '/attendance',
+    icon: 'event_available'
   },
   {
     id: 'giving',

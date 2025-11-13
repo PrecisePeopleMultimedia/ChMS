@@ -550,11 +550,60 @@ export const useAttendanceStore = defineStore('attendance', () => {
     error.value = null
   }
 
+  // New methods for AttendanceTracker component
+  const checkIn = async (data: {
+    serviceId: string
+    memberId: string
+    status: 'present' | 'absent' | 'late' | 'excused'
+    checkInMethod?: string
+    checkInTime?: string
+  }) => {
+    return await checkInMember({
+      service_id: parseInt(data.serviceId),
+      member_id: parseInt(data.memberId),
+      checkin_method: data.checkInMethod || 'manual',
+      notes: `Status: ${data.status}`,
+    })
+  }
+
+  const bulkCheckIn = async (data: {
+    serviceId: string
+    memberIds: string[]
+    status: 'present' | 'absent' | 'late' | 'excused'
+    checkInMethod?: string
+    checkInTime?: string
+  }) => {
+    saving.value = true
+    try {
+      const promises = data.memberIds.map(memberId =>
+        checkInMember({
+          service_id: parseInt(data.serviceId),
+          member_id: parseInt(memberId),
+          checkin_method: data.checkInMethod || 'manual',
+          notes: `Status: ${data.status}`,
+        })
+      )
+      await Promise.all(promises)
+    } finally {
+      saving.value = false
+    }
+  }
+
+  const fetchRecords = async (serviceId?: string) => {
+    return await fetchAttendanceRecords(serviceId ? { service_id: parseInt(serviceId) } : undefined)
+  }
+
+  const exportReport = async (serviceId: string) => {
+    // In production, call API to export report
+    console.log('Exporting report for service:', serviceId)
+  }
+
   return {
     // State
     services,
     currentService,
-    attendanceRecords,
+    attendanceRecords: attendanceRecords as any,
+    records: attendanceRecords, // Alias for compatibility
     stats,
     loading,
     saving,
@@ -570,12 +619,16 @@ export const useAttendanceStore = defineStore('attendance', () => {
     createService,
     updateService,
     fetchAttendanceRecords,
+    fetchRecords, // New alias
     checkInMember,
+    checkIn, // New method for AttendanceTracker
+    bulkCheckIn, // New method for AttendanceTracker
     qrCheckIn,
     familyCheckIn,
     fetchReports,
     generateMemberQrCode,
     generateFamilyQrCode,
+    exportReport, // New method
     clearError
   }
 })
