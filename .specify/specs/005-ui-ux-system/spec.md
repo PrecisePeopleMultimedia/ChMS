@@ -93,14 +93,73 @@ Based on comprehensive RockRMS competitive analysis, the following critical enha
 - **Smooth transitions** - No jarring theme changes
 - **No flash of unstyled content** - Seamless loading
 
-#### 5. Green Dark Theme (NEW - Figma Make Inspired)
-- **Primary Green**: `#1CE479` (bright neon green) - Modern, energetic, growth
-- **Dark Background**: `#0A0A0F` (very dark navy) - Professional, sophisticated
-- **Card Background**: `#1A1A20` (slightly lighter dark) - Subtle elevation
-- **Secondary**: `#2A2A35` (medium dark grey) - Supporting elements
-- **Orange Accent**: Available in chart colors for gradients and highlights
-- **Typography**: Archivo font family for modern, clean appearance
-- **Glass Morphism**: Subtle transparency effects for depth and modern feel
+#### 5. TweakCN Green Dark Theme (NEW - Complete Design System Overhaul)
+**⚠️ CRITICAL**: This is a complete design system replacement using TweakCN theme with OKLCH color space.
+
+**Color System: OKLCH Color Space** (Modern, Perceptually Uniform)
+- **Primary Green**: `oklch(0.4365 0.1044 156.7556)` - Modern, energetic, growth
+  - Hex Fallback: `#1CE479` (for older browsers)
+- **Dark Background**: `oklch(0.1822 0 0)` - Professional, sophisticated
+  - Hex Fallback: `#0A0A0F` (for older browsers)
+- **Card Background**: `oklch(0.2046 0 0)` - Subtle elevation
+  - Hex Fallback: `#1A1A20` (for older browsers)
+- **Foreground (Text)**: `oklch(0.9288 0.0126 255.5078)` - Primary text (white)
+- **Muted Foreground**: `oklch(0.7122 0 0)` - Secondary text (grey)
+- **Border**: `oklch(0.2809 0 0)` - Subtle borders
+- **Secondary**: `oklch(0.2603 0 0)` - Supporting elements
+
+**Semantic Colors (OKLCH)**:
+- **Success**: `oklch(0.4365 0.1044 156.7556)` (same as primary)
+- **Warning**: `oklch(0.8369 0.1644 84.4286)` (yellow/gold)
+- **Destructive**: `oklch(0.3123 0.0852 29.7877)` (red)
+- **Info**: `oklch(0.7137 0.1434 254.6240)` (blue)
+
+**Chart Colors (OKLCH)** - 5 distinct colors for data visualization:
+- Chart 1: `oklch(0.8003 0.1821 151.7110)` (green)
+- Chart 2: `oklch(0.7137 0.1434 254.6240)` (purple)
+- Chart 3: `oklch(0.7090 0.1592 293.5412)` (pink)
+- Chart 4: `oklch(0.8369 0.1644 84.4286)` (yellow)
+- Chart 5: `oklch(0.7845 0.1325 181.9120)` (cyan)
+
+**Browser Support & Fallbacks**:
+- Modern browsers (Chrome 120+, Safari 16.4+, Firefox 113+): Use OKLCH
+- Older browsers: Automatic fallback to hex/RGB via `@supports` queries
+- Graceful degradation ensures all browsers work correctly
+**Typography System: Geist Font** (Complete Replacement)
+- **Font Family**: `'Geist', sans-serif` (NOT Archivo, NOT Inter, NOT system fonts)
+- **Font Import**: Google Fonts - `https://fonts.googleapis.com/css2?family=Geist:wght@100;200;300;400;500;600;700;800&display=swap`
+- **Base Font Size**: 15px (not 14px - prototype uses 15px)
+- **Font Weights Available**: 100, 200, 300, 400, 500, 600, 700, 800
+- **Global Heading Weights**: ALL headings (H1-H6) use `font-weight: 300` (light) globally
+- **Body Text Weight**: `font-weight: 400` (regular)
+- **Letter Spacing**: `0.025em` (normal), with tight/wide variants
+- **Line Heights**: 
+  - Headings: Tight (1.0-1.2)
+  - Body: Normal (1.5)
+- **Font Display**: `swap` for better perceived performance
+
+**Layout System: 3-Column Layout** (Complete Replacement)
+- **Left Sidebar**: 280px fixed width, collapsible
+- **Main Content**: Flexible width, responsive
+- **Right Sidebar** (optional): 320px, collapsible
+- **Mobile**: Bottom navigation bar (always visible, fixed position)
+- **Breakpoints**: Match prototype exactly
+- **Collapsible Sidebars**: Smooth animations (300ms ease-in-out)
+- **State Persistence**: Use localStorage for sidebar state
+
+**Shadow System** (Complete Design System)
+- **Shadow Scale**: 2xs, xs, sm, md, lg, xl, 2xl
+- **Shadow Properties**: x, y, blur, spread, opacity, color
+- **Base Shadow**: `0px 1px 3px 0px hsl(0 0% 0% / 0.17), 0px 1px 2px -1px hsl(0 0% 0% / 0.17)`
+- **Largest Shadow**: `0px 1px 3px 0px hsl(0 0% 0% / 0.43)`
+
+**Border Radius System**
+- **Base Radius**: `0.5rem` (8px)
+- **Variants**: sm (calc(var(--radius) - 4px)), md (calc(var(--radius) - 2px)), lg (var(--radius)), xl (calc(var(--radius) + 4px))
+
+**Spacing System**
+- **Base Spacing**: `0.25rem` (4px)
+- **Systematic Scale**: 4px, 8px, 16px, 24px, 32px, 48px, 64px
 
 #### 6. Customizable Dashboard System (NEW - Enhanced)
 - **Drag-and-Drop Cards**: Rearrange main dashboard grid with intuitive drag-and-drop
