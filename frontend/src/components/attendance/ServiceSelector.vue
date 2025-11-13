@@ -121,7 +121,7 @@ interface Props {
   onCreateService?: () => void
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 
 const serviceTypeLabels: Record<ServiceType, string> = {
   sunday_first: 'Sunday 1st Service',
@@ -143,8 +143,6 @@ const serviceTypeColors: Record<ServiceType, string> = {
   children: 'bg-pink-500/10 text-pink-500 border-pink-500/20',
 }
 
-const props = defineProps<Props>()
-
 const formatDate = (dateString: string): string => {
   const date = new Date(dateString)
   const today = new Date()
@@ -165,8 +163,10 @@ const formatDate = (dateString: string): string => {
   }
 }
 
-const formatTime = (timeString: string): string => {
+const formatTime = (timeString: string | undefined): string => {
+  if (!timeString) return ''
   const [hours, minutes] = timeString.split(':')
+  if (!hours || !minutes) return timeString
   const hour = parseInt(hours)
   const ampm = hour >= 12 ? 'PM' : 'AM'
   const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour
@@ -176,10 +176,12 @@ const formatTime = (timeString: string): string => {
 const servicesByDate = computed(() => {
   const grouped: Record<string, Service[]> = {}
   props.services.forEach(service => {
-    if (!grouped[service.date]) {
-      grouped[service.date] = []
+    const date = service.date
+    if (!date) return
+    if (!grouped[date]) {
+      grouped[date] = []
     }
-    grouped[service.date].push(service)
+    grouped[date].push(service)
   })
 
   return Object.entries(grouped).sort(([a], [b]) =>
