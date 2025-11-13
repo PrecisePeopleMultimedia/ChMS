@@ -50,19 +50,36 @@
 
     <!-- Registration Form -->
     <form @submit.prevent="handleSubmit" class="auth-form">
-      <!-- Name Field -->
+      <!-- Name Fields -->
       <div class="form-field">
-        <label class="field-label" for="name">Full Name</label>
+        <label class="field-label" for="firstName">First Name</label>
         <div class="input-container">
           <q-icon name="person" class="field-icon" />
           <input
-            id="name"
-            v-model="form.name"
+            id="firstName"
+            v-model="form.first_name"
             type="text"
             class="form-input"
-            placeholder="John Doe"
+            placeholder="John"
             :disabled="loading || googleLoading"
-            autocomplete="name"
+            autocomplete="given-name"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label class="field-label" for="lastName">Last Name</label>
+        <div class="input-container">
+          <q-icon name="person" class="field-icon" />
+          <input
+            id="lastName"
+            v-model="form.last_name"
+            type="text"
+            class="form-input"
+            placeholder="Doe"
+            :disabled="loading || googleLoading"
+            autocomplete="family-name"
             required
           />
         </div>
@@ -118,7 +135,7 @@
           <q-icon name="lock" class="field-icon" />
           <input
             id="confirmPassword"
-            v-model="form.confirmPassword"
+            v-model="form.password_confirmation"
             :type="showConfirmPassword ? 'text' : 'password'"
             class="form-input"
             placeholder="•••••••••"
@@ -155,7 +172,7 @@
         <label class="checkbox-container">
           <input
             type="checkbox"
-            v-model="form.acceptTerms"
+            v-model="acceptTerms"
             class="checkbox"
             :disabled="loading || googleLoading"
             required
@@ -209,12 +226,18 @@ const authStore = useAuthStore();
 
 // Form state
 const form = ref<RegisterCredentials>({
-  name: '',
+  first_name: '',
+  last_name: '',
   email: '',
   password: '',
-  confirmPassword: '',
-  acceptTerms: false
+  password_confirmation: '',
+  phone: '',
+  organization_name: '',
+  role: 'member'
 });
+
+// Additional form state not part of API
+const acceptTerms = ref(false);
 
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
@@ -224,20 +247,23 @@ const error = ref<string | null>(null);
 
 // Emits
 const emit = defineEmits<{
-  switchToLogin: [];
+  (e: 'success'): void
+  (e: 'switchToLogin'): void
 }>();
 
 // Computed
 const isFormValid = computed(() => {
-  return form.value.name &&
+  return form.value.first_name.trim() &&
+         form.value.last_name.trim() &&
          form.value.email &&
          form.value.password &&
-         form.value.confirmPassword &&
-         form.value.acceptTerms &&
-         form.value.password === form.value.confirmPassword &&
+         form.value.password_confirmation &&
+         acceptTerms.value &&
+         form.value.password === form.value.password_confirmation &&
          form.value.email.includes('@') &&
          form.value.password.length >= 6 &&
-         form.value.name.trim().length >= 2;
+         form.value.first_name.trim().length >= 2 &&
+         form.value.last_name.trim().length >= 2;
 });
 
 const passwordStrength = computed(() => {
@@ -287,10 +313,15 @@ const handleSubmit = async () => {
       position: 'top'
     });
 
+    emit('success');
     router.push('/dashboard');
-  } catch (err: any) {
+  } catch (err) {
     console.error('Registration error:', err);
-    error.value = err.message || 'Registration failed';
+    if (err && typeof err === 'object' && 'message' in err) {
+      error.value = (err as { message?: string }).message || 'Registration failed';
+    } else {
+      error.value = 'Registration failed';
+    }
   } finally {
     loading.value = false;
   }
@@ -307,7 +338,8 @@ const handleGoogleSignUp = async () => {
       message: 'Google sign up coming soon!',
       position: 'top'
     });
-  } catch (err: any) {
+  } catch (err) {
+    console.error('Google sign up error:', err);
     error.value = 'Google sign up failed';
   } finally {
     googleLoading.value = false;

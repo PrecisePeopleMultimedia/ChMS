@@ -126,6 +126,10 @@ import { useQuasar } from 'quasar';
 import { useAuthStore } from '@/stores/auth';
 import type { LoginCredentials } from '@/types/auth';
 
+const emit = defineEmits<{
+  (e: 'success'): void
+}>();
+
 const router = useRouter();
 const $q = useQuasar();
 const authStore = useAuthStore();
@@ -169,11 +173,19 @@ const handleSubmit = async () => {
       position: 'top'
     });
 
-    const redirectPath = router.currentRoute.value.query.redirect as string;
+    emit('success');
+    
+    const redirectPath = router.currentRoute.value.query.redirect as string | undefined;
     await router.push(redirectPath || '/dashboard');
-  } catch (err: any) {
+  } catch (err) {
+    // Use more specific error type, fallback to unknown if necessary
     console.error('Login error:', err);
-    error.value = err.message || 'Invalid email or password';
+    // Type-narrow for better safety and no-implicit-any
+    if (err && typeof err === 'object' && 'message' in err) {
+      error.value = (err as { message?: string }).message || 'Invalid email or password';
+    } else {
+      error.value = 'Invalid email or password';
+    }
   } finally {
     loading.value = false;
   }
@@ -190,7 +202,8 @@ const handleGoogleSignIn = async () => {
       message: 'Google sign in coming soon!',
       position: 'top'
     });
-  } catch (err: any) {
+  } catch (err) {
+    console.error('Google sign in error:', err);
     error.value = 'Google sign in failed';
   } finally {
     googleLoading.value = false;
