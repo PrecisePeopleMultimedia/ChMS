@@ -313,6 +313,9 @@ watch(() => props.config, (newConfig) => {
   animation: slideDown 0.3s ease-out;
 }
 
+@-webkit-keyframes slideDown {
+  from {
+    transform: translateY(-100%);
 @keyframes slideDown {
   from {
     transform: translateY(-100%);

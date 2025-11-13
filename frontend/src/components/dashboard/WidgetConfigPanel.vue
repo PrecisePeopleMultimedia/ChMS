@@ -394,6 +394,7 @@ onMounted(() => {
 }
 
 .generic-config {
+  display: -ms-grid;
   display: grid;
   gap: 12px;
 }

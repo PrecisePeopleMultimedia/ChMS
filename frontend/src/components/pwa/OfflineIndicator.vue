@@ -177,6 +177,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   z-index: 9997;
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
 
@@ -184,6 +185,10 @@ onUnmounted(() => {
   animation: spin 1s linear infinite;
 }
 
+@-webkit-keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

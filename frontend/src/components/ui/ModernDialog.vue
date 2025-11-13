@@ -82,6 +82,14 @@ defineEmits<{
 
 <style scoped>
 /* Dialog animations */
+@-webkit-keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -91,6 +99,14 @@ defineEmits<{
   }
 }
 
+@-webkit-keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
 @keyframes fade-out {
   from {
     opacity: 1;
@@ -100,6 +116,14 @@ defineEmits<{
   }
 }
 
+@-webkit-keyframes zoom-in {
+  from {
+    transform: scale(0.95);
+  }
+  to {
+    transform: scale(1);
+  }
+}
 @keyframes zoom-in {
   from {
     transform: scale(0.95);
@@ -109,6 +133,14 @@ defineEmits<{
   }
 }
 
+@-webkit-keyframes zoom-out {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0.95);
+  }
+}
 @keyframes zoom-out {
   from {
     transform: scale(1);
@@ -119,11 +151,17 @@ defineEmits<{
 }
 
 [data-state="open"] {
+  -webkit-animation: fade-in 0.2s, zoom-in 0.2s;
+  -webkit-animation-fill-mode: both;
   animation: fade-in 0.2s, zoom-in 0.2s;
+  animation-fill-mode: both;
 }
 
 [data-state="closed"] {
+  -webkit-animation: fade-out 0.2s, zoom-out 0.2s;
+  -webkit-animation-fill-mode: both;
   animation: fade-out 0.2s, zoom-out 0.2s;
+  animation-fill-mode: both;
 }
 </style>
 

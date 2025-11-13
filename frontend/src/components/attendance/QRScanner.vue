@@ -299,6 +299,9 @@ onBeforeUnmount(() => {
   background: linear-gradient(to bottom, transparent, #4CAF50, transparent)
   animation: scan 2s linear infinite
 
+@-webkit-keyframes scan
+  0%
+    top: 0
 @keyframes scan
   0%
     top: 0

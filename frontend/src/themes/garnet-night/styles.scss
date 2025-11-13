@@ -20,6 +20,7 @@ html[data-theme="garnet-night"] {
     height: $gn-toolbar-height;
     background: var(--gn-gradient-primary);
     color: white;
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
   }
 
@@ -38,6 +39,7 @@ html[data-theme="garnet-night"] {
   .q-card {
     background: var(--gn-surface);
     background: rgba(45, 27, 36, 0.95);
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     border-radius: $gn-card-border-radius;
     border: 1px solid rgba(184, 51, 106, 0.2);
@@ -146,6 +148,7 @@ html[data-theme="garnet-night"] {
   .gn-table,
   .q-table {
     background: rgba(45, 27, 36, 0.7);
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     border-radius: $gn-card-border-radius;
     border: 1px solid rgba(184, 51, 106, 0.2);
@@ -247,6 +250,7 @@ html[data-theme="garnet-night"] {
   .login-card,
   .register-card {
     background: rgba(26, 10, 15, 0.95);
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(184, 51, 106, 0.2);
     border-radius: $gn-card-border-radius;
@@ -292,6 +296,9 @@ html[data-theme="garnet-night"] {
   }
 
   // === ANIMATIONS ===
+  @-webkit-keyframes gn-shimmer {
+    0% {
+      background-position: -1000px 0;
   @keyframes gn-shimmer {
     0% {
       background-position: -1000px 0;

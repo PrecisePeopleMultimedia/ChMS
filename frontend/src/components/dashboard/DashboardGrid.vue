@@ -284,6 +284,9 @@ onUnmounted(() => {
   animation: pulse 1s infinite;
 }
 
+@-webkit-keyframes pulse {
+  0% { opacity: 0.3; }
+  50% { opacity: 0.6; }
 @keyframes pulse {
   0% { opacity: 0.3; }
   50% { opacity: 0.6; }

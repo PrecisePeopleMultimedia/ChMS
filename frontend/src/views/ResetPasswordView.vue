@@ -22,7 +22,7 @@
       <!-- Reset Password Form -->
       <q-card 
         class="reset-password-card q-pa-lg"
-        style="min-width: 400px; max-width: 500px; background: rgba(26, 10, 15, 0.95); backdrop-filter: blur(10px);"
+        style="min-width: 400px; max-width: 500px; background: rgba(26, 10, 15, 0.95); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);"
       >
         <q-card-section>
           <q-form @submit="handleResetPassword" class="q-gutter-md">

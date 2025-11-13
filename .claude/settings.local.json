@@ -27,7 +27,8 @@
       "Bash(docker-compose exec:*)",
       "Bash(git add:*)",
       "WebFetch(domain:www.figma.com)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "mcp__MCP_DOCKER__brave_web_search"
     ],
     "deny": [],
     "ask": []

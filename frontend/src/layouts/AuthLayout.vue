@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view="hHh Lpr lFf" class="auth-layout">
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -7,10 +7,21 @@
 </template>
 
 <script setup lang="ts">
-// Simple authentication layout for login, register, forgot password pages
+// Authentication layout for login, register, and forgot password pages
+// This layout applies the TweakCN green dark theme to auth pages
 </script>
 
-<style lang="sass" scoped>
-.q-layout
-  min-height: 100vh
+<style lang="scss">
+.auth-layout {
+  min-height: 100vh;
+  background: oklch(0.1822 0 0); // --background from TweakCN theme
+
+  :deep(.q-page) {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+}
 </style>

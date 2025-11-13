@@ -282,6 +282,8 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     font-feature-settings: "kern" 1, "liga" 1;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
     background: var(--background);
     min-height: 100vh;
   }

@@ -130,6 +130,14 @@ const customStyle = computed(() => {
   animation: bars 1.2s ease-in-out infinite;
 }
 
+@-webkit-keyframes bounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
 @keyframes bounce {
   0%, 80%, 100% {
     transform: scale(0);
@@ -139,6 +147,14 @@ const customStyle = computed(() => {
   }
 }
 
+@-webkit-keyframes bars {
+  0%, 40%, 100% {
+    transform: scaleY(0.4);
+  }
+  20% {
+    transform: scaleY(1);
+  }
+}
 @keyframes bars {
   0%, 40%, 100% {
     transform: scaleY(0.4);
@@ -151,9 +167,14 @@ const customStyle = computed(() => {
 /* Pulse animation */
 .modern-spinner.variant-pulse {
   @apply bg-current;
+  -webkit-animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
+@-webkit-keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
 @keyframes pulse {
   0%, 100% {
     opacity: 1;

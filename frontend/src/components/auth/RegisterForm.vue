@@ -1,16 +1,16 @@
 <template>
-  <div class="login-form">
+  <div class="register-form">
     <!-- Error Alert -->
     <div v-if="error" class="error-alert">
       <q-icon name="error_outline" size="16px" />
       <span>{{ error }}</span>
     </div>
 
-    <!-- Google Sign In Button -->
+    <!-- Google Sign Up Button -->
     <q-btn
       flat
       class="google-btn"
-      @click="handleGoogleSignIn"
+      @click="handleGoogleSignUp"
       :loading="googleLoading"
       :disable="loading || googleLoading"
     >
@@ -48,8 +48,26 @@
       <div class="divider-line"></div>
     </div>
 
-    <!-- Email/Password Form -->
+    <!-- Registration Form -->
     <form @submit.prevent="handleSubmit" class="auth-form">
+      <!-- Name Field -->
+      <div class="form-field">
+        <label class="field-label" for="name">Full Name</label>
+        <div class="input-container">
+          <q-icon name="person" class="field-icon" />
+          <input
+            id="name"
+            v-model="form.name"
+            type="text"
+            class="form-input"
+            placeholder="John Doe"
+            :disabled="loading || googleLoading"
+            autocomplete="name"
+            required
+          />
+        </div>
+      </div>
+
       <!-- Email Field -->
       <div class="form-field">
         <label class="field-label" for="email">Email</label>
@@ -78,9 +96,9 @@
             v-model="form.password"
             :type="showPassword ? 'text' : 'password'"
             class="form-input"
-            placeholder="••••••••"
+            placeholder="•••••••••"
             :disabled="loading || googleLoading"
-            autocomplete="current-password"
+            autocomplete="new-password"
             required
           />
           <button
@@ -93,28 +111,87 @@
         </div>
       </div>
 
-      <!-- Forgot Password Link -->
-      <div class="form-actions">
-        <q-btn
-          flat
-          dense
-          label="Forgot password?"
-          class="forgot-link"
-          :disable="loading || googleLoading"
-          @click="handleForgotPassword"
-        />
+      <!-- Confirm Password Field -->
+      <div class="form-field">
+        <label class="field-label" for="confirmPassword">Confirm Password</label>
+        <div class="input-container">
+          <q-icon name="lock" class="field-icon" />
+          <input
+            id="confirmPassword"
+            v-model="form.confirmPassword"
+            :type="showConfirmPassword ? 'text' : 'password'"
+            class="form-input"
+            placeholder="•••••••••"
+            :disabled="loading || googleLoading"
+            autocomplete="new-password"
+            required
+          />
+          <button
+            type="button"
+            class="password-toggle"
+            @click="showConfirmPassword = !showConfirmPassword"
+          >
+            <q-icon :name="showConfirmPassword ? 'visibility_off' : 'visibility'" />
+          </button>
+        </div>
       </div>
 
-      <!-- Sign In Button -->
+      <!-- Password Strength Indicator -->
+      <div v-if="form.password" class="password-strength">
+        <div class="strength-bar">
+          <div
+            class="strength-fill"
+            :class="passwordStrengthClass"
+            :style="{ width: passwordStrengthWidth + '%' }"
+          ></div>
+        </div>
+        <span class="strength-text" :class="passwordStrengthClass">
+          {{ passwordStrengthText }}
+        </span>
+      </div>
+
+      <!-- Terms and Conditions -->
+      <div class="terms-field">
+        <label class="checkbox-container">
+          <input
+            type="checkbox"
+            v-model="form.acceptTerms"
+            class="checkbox"
+            :disabled="loading || googleLoading"
+            required
+          />
+          <span class="checkbox-label">
+            I agree to the
+            <a href="/terms" class="terms-link" target="_blank">Terms of Service</a>
+            and
+            <a href="/privacy" class="terms-link" target="_blank">Privacy Policy</a>
+          </span>
+        </label>
+      </div>
+
+      <!-- Sign Up Button -->
       <q-btn
         type="submit"
         color="primary"
-        class="signin-btn"
+        class="signup-btn"
         :loading="loading"
         :disable="loading || googleLoading || !isFormValid"
       >
-        {{ loading ? 'Signing in...' : 'Sign In' }}
+        {{ loading ? 'Creating account...' : 'Sign Up' }}
       </q-btn>
+
+      <!-- Login Link -->
+      <div class="login-link">
+        Already have an account?
+        <q-btn
+          flat
+          dense
+          label="Sign In"
+          class="login-link-btn"
+          :disable="loading || googleLoading"
+          @click="$emit('switchToLogin')"
+        />
+      </div>
     </form>
   </div>
 </template>
@@ -124,34 +201,75 @@ import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
 import { useAuthStore } from '@/stores/auth';
-import type { LoginCredentials } from '@/types/auth';
+import type { RegisterCredentials } from '@/types/auth';
 
 const router = useRouter();
 const $q = useQuasar();
 const authStore = useAuthStore();
 
 // Form state
-const form = ref<LoginCredentials>({
+const form = ref<RegisterCredentials>({
+  name: '',
   email: '',
   password: '',
-  remember: false
-})
-
-// Pre-fill demo credentials if available
-if (authStore.demoCredentials) {
-  form.value.email = authStore.demoCredentials.email
-  form.value.password = authStore.demoCredentials.password
-}
+  confirmPassword: '',
+  acceptTerms: false
+});
 
 const showPassword = ref(false);
+const showConfirmPassword = ref(false);
 const loading = ref(false);
 const googleLoading = ref(false);
 const error = ref<string | null>(null);
 
+// Emits
+const emit = defineEmits<{
+  switchToLogin: [];
+}>();
+
 // Computed
 const isFormValid = computed(() => {
-  return form.value.email && form.value.password &&
-         form.value.email.includes('@') && form.value.password.length >= 6;
+  return form.value.name &&
+         form.value.email &&
+         form.value.password &&
+         form.value.confirmPassword &&
+         form.value.acceptTerms &&
+         form.value.password === form.value.confirmPassword &&
+         form.value.email.includes('@') &&
+         form.value.password.length >= 6 &&
+         form.value.name.trim().length >= 2;
+});
+
+const passwordStrength = computed(() => {
+  const password = form.value.password;
+  let strength = 0;
+
+  if (password.length >= 8) strength++;
+  if (password.length >= 12) strength++;
+  if (/[a-z]/.test(password)) strength++;
+  if (/[A-Z]/.test(password)) strength++;
+  if (/[0-9]/.test(password)) strength++;
+  if (/[^a-zA-Z0-9]/.test(password)) strength++;
+
+  return strength;
+});
+
+const passwordStrengthClass = computed(() => {
+  const strength = passwordStrength.value;
+  if (strength <= 2) return 'weak';
+  if (strength <= 4) return 'medium';
+  return 'strong';
+});
+
+const passwordStrengthWidth = computed(() => {
+  return (passwordStrength.value / 6) * 100;
+});
+
+const passwordStrengthText = computed(() => {
+  const strength = passwordStrength.value;
+  if (strength <= 2) return 'Weak password';
+  if (strength <= 4) return 'Good password';
+  return 'Strong password';
 });
 
 // Methods
@@ -162,24 +280,23 @@ const handleSubmit = async () => {
   loading.value = true;
 
   try {
-    await authStore.login(form.value);
+    await authStore.register(form.value);
     $q.notify({
       type: 'positive',
-      message: 'Welcome back!',
+      message: 'Account created successfully!',
       position: 'top'
     });
 
-    const redirectPath = router.currentRoute.value.query.redirect as string;
-    await router.push(redirectPath || '/dashboard');
+    router.push('/dashboard');
   } catch (err: any) {
-    console.error('Login error:', err);
-    error.value = err.message || 'Invalid email or password';
+    console.error('Registration error:', err);
+    error.value = err.message || 'Registration failed';
   } finally {
     loading.value = false;
   }
 };
 
-const handleGoogleSignIn = async () => {
+const handleGoogleSignUp = async () => {
   error.value = null;
   googleLoading.value = true;
 
@@ -187,26 +304,20 @@ const handleGoogleSignIn = async () => {
     // Implement Google OAuth logic here
     $q.notify({
       type: 'info',
-      message: 'Google sign in coming soon!',
+      message: 'Google sign up coming soon!',
       position: 'top'
     });
   } catch (err: any) {
-    error.value = 'Google sign in failed';
+    error.value = 'Google sign up failed';
   } finally {
     googleLoading.value = false;
   }
 };
-
-const handleForgotPassword = () => {
-  router.push('/forgot-password');
-};
 </script>
 
 <style lang="scss" scoped>
-.login-form {
-  display: -ms-flexbox;
+.register-form {
   display: flex;
-  -ms-flex-direction: column;
   flex-direction: column;
   gap: 20px;
 }
@@ -350,23 +461,89 @@ const handleForgotPassword = () => {
   }
 }
 
-.form-actions {
+.password-strength {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
 }
 
-.forgot-link {
-  color: oklch(0.4365 0.1044 156.7556);
-  font-size: 14px;
-  font-weight: 400;
-  text-transform: none;
+.strength-bar {
+  flex: 1;
+  height: 4px;
+  background: oklch(0.2809 0 0 / 0.3);
+  border-radius: 2px;
+  overflow: hidden;
+}
 
-  &:hover {
-    background: oklch(0.4365 0.1044 156.7556 / 0.1);
+.strength-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: all 300ms ease-out;
+
+  &.weak {
+    background: oklch(0.3123 0.0852 29.7877);
+  }
+
+  &.medium {
+    background: oklch(0.8369 0.1644 84.4286);
+  }
+
+  &.strong {
+    background: oklch(0.4365 0.1044 156.7556);
   }
 }
 
-.signin-btn {
+.strength-text {
+  font-size: 12px;
+  font-weight: 400;
+
+  &.weak {
+    color: oklch(0.3123 0.0852 29.7877);
+  }
+
+  &.medium {
+    color: oklch(0.8369 0.1644 84.4286);
+  }
+
+  &.strong {
+    color: oklch(0.4365 0.1044 156.7556);
+  }
+}
+
+.terms-field {
+  margin-top: 4px;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  color: oklch(0.9288 0.0126 255.5078);
+  cursor: pointer;
+}
+
+.checkbox {
+  margin-top: 2px;
+  width: 16px;
+  height: 16px;
+  accent-color: oklch(0.4365 0.1044 156.7556);
+}
+
+.checkbox-label {
+  line-height: 1.4;
+}
+
+.terms-link {
+  color: oklch(0.4365 0.1044 156.7556);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.signup-btn {
   height: 44px;
   border-radius: 6px;
   background: oklch(0.4365 0.1044 156.7556);
@@ -382,6 +559,25 @@ const handleForgotPassword = () => {
 
   &:disabled {
     opacity: 0.6;
+  }
+}
+
+.login-link {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 400;
+  color: oklch(0.7122 0 0);
+  margin-top: 8px;
+}
+
+.login-link-btn {
+  color: oklch(0.4365 0.1044 156.7556);
+  font-size: 14px;
+  font-weight: 400;
+  text-transform: none;
+
+  &:hover {
+    background: oklch(0.4365 0.1044 156.7556 / 0.1);
   }
 }
 </style>

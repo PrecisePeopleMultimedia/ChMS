@@ -136,6 +136,9 @@ const goBack = () => {
   &:hover
     background: linear-gradient(135deg, #A01B42 0%, #C93D74 100%)
 
+@-webkit-keyframes pulse
+  0%
+    transform: scale(1)
 @keyframes pulse
   0%
     transform: scale(1)

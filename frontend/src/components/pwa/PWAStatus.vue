@@ -321,6 +321,10 @@ onUnmounted(() => {
   animation: spin 1s linear infinite;
 }
 
+@-webkit-keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

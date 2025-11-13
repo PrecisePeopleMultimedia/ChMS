@@ -274,6 +274,7 @@ onMounted(() => {
 
 .garnet-card
   background: rgba(26, 10, 15, 0.95)
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px)
   border: 1px solid rgba(184, 51, 106, 0.2)
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3)

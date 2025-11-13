@@ -29,7 +29,7 @@ $space-lg: $space-base * 1.5 !default;
 $space-xl: $space-base * 2 !default;
 
 // Quasar Typography
-$typography-font-family: var(--theme-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif) !default;
+$typography-font-family: var(--theme-font-family, 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif) !default;
 
 $h1: (
   size: 6rem,
