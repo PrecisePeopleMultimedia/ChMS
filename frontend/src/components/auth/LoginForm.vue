@@ -1,228 +1,134 @@
 <template>
-  <BaseFormCard
-    class="fade-in-up login-card"
-  >
-    <template #content>
-      <q-form
-        @submit="handleLogin"
-        class="q-gutter-md"
-        role="form"
-        aria-label="Sign in form"
-        novalidate
+  <div class="login-form">
+    <!-- Error Alert -->
+    <div v-if="error" class="error-alert">
+      <q-icon name="error_outline" size="16px" />
+      <span>{{ error }}</span>
+    </div>
+
+    <!-- Google Sign In Button -->
+    <q-btn
+      flat
+      class="google-btn"
+      @click="handleGoogleSignIn"
+      :loading="googleLoading"
+      :disable="loading || googleLoading"
+    >
+      <template v-if="!googleLoading">
+        <svg class="google-icon" viewBox="0 0 24 24">
+          <path
+            fill="#4285F4"
+            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+          />
+          <path
+            fill="#34A853"
+            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+          />
+          <path
+            fill="#FBBC05"
+            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+          />
+          <path
+            fill="#EA4335"
+            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+          />
+        </svg>
+        Continue with Google
+      </template>
+      <template v-else>
+        <q-spinner-dots size="16px" />
+        Connecting to Google...
+      </template>
+    </q-btn>
+
+    <!-- Divider -->
+    <div class="divider-container">
+      <div class="divider-line"></div>
+      <span class="divider-text">Or continue with email</span>
+      <div class="divider-line"></div>
+    </div>
+
+    <!-- Email/Password Form -->
+    <form @submit.prevent="handleSubmit" class="auth-form">
+      <!-- Email Field -->
+      <div class="form-field">
+        <label class="field-label" for="email">Email</label>
+        <div class="input-container">
+          <q-icon name="mail" class="field-icon" />
+          <input
+            id="email"
+            v-model="form.email"
+            type="email"
+            class="form-input"
+            placeholder="pastor@church.com"
+            :disabled="loading || googleLoading"
+            autocomplete="email"
+            required
+          />
+        </div>
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-field">
+        <label class="field-label" for="password">Password</label>
+        <div class="input-container">
+          <q-icon name="lock" class="field-icon" />
+          <input
+            id="password"
+            v-model="form.password"
+            :type="showPassword ? 'text' : 'password'"
+            class="form-input"
+            placeholder="••••••••"
+            :disabled="loading || googleLoading"
+            autocomplete="current-password"
+            required
+          />
+          <button
+            type="button"
+            class="password-toggle"
+            @click="showPassword = !showPassword"
+          >
+            <q-icon :name="showPassword ? 'visibility_off' : 'visibility'" />
+          </button>
+        </div>
+      </div>
+
+      <!-- Forgot Password Link -->
+      <div class="form-actions">
+        <q-btn
+          flat
+          dense
+          label="Forgot password?"
+          class="forgot-link"
+          :disable="loading || googleLoading"
+          @click="handleForgotPassword"
+        />
+      </div>
+
+      <!-- Sign In Button -->
+      <q-btn
+        type="submit"
+        color="primary"
+        class="signin-btn"
+        :loading="loading"
+        :disable="loading || googleLoading || !isFormValid"
       >
-        <!-- Email Field -->
-        <q-input
-          id="login-email"
-          ref="emailInputRef"
-          v-model="form.email"
-          type="email"
-          label="Email Address"
-          outlined
-          dark
-          required
-          autocomplete="email"
-          :rules="emailRules"
-          :error="!!fieldErrors.email"
-          :error-message="fieldErrors.email"
-          :aria-describedby="fieldErrors.email ? 'email-error' : undefined"
-          :aria-invalid="!!fieldErrors.email"
-          class="garnet-input"
-          @focus="announceFieldFocus('Email Address')"
-          @input="handleEmailInput"
-          @keydown="handleKeyDown"
-        >
-          <template v-slot:prepend>
-            <q-icon name="email" color="primary" aria-hidden="true" />
-          </template>
-        </q-input>
-
-        <!-- Password Field -->
-        <q-input
-          id="login-password"
-          ref="passwordInputRef"
-          v-model="form.password"
-          :type="showPassword ? 'text' : 'password'"
-          label="Password"
-          outlined
-          dark
-          required
-          autocomplete="current-password"
-          :rules="passwordRules"
-          :error="!!fieldErrors.password"
-          :error-message="fieldErrors.password"
-          :aria-describedby="fieldErrors.password ? 'password-error' : undefined"
-          :aria-invalid="!!fieldErrors.password"
-          class="garnet-input"
-          @focus="announceFieldFocus('Password')"
-          @input="handlePasswordInput"
-          @keydown="handleKeyDown"
-        >
-          <template v-slot:prepend>
-            <q-icon name="lock" color="primary" aria-hidden="true" />
-          </template>
-          <template v-slot:append>
-            <q-btn
-              flat
-              round
-              dense
-              :icon="showPassword ? 'visibility_off' : 'visibility'"
-              color="grey-5"
-              :aria-label="showPassword ? 'Hide password' : 'Show password'"
-              :aria-pressed="showPassword.toString()"
-              @click="togglePasswordVisibility"
-              data-testid="password-toggle"
-              tabindex="0"
-            />
-          </template>
-        </q-input>
-
-        <!-- Remember Me -->
-        <q-checkbox
-          id="login-remember"
-          v-model="form.remember"
-          label="Remember me"
-          color="primary"
-          dark
-          class="text-grey-3"
-          aria-describedby="remember-help"
-        />
-        <div id="remember-help" class="text-caption text-grey-5 q-mt-xs">
-          Keep me signed in on this device
-        </div>
-
-        <!-- Error Message -->
-        <ModernAlert
-          v-if="authStore.error"
-          variant="error"
-          :message="authStore.error"
-          dismissible
-        />
-
-        <!-- Debug Info -->
-        <ModernAlert
-          v-if="debugInfo"
-          variant="info"
-          title="Debug Information"
-          dismissible
-        >
-          <div class="space-y-1 text-sm">
-            <div>API URL: {{ apiUrl }}</div>
-            <div>Form Valid: {{ isFormValid }}</div>
-            <div>Loading: {{ authStore.isLoading }}</div>
-          </div>
-        </ModernAlert>
-
-        <!-- Login Button -->
-        <ModernButton
-          variant="primary"
-          size="lg"
-          :loading="authStore.isLoading"
-          :disabled="!isFormValid || authStore.isLoading"
-          class="w-full garnet-btn"
-          @click="handleLogin"
-          :aria-describedby="!isFormValid ? 'form-validation-help' : undefined"
-        >
-          <template v-if="!authStore.isLoading">
-            Sign In
-          </template>
-          <template v-else>
-            Signing in...
-          </template>
-        </ModernButton>
-
-        <!-- Form validation help text -->
-        <div
-          v-if="!isFormValid && (form.email || form.password)"
-          id="form-validation-help"
-          class="text-caption text-grey-5 q-mt-xs"
-        >
-          Please fill in all required fields with valid information
-        </div>
-
-        <!-- Test API Button -->
-        <!-- Test API Button - Hidden by default, shown only in development -->
-        <ModernButton
-          v-if="isDevelopment"
-          variant="outline"
-          size="sm"
-          :loading="isTestingApi"
-          class="w-full"
-          @click="testApiConnection"
-        >
-          Test API Connection
-        </ModernButton>
-
-        <!-- Divider -->
-        <div class="flex items-center my-4">
-          <div class="flex-1 border-t border-border"></div>
-          <div class="px-3 text-sm text-muted-foreground">or</div>
-          <div class="flex-1 border-t border-border"></div>
-        </div>
-
-        <!-- Google Login Button -->
-        <ModernButton
-          variant="outline"
-          size="lg"
-          :loading="isGoogleLoading"
-          :disabled="authStore.isLoading || isGoogleLoading"
-          class="w-full google-btn"
-          @click="handleGoogleLogin"
-          :aria-label="isGoogleLoading ? 'Opening Google login...' : 'Continue with Google'"
-        >
-          <template #icon v-if="!isGoogleLoading">
-            <img
-              src="https://developers.google.com/identity/images/g-logo.png"
-              alt="Google"
-              class="w-4 h-4 mr-2"
-            />
-          </template>
-          <template v-if="!isGoogleLoading">
-            Continue with Google
-          </template>
-          <template v-else>
-            Opening Google login...
-          </template>
-        </ModernButton>
-      </q-form>
-    </template>
-
-    <template #footer>
-      <div class="text-grey-5">
-        <router-link 
-          :to="forgotPasswordLink" 
-          class="text-primary text-decoration-none"
-        >
-          Forgot your password?
-        </router-link>
-      </div>
-      <div class="text-grey-5 q-mt-xs">
-        Don't have an account?
-        <router-link to="/register" class="text-primary text-decoration-none">
-          Sign up
-        </router-link>
-      </div>
-    </template>
-  </BaseFormCard>
+        {{ loading ? 'Signing in...' : 'Sign In' }}
+      </q-btn>
+    </form>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { useQuasar } from 'quasar'
-import { useAuthStore } from '@/stores/auth'
-import { useAccessibility } from '@/composables/useAccessibility'
-import type { LoginCredentials } from '@/types/auth'
-import BaseFormCard from '@/components/common/BaseFormCard.vue'
-import { api } from '@/services/api'
-import ModernButton from '@/components/ui/ModernButton.vue'
-import ModernAlert from '@/components/ui/ModernAlert.vue'
-import ThemeSwitcher from '@/components/theme/ThemeSwitcher.vue'
+import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useQuasar } from 'quasar';
+import { useAuthStore } from '@/stores/auth';
+import type { LoginCredentials } from '@/types/auth';
 
-// Composables
-const router = useRouter()
-const $q = useQuasar()
-const authStore = useAuthStore()
-const { announceToScreenReader } = useAccessibility()
+const router = useRouter();
+const $q = useQuasar();
+const authStore = useAuthStore();
 
 // Form state
 const form = ref<LoginCredentials>({
@@ -231,389 +137,249 @@ const form = ref<LoginCredentials>({
   remember: false
 })
 
-const showPassword = ref(false)
-const isGoogleLoading = ref(false)
-const isTestingApi = ref(false)
-const fieldErrors = ref<Record<string, string>>({})
-const debugInfo = ref(false) // Hide debug info in production
+// Pre-fill demo credentials if available
+if (authStore.demoCredentials) {
+  form.value.email = authStore.demoCredentials.email
+  form.value.password = authStore.demoCredentials.password
+}
 
-// API URL for debugging
-const apiUrl = import.meta.env.VITE_API_URL
-
-// Enhanced validation rules
-const emailRules = [
-  (val: string) => !!val || 'Email is required',
-  (val: string) => {
-    // More robust email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return emailRegex.test(val) || 'Please enter a valid email address'
-  },
-  (val: string) => {
-    // Check for common email format issues
-    if (val.includes('..')) return 'Email cannot contain consecutive dots'
-    if (val.startsWith('.') || val.endsWith('.')) return 'Email cannot start or end with a dot'
-    if (val.length > 254) return 'Email address is too long'
-    return true
-  }
-]
-
-const passwordRules = [
-  (val: string) => !!val || 'Password is required',
-  (val: string) => val.length >= 6 || 'Password must be at least 6 characters',
-  (val: string) => val.length <= 128 || 'Password must be less than 128 characters',
-  (val: string) => {
-    // Check for common password issues
-    if (val.trim() !== val) return 'Password cannot start or end with spaces'
-    return true
-  }
-]
+const showPassword = ref(false);
+const loading = ref(false);
+const googleLoading = ref(false);
+const error = ref<string | null>(null);
 
 // Computed
-const isDevelopment = computed(() => {
-  // Only show test components when explicitly enabled via environment variable
-  return import.meta.env.VITE_SHOW_TEST_COMPONENTS === 'true'
-})
-
 const isFormValid = computed(() => {
-  // Check if all fields are filled
-  if (!form.value.email || !form.value.password) {
-    return false
-  }
-
-  // Validate email using the same rules
-  const emailValid = emailRules.every(rule => rule(form.value.email) === true)
-
-  // Validate password using the same rules
-  const passwordValid = passwordRules.every(rule => rule(form.value.password) === true)
-
-  return emailValid && passwordValid
-})
-
-// Forgot password link with email pre-population
-// UX Enhancement: If user has entered a valid email in the login form,
-// it will be pre-populated in the forgot password form when they click the link
-const forgotPasswordLink = computed(() => {
-  const basePath = '/forgot-password'
-  // If email is entered and valid, pass it as query parameter
-  if (form.value.email && emailRules.every(rule => rule(form.value.email) === true)) {
-    return {
-      path: basePath,
-      query: { email: form.value.email }
-    }
-  }
-  return basePath
-})
+  return form.value.email && form.value.password &&
+         form.value.email.includes('@') && form.value.password.length >= 6;
+});
 
 // Methods
-const handleLogin = async () => {
-  console.log('Login form submitted:', form.value)
-  console.log('API URL:', apiUrl)
-  
+const handleSubmit = async () => {
+  if (!isFormValid.value) return;
+
+  error.value = null;
+  loading.value = true;
+
   try {
-    fieldErrors.value = {}
-    console.log('Calling authStore.login...')
-    await authStore.login(form.value)
-    
+    await authStore.login(form.value);
     $q.notify({
       type: 'positive',
       message: 'Welcome back!',
       position: 'top'
-    })
+    });
 
-    // Handle redirect after successful login
-    const redirectPath = router.currentRoute.value.query.redirect as string
-    if (redirectPath && redirectPath.startsWith('/')) {
-      console.log('Redirecting to:', redirectPath)
-      await router.push(redirectPath)
-    } else {
-      console.log('Redirecting to dashboard')
-      await router.push('/dashboard')
-    }
-  } catch (error: any) {
-    console.error('Login error:', error)
-
-    // Clear any existing field errors
-    fieldErrors.value = {}
-
-    // Handle different types of errors
-    let errorMessage = 'Login failed. Please try again.'
-
-    if (error.response?.data?.errors) {
-      // Validation errors from server
-      fieldErrors.value = error.response.data.errors
-      errorMessage = 'Please check the form for errors.'
-    } else if (error.response?.data?.message) {
-      // Specific error message from server
-      errorMessage = error.response.data.message
-    } else if (error.response?.status === 401) {
-      errorMessage = 'Invalid email or password. Please try again.'
-    } else if (error.response?.status === 422) {
-      errorMessage = 'Please check your input and try again.'
-    } else if (error.response?.status >= 500) {
-      errorMessage = 'Server error. Please try again later.'
-    } else if (error.code === 'NETWORK_ERROR' || !error.response) {
-      errorMessage = 'Network error. Please check your connection and try again.'
-    } else if (authStore.error) {
-      // Use store error if available
-      errorMessage = authStore.error
-    }
-
-    // Announce error to screen readers
-    announceToScreenReader(`Login failed: ${errorMessage}`)
-
-    $q.notify({
-      type: 'negative',
-      message: errorMessage,
-      position: 'top',
-      timeout: 5000,
-      actions: [
-        {
-          icon: 'close',
-          color: 'white',
-          round: true,
-          handler: () => {}
-        }
-      ]
-    })
-  }
-}
-
-const testApiConnection = async () => {
-  isTestingApi.value = true
-  try {
-    console.log('Testing API connection to:', apiUrl)
-    const response = await fetch(`${apiUrl}/health`)
-    const data = await response.json()
-    
-    $q.notify({
-      type: 'positive',
-      message: `API connected! Status: ${data.status}`,
-      position: 'top'
-    })
-  } catch (error: any) {
-    console.error('API test failed:', error)
-    $q.notify({
-      type: 'negative',
-      message: `API test failed: ${error.message}`,
-      position: 'top'
-    })
+    const redirectPath = router.currentRoute.value.query.redirect as string;
+    await router.push(redirectPath || '/dashboard');
+  } catch (err: any) {
+    console.error('Login error:', err);
+    error.value = err.message || 'Invalid email or password';
   } finally {
-    isTestingApi.value = false
+    loading.value = false;
   }
-}
+};
 
-const handleGoogleLogin = async () => {
+const handleGoogleSignIn = async () => {
+  error.value = null;
+  googleLoading.value = true;
+
   try {
-    isGoogleLoading.value = true
-
-    // Check if Google OAuth is configured
-    const response = await api.get('/auth/google')
-    const { redirect_url, client_id } = response.data
-
-    if (!redirect_url) {
-      throw new Error('Google OAuth not configured')
-    }
-
-    // Announce to screen readers
-    announceToScreenReader('Opening Google login window')
-
-    // Use popup for better UX (fallback to redirect if popup blocked)
-    const popup = window.open(
-      redirect_url,
-      'google-oauth',
-      'width=500,height=600,scrollbars=yes,resizable=yes'
-    )
-
-    if (!popup) {
-      // Popup blocked, fallback to redirect
-      console.warn('Popup blocked, falling back to redirect')
-      window.location.href = redirect_url
-      return
-    }
-
-    // Monitor popup for completion
-    const checkClosed = setInterval(() => {
-      if (popup.closed) {
-        clearInterval(checkClosed)
-        isGoogleLoading.value = false
-
-        // Check if user was redirected back with auth data
-        // This would typically be handled by the OAuth callback
-        console.log('Google OAuth popup closed')
-      }
-    }, 1000)
-
-    // Handle popup messages (if using postMessage pattern)
-    const handleMessage = (event: MessageEvent) => {
-      if (event.origin !== window.location.origin) return
-
-      if (event.data.type === 'GOOGLE_OAUTH_SUCCESS') {
-        clearInterval(checkClosed)
-        popup.close()
-        window.removeEventListener('message', handleMessage)
-
-        // Handle successful OAuth
-        handleOAuthSuccess(event.data.token)
-      } else if (event.data.type === 'GOOGLE_OAUTH_ERROR') {
-        clearInterval(checkClosed)
-        popup.close()
-        window.removeEventListener('message', handleMessage)
-
-        throw new Error(event.data.error || 'Google OAuth failed')
-      }
-    }
-
-    window.addEventListener('message', handleMessage)
-
-    // Timeout after 5 minutes
-    setTimeout(() => {
-      if (!popup.closed) {
-        clearInterval(checkClosed)
-        popup.close()
-        window.removeEventListener('message', handleMessage)
-        isGoogleLoading.value = false
-
-        $q.notify({
-          type: 'warning',
-          message: 'Google login timed out. Please try again.',
-          position: 'top'
-        })
-      }
-    }, 300000) // 5 minutes
-
-  } catch (error: any) {
-    console.error('Google OAuth error:', error)
-
-    let errorMessage = 'Google login failed. Please try again.'
-
-    if (error.response?.status === 404) {
-      errorMessage = 'Google login is not available. Please use email/password login.'
-    } else if (error.response?.status === 500) {
-      errorMessage = 'Google login is not configured yet. Please use email/password login.'
-    } else if (error.response?.data?.message) {
-      errorMessage = error.response.data.message
-    } else if (error.message === 'Google OAuth not configured') {
-      errorMessage = 'Google login is not set up yet. Please use email/password login.'
-    }
-
-    // Announce error to screen readers
-    announceToScreenReader(`Google login failed: ${errorMessage}`)
-
+    // Implement Google OAuth logic here
     $q.notify({
-      type: 'negative',
-      message: errorMessage,
-      position: 'top',
-      timeout: 5000,
-      actions: [
-        {
-          icon: 'close',
-          color: 'white',
-          round: true,
-          handler: () => {}
-        }
-      ]
-    })
+      type: 'info',
+      message: 'Google sign in coming soon!',
+      position: 'top'
+    });
+  } catch (err: any) {
+    error.value = 'Google sign in failed';
   } finally {
-    isGoogleLoading.value = false
+    googleLoading.value = false;
   }
-}
+};
 
-// Handle successful OAuth callback
-const handleOAuthSuccess = async (token: string) => {
-  try {
-    // Use the token to authenticate with our backend
-    await authStore.googleLogin(token)
-
-    $q.notify({
-      type: 'positive',
-      message: 'Welcome! You have been signed in with Google.',
-      position: 'top'
-    })
-
-    router.push('/dashboard')
-  } catch (error: any) {
-    console.error('OAuth success handling error:', error)
-
-    $q.notify({
-      type: 'negative',
-      message: 'Authentication failed. Please try again.',
-      position: 'top'
-    })
-  }
-}
-
-// Clear errors when form changes
-const clearErrors = () => {
-  authStore.clearError()
-  fieldErrors.value = {}
-}
-
-// Accessibility methods
-const announceFieldFocus = (fieldName: string) => {
-  announceToScreenReader(`${fieldName} field focused`)
-}
-
-const togglePasswordVisibility = () => {
-  showPassword.value = !showPassword.value
-  const message = showPassword.value ? 'Password is now visible' : 'Password is now hidden'
-  announceToScreenReader(message)
-}
-
-// Focus management
-const emailInputRef = ref<HTMLElement>()
-const passwordInputRef = ref<HTMLElement>()
-
-// Handle Enter key submission
-const handleKeyDown = (event: KeyboardEvent) => {
-  if (event.key === 'Enter' && isFormValid.value && !authStore.isLoading) {
-    event.preventDefault()
-    handleLogin()
-  }
-}
-
-// Auto-focus next field on valid input
-const handleEmailInput = () => {
-  // Clear email-specific errors when user starts typing
-  if (fieldErrors.value.email) {
-    delete fieldErrors.value.email
-  }
-
-  // Auto-focus password field when email is valid
-  if (form.value.email && emailRules.every(rule => rule(form.value.email) === true)) {
-    setTimeout(() => {
-      passwordInputRef.value?.focus()
-    }, 100)
-  }
-}
-
-const handlePasswordInput = () => {
-  // Clear password-specific errors when user starts typing
-  if (fieldErrors.value.password) {
-    delete fieldErrors.value.password
-  }
-}
-
-// Lifecycle
-onMounted(() => {
-  // Clear any existing errors
-  clearErrors()
-
-  // Only pre-fill form in development environment for testing
-  if (import.meta.env.DEV && import.meta.env.VITE_ENABLE_TEST_CREDENTIALS === 'true') {
-    form.value.email = 'john@example.com'
-    form.value.password = 'password123'
-    console.warn('🔒 Test credentials loaded - Development mode only')
-  }
-
-  // Focus email field on mount for better UX
-  setTimeout(() => {
-    emailInputRef.value?.focus()
-  }, 100)
-})
+const handleForgotPassword = () => {
+  router.push('/forgot-password');
+};
 </script>
 
-<style lang="sass" scoped>
-// All form styling is now handled by BaseFormCard component
-// This keeps the LoginForm component clean and focused on logic
-  min-height: 100vh
+<style lang="scss" scoped>
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.error-alert {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: oklch(0.3123 0.0852 29.7877 / 0.1);
+  border: 1px solid oklch(0.3123 0.0852 29.7877 / 0.3);
+  border-radius: 6px;
+  color: oklch(0.3123 0.0852 29.7877);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 16px;
+  border: 1px solid oklch(0.2809 0 0);
+  border-radius: 6px;
+  background: transparent;
+  color: oklch(0.9288 0.0126 255.5078);
+  font-size: 14px;
+  font-weight: 400;
+  text-transform: none;
+  transition: all 150ms ease-out;
+
+  &:hover {
+    background: oklch(0.2246 0 0);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+  }
+}
+
+.google-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.divider-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1px;
+  background: oklch(0.2809 0 0 / 0.5);
+}
+
+.divider-text {
+  font-size: 12px;
+  font-weight: 400;
+  color: oklch(0.7122 0 0);
+  text-transform: uppercase;
+  background: oklch(0.2046 0 0);
+  padding: 0 8px;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-label {
+  font-size: 14px;
+  font-weight: 400;
+  color: oklch(0.9288 0.0126 255.5078);
+}
+
+.input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.field-icon {
+  position: absolute;
+  left: 12px;
+  color: oklch(0.7122 0 0);
+  font-size: 16px;
+}
+
+.form-input {
+  width: 100%;
+  height: 44px;
+  padding: 0 12px 0 40px;
+  border: 1px solid oklch(0.2809 0 0 / 0.5);
+  border-radius: 6px;
+  background: oklch(0.1822 0 0);
+  color: oklch(0.9288 0.0126 255.5078);
+  font-size: 14px;
+  font-family: 'Geist', system-ui, sans-serif;
+  transition: all 150ms ease-out;
+
+  &:focus {
+    outline: none;
+    border-color: oklch(0.4365 0.1044 156.7556);
+    box-shadow: 0 0 0 2px oklch(0.4365 0.1044 156.7556 / 0.2);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &::placeholder {
+    color: oklch(0.7122 0 0);
+  }
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: oklch(0.7122 0 0);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: color 150ms ease-out;
+
+  &:hover {
+    color: oklch(0.9288 0.0126 255.5078);
+  }
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.forgot-link {
+  color: oklch(0.4365 0.1044 156.7556);
+  font-size: 14px;
+  font-weight: 400;
+  text-transform: none;
+
+  &:hover {
+    background: oklch(0.4365 0.1044 156.7556 / 0.1);
+  }
+}
+
+.signin-btn {
+  height: 44px;
+  border-radius: 6px;
+  background: oklch(0.4365 0.1044 156.7556);
+  color: oklch(0.098 0 0);
+  font-size: 14px;
+  font-weight: 400;
+  text-transform: none;
+  transition: all 150ms ease-out;
+
+  &:hover:not(:disabled) {
+    background: oklch(0.4835 0.1152 156.7556);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+  }
+}
 </style>

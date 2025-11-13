@@ -9,6 +9,7 @@ export const useAuthStore = defineStore('auth', () => {
   const token = ref<string | null>(typeof localStorage !== 'undefined' ? localStorage.getItem('auth_token') : null)
   const isLoading = ref(false)
   const error = ref<string | null>(null)
+  const demoCredentials = ref<LoginCredentials | null>(null)
 
   // Getters
   const isAuthenticated = computed(() => !!token.value && !!user.value)
@@ -195,6 +196,10 @@ export const useAuthStore = defineStore('auth', () => {
     error.value = null
   }
 
+  const setDemoCredentials = (credentials: LoginCredentials | null) => {
+    demoCredentials.value = credentials
+  }
+
   // Initialize auth on store creation
   if (token.value) {
     setAuthHeader(token.value)
@@ -206,6 +211,7 @@ export const useAuthStore = defineStore('auth', () => {
     token: readonly(token),
     isLoading: readonly(isLoading),
     error: readonly(error),
+    demoCredentials: readonly(demoCredentials),
 
     // Getters
     isAuthenticated,
@@ -224,6 +230,7 @@ export const useAuthStore = defineStore('auth', () => {
     hasRole,
     hasAnyRole,
     clearError,
+    setDemoCredentials,
 
     // Internal methods (exposed for testing)
     setToken,
