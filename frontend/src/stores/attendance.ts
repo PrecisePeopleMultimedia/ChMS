@@ -239,6 +239,24 @@ export const useAttendanceStore = defineStore('attendance', () => {
     }
   }
 
+  const deleteService = async (id: number) => {
+    saving.value = true
+    error.value = null
+
+    try {
+      await api.delete(`/services/${id}`)
+      services.value = services.value.filter(s => s.id !== id)
+      if (currentService.value?.id === id) {
+        currentService.value = null
+      }
+    } catch (err: any) {
+      error.value = err.response?.data?.message || 'Failed to delete service'
+      throw err
+    } finally {
+      saving.value = false
+    }
+  }
+
   const fetchAttendanceRecords = async (filters?: AttendanceFilters) => {
     loading.value = true
     error.value = null
@@ -618,6 +636,7 @@ export const useAttendanceStore = defineStore('attendance', () => {
     fetchService,
     createService,
     updateService,
+    deleteService,
     fetchAttendanceRecords,
     fetchRecords, // New alias
     checkInMember,

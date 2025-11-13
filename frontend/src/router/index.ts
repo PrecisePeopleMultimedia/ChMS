@@ -183,6 +183,15 @@ const router = createRouter({
             requiresAuth: true,
             title: 'Attendance Reports - ChurchAfrica'
           }
+        },
+        {
+          path: '/services',
+          name: 'Services',
+          component: () => import('@/views/ServiceView.vue'),
+          meta: {
+            requiresAuth: true,
+            title: 'Service Management - ChurchAfrica'
+          }
         }
       ]
     },

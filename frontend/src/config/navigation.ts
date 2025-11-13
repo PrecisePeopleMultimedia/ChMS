@@ -33,6 +33,12 @@ export const primaryNavigation: NavigationItem[] = [
     icon: 'event_available'
   },
   {
+    id: 'services',
+    label: 'Services',
+    to: '/services',
+    icon: 'event'
+  },
+  {
     id: 'giving',
     label: 'Giving',
     href: '/giving',
