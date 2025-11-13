@@ -330,6 +330,19 @@
     },
     {
       "parameters": {
+        "jsCode": "// Build the PandaDoc contract payload\nconst triggerData = $('Google Sheets Trigger').item.json;\nconst extractedData = $input.item.json.output;\n\nconst contractPayload = {\n  \"template_uuid\": \"YOUR_TEMPLATE_ID\",\n  \"recipients\": [\n    {\n      \"redirect\": {\n        \"is_enabled\": false,\n        \"url\": null\n      },\n      \"type\": \"recipient\",\n      \"role\": \"Buyer\",\n      \"signing_order\": 2,\n      \"email\": triggerData['Contact Email'] ? triggerData['Contact Email'].trim() : '',\n      \"first_name\": triggerData['First Name'] || '',\n      \"last_name\": triggerData['Last Name'] || ''\n    },\n    {\n      \"redirect\": {\n        \"is_enabled\": false,\n        \"url\": null\n      },\n      \"type\": \"recipient\",\n      \"role\": \"Seller\",\n      \"signing_order\": 1,\n      \"email\": \"YOUR_EMAIL\",\n      \"first_name\": \"YOUR_FIRST_NAME\",\n      \"last_name\": \"YOUR_LAST_NAME\"\n    }\n  ],\n  \"name\": `Contract for ${triggerData['Company Name'] || 'Client'}`,\n  \"tokens\": [\n    {\n      \"name\": \"Project.Title\",\n      \"value\": extractedData['Project Title'] || ''\n    },\n    {\n      \"name\": \"Buyer.FirstName\",\n      \"value\": triggerData['First Name'] || ''\n    },\n    {\n      \"name\": \"Buyer.LastName\",\n      \"value\": triggerData['Last Name'] || ''\n    },\n    {\n      \"name\": \"Buyer.Company\",\n      \"value\": triggerData['Company Name'] || ''\n    },\n    {\n      \"name\": \"Buyer.Address\",\n      \"value\": triggerData['Company Address'] || ''\n    },\n    {\n      \"name\": \"Seller.Company\",\n      \"value\": \"YOUR_COMPANY_NAME\"\n    },\n    {\n      \"name\": \"Seller.Address\",\n      \"value\": \"YOUR_ADDRESS\"\n    },\n    {\n      \"name\": \"Project.Fee\",\n      \"value\": extractedData['Project.Fee'] || ''\n    },\n    {\n      \"name\": \"Deposit %, milestone amounts, due dates\",\n      \"value\": extractedData['Deposit %, milestone amounts, due dates'] || ''\n    },\n    {\n      \"name\": \"Start.Date\",\n      \"value\": extractedData['Start Date'] || ''\n    },\n    {\n      \"name\": \"EstimatedCompletionDate\",\n      \"value\": extractedData['Estimated Completion Date'] || ''\n    },\n    {\n      \"name\": \"Ongoing.monthly.maintenance\",\n      \"value\": extractedData['Ongoing monthly maintenance'] || ''\n    },\n    {\n      \"name\": \"Seller.FirstName\",\n      \"value\": \"YOUR_FIRST_NAME\"\n    },\n    {\n      \"name\": \"Seller.LastName\",\n      \"value\": \"YOUR_LAST_NAME\"\n    },\n    {\n      \"name\": \"Project.Scope\",\n      \"value\": extractedData['Project Scope'] || ''\n    },\n    {\n      \"name\": \"Project.Deliverables\",\n      \"value\": extractedData['Project Deliverables'] || ''\n    },\n    {\n      \"name\": \"Functionality.System.Must.Have\",\n      \"value\": extractedData['Functionality System Must Have'] || ''\n    },\n    {\n      \"name\": \"milestoneone\",\n      \"value\": extractedData['Milestone One'] || ''\n    },\n    {\n      \"name\": \"milestoneoneduedate\",\n      \"value\": extractedData['Milestone One Due Date'] || ''\n    },\n    {\n      \"name\": \"milestoneonepaymentpercent\",\n      \"value\": extractedData['Milestone one payment percent'] || ''\n    },\n    {\n      \"name\": \"milestonetwo\",\n      \"value\": extractedData['Milestone two'] || ''\n    },\n    {\n      \"name\": \"milestonetwoduedate\",\n      \"value\": extractedData['Milestone Two Due Date'] || ''\n    },\n    {\n      \"name\": \"milestonetwopaymentpercent\",\n      \"value\": extractedData['Milestone Two Payment Percent'] || ''\n    },\n    {\n      \"name\": \"Functionality.To.Meet.Acceptance\",\n      \"value\": extractedData['Functionality To Meet Acceptance'] || ''\n    }\n  ]\n};\n\nreturn {\n  json: {\n    contractPayload: contractPayload\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2144,
+        -656
+      ],
+      "id": "d1e2f3a4-b5c6-4d7e-8f9a-0b1c2d3e4f5a",
+      "name": "Build Contract Payload"
+    },
+    {
+      "parameters": {
         "method": "POST",
         "url": "https://api.pandadoc.com/public/v1/documents",
         "authentication": "none",
@@ -349,13 +362,13 @@
         "sendBody": true,
         "bodyContentType": "json",
         "specifyBody": "json",
-        "jsonBody": "={\n  \"template_uuid\": \"YOUR_TEMPLATE_ID\",\n  \"recipients\": [\n    {\n      \"redirect\": {\n        \"is_enabled\": false,\n        \"url\": null\n      },\n      \"type\": \"recipient\",\n      \"role\": \"Buyer\",\n      \"signing_order\": 2,\n      \"email\": \"{{ $('Google Sheets Trigger').item.json['Contact Email'].trim() }}\",\n      \"first_name\": \"{{ $('Google Sheets Trigger').item.json['First Name'] }}\",\n      \"last_name\": \"{{ $('Google Sheets Trigger').item.json['Last Name'] }}\"\n    },\n    {\n      \"redirect\": {\n        \"is_enabled\": false,\n        \"url\": null\n      },\n      \"type\": \"recipient\",\n      \"role\": \"Seller\",\n      \"signing_order\": 1,\n      \"email\": \"YOUR_EMAIL\",\n      \"first_name\": \"YOUR_FIRST_NAME\",\n      \"last_name\": \"YOUR_LAST_NAME\"\n    }\n  ],\n  \"name\": \"Contract for {{ $('Google Sheets Trigger').item.json['Company Name'] }}\",\n  \"tokens\": [\n    {\n      \"name\": \"Project.Title\",\n      \"value\": \"{{ $json.output['Project Title'] }}\"\n    },\n    {\n      \"name\": \"Buyer.FirstName\",\n      \"value\": \"{{ $('Google Sheets Trigger').item.json['First Name'] }}\"\n    },\n    {\n      \"name\": \"Buyer.LastName\",\n      \"value\": \"{{ $('Google Sheets Trigger').item.json['Last Name'] }}\"\n    },\n    {\n      \"name\": \"Buyer.Company\",\n      \"value\": \"{{ $('Google Sheets Trigger').item.json['Company Name'] }}\"\n    },\n    {\n      \"name\": \"Buyer.Address\",\n      \"value\": \"{{ $('Google Sheets Trigger').item.json['Company Address'] }}\"\n    },\n    {\n      \"name\": \"Seller.Company\",\n      \"value\": \"YOUR_COMPANY_NAME\"\n    },\n    {\n      \"name\": \"Seller.Address\",\n      \"value\": \"YOUR_ADDRESS\"\n    },\n    {\n      \"name\": \"Project.Fee\",\n      \"value\": \"{{ $json.output['Project.Fee'] }}\"\n    },\n    {\n      \"name\": \"Deposit %, milestone amounts, due dates\",\n      \"value\": \"{{ $json.output['Deposit %, milestone amounts, due dates'] }}\"\n    },\n    {\n      \"name\": \"Start.Date\",\n      \"value\": \"{{ $json.output['Start Date'] }}\"\n    },\n    {\n      \"name\": \"EstimatedCompletionDate\",\n      \"value\": \"{{ $json.output['Estimated Completion Date'] }}\"\n    },\n    {\n      \"name\": \"Ongoing.monthly.maintenance\",\n      \"value\": \"{{ $json.output['Ongoing monthly maintenance'] }}\"\n    },\n    {\n      \"name\": \"Seller.FirstName\",\n      \"value\": \"YOUR_FIRST_NAME\"\n    },\n    {\n      \"name\": \"Seller.LastName\",\n      \"value\": \"YOUR_LAST_NAME\"\n    },\n    {\n      \"name\": \"Project.Scope\",\n      \"value\": \"{{ $json.output['Project Scope'] }}\"\n    },\n    {\n      \"name\": \"Project.Deliverables\",\n      \"value\": \"{{ $json.output['Project Deliverables'] }}\"\n    },\n    {\n      \"name\": \"Functionality.System.Must.Have\",\n      \"value\": \"{{ $json.output['Functionality System Must Have'] }}\"\n    },\n    {\n      \"name\": \"milestoneone\",\n      \"value\": \"{{ $json.output['Milestone One'] }}\"\n    },\n    {\n      \"name\": \"milestoneoneduedate\",\n      \"value\": \"{{ $json.output['Milestone One Due Date'] }}\"\n    },\n    {\n      \"name\": \"milestoneonepaymentpercent\",\n      \"value\": \"{{ $json.output['Milestone one payment percent'] }}\"\n    },\n    {\n      \"name\": \"milestonetwo\",\n      \"value\": \"{{ $json.output['Milestone two'] }}\"\n    },\n    {\n      \"name\": \"milestonetwoduedate\",\n      \"value\": \"{{ $json.output['Milestone Two Due Date'] }}\"\n    },\n    {\n      \"name\": \"milestonetwopaymentpercent\",\n      \"value\": \"{{ $json.output['Milestone Two Payment Percent'] }}\"\n    },\n    {\n      \"name\": \"Functionality.To.Meet.Acceptance\",\n      \"value\": \"{{ $json.output['Functionality To Meet Acceptance'] }}\"\n    }\n  ]\n}",
+        "jsonBody": "={{ $json.contractPayload }}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2144,
+        2368,
         -656
       ],
       "id": "e8f9a1b2-c3d4-4e5f-6a7b-8c9d0e1f2a3b",
@@ -370,7 +383,7 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        2368,
+        2592,
         -656
       ],
       "id": "f1a2b3c4-d5e6-4f7a-8b9c-0d1e2f3a4b5c",
@@ -395,7 +408,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2592,
+        2816,
         -656
       ],
       "id": "a2b3c4d5-e6f7-4a8b-9c0d-1e2f3a4b5c6d",
@@ -416,7 +429,7 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        2816,
+        3040,
         -656
       ],
       "id": "b3c4d5e6-f7a8-4b9c-0d1e-2f3a4b5c6d7e",
@@ -453,7 +466,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.4,
       "position": [
-        3040,
+        3264,
         -656
       ],
       "id": "c4d5e6f7-a8b9-4c0d-1e2f-3a4b5c6d7e8f",
@@ -575,6 +588,17 @@
       ]
     },
     "Extract information for the contract": {
+      "main": [
+        [
+          {
+            "node": "Build Contract Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Contract Payload": {
       "main": [
         [
           {
