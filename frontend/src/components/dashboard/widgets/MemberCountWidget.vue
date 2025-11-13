@@ -283,6 +283,7 @@ onMounted(() => {
 
 .metric-item {
   text-align: center;
+  -ms-flex: 1;
   flex: 1;
 }
 

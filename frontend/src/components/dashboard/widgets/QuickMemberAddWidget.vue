@@ -270,6 +270,7 @@ watch(() => props.config, (newConfig) => {
 }
 
 .quick-form {
+  -ms-flex: 1;
   flex: 1;
 }
 

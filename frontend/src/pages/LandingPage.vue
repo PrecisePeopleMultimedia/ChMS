@@ -221,11 +221,13 @@ const scrollToDemo = () => {
 .hero-content {
   display: -ms-grid;
   display: grid;
+  -ms-grid-columns: 1fr 1fr;
   grid-template-columns: 1fr 1fr;
   gap: 60px;
   align-items: center;
   
   @media (max-width: 968px) {
+    -ms-grid-columns: 1fr;
     grid-template-columns: 1fr;
     gap: 40px;
     text-align: center;
@@ -359,10 +361,12 @@ const scrollToDemo = () => {
 .features-grid {
   display: -ms-grid;
   display: grid;
+  -ms-grid-columns: repeat(auto-fit, minmax(280px, 1fr));
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 24px;
   
   @media (max-width: 768px) {
+    -ms-grid-columns: 1fr;
     grid-template-columns: 1fr;
   }
 }

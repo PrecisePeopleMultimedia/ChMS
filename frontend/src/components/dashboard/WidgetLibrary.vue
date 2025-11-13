@@ -324,6 +324,7 @@ onMounted(async () => {
 @media (max-width: 1024px) {
   .widget-grid .row .col-md-4 {
     /* 2 columns on tablet */
+    -ms-flex: 0 0 50%;
     flex: 0 0 50%;
     max-width: 50%;
   }

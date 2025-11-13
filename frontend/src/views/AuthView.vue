@@ -231,6 +231,7 @@ onMounted(() => {
   border-radius: 6px;
   transition: all 150ms ease-out;
   min-width: auto;
+  -ms-flex: 1;
   flex: 1;
 }
 

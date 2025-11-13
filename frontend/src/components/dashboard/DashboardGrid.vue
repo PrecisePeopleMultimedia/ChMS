@@ -100,7 +100,9 @@ const gridStyle = computed(() => {
   
   return {
     display: 'grid' as const,
+    msGridColumns: `repeat(${columns}, 1fr)` as any,
     gridTemplateColumns: `repeat(${columns}, 1fr)`,
+    msGridRows: `repeat(${rows}, ${props.gridSize}px)` as any,
     gridTemplateRows: `repeat(${rows}, ${props.gridSize}px)`,
     gap: `${props.gap}px`,
     minHeight: `${rows * props.gridSize + (rows - 1) * props.gap}px`,

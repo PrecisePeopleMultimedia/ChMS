@@ -404,6 +404,7 @@ const handleGoogleSignUp = async () => {
 }
 
 .divider-line {
+  -ms-flex: 1;
   flex: 1;
   height: 1px;
   background: oklch(0.2809 0 0 / 0.5);
@@ -500,6 +501,7 @@ const handleGoogleSignUp = async () => {
 }
 
 .strength-bar {
+  -ms-flex: 1;
   flex: 1;
   height: 4px;
   background: oklch(0.2809 0 0 / 0.3);

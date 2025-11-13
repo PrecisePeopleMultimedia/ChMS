@@ -110,6 +110,7 @@ const getWidgetColor = (type: string): string => {
 .preview-visualization {
   margin-top: 8px;
   width: 100%;
+  -ms-flex: 1;
   flex: 1;
   display: flex;
   align-items: center;
