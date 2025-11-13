@@ -70,6 +70,66 @@ A comprehensive chat system integrated into the ChMS platform that provides:
 - **Voice messages** for personal touch
 - **Link previews** with metadata
 
+## Prototype Design Requirements (TweakCN Theme)
+
+### Chat UI Patterns
+**⚠️ CRITICAL**: The chat system must implement the prototype's chat UI patterns exactly:
+
+#### ChatSidebar Component (Secondary Sidebar)
+- **Width**: 320px, collapsible
+- **Background**: `oklch(0.1822 0 0)` (dark background)
+- **Conversation List**: 
+  - Card styling: `oklch(0.2046 0 0)` (card background)
+  - Border: `oklch(0.2809 0 0)` (border color)
+  - Hover: Accent color with smooth transition
+- **Active Conversation**: Highlighted with primary green `oklch(0.4365 0.1044 156.7556)`
+- **Unread Badge**: Primary green with white text
+
+#### MessageList Component
+- **Message Bubbles**: 
+  - Sent: Primary green background `oklch(0.4365 0.1044 156.7556)`
+  - Received: Card background `oklch(0.2046 0 0)`
+  - Border Radius: `0.5rem` (8px)
+- **Message Text**: Geist font, regular weight (400)
+- **Timestamps**: Muted foreground `oklch(0.7122 0 0)`
+- **Status Indicators**: Read/delivered with OKLCH colors
+
+#### MessageInput Component
+- **Input Field**: 
+  - Background: `oklch(0.2603 0 0)` (input background)
+  - Border: `oklch(0.2809 0 0)` (border color)
+  - Focus ring: `oklch(0.8003 0.1821 151.7110)` (ring color)
+- **Send Button**: Primary green button
+- **Emoji Picker**: Match prototype's emoji picker design
+
+#### ConversationHeader Component
+- **Header Background**: Card background `oklch(0.2046 0 0)`
+- **Participant Info**: Geist font, light weight (300)
+- **Online Status**: Primary green indicator
+
+#### TypingIndicator Component
+- **Animated Dots**: Use primary green color
+- **Animation**: Smooth, 300ms ease-in-out
+
+#### FileUpload Component
+- **Upload Area**: Card styling with border
+- **Progress Bar**: Primary green progress indicator
+- **File Preview**: Match prototype's preview design
+
+### Mobile Chat UI
+- **Bottom Navigation**: Always visible on mobile (as per prototype)
+- **Chat Tab**: Icon + label with active state
+- **Notification Badge**: Unread count with primary green
+- **Fullscreen Chat**: On mobile, chat takes full viewport
+
+### Component Styling Requirements
+- **Colors**: Use OKLCH color system throughout
+- **Typography**: Geist font, light weights for headings, regular for body
+- **Spacing**: Match prototype's spacing system (4px, 8px, 16px, etc.)
+- **Shadows**: Use prototype's shadow system for elevation
+- **Border Radius**: `0.5rem` (8px) base radius
+- **Animations**: Smooth transitions (150ms-300ms ease-in-out)
+
 ## Technical Requirements
 
 ### Frontend Components

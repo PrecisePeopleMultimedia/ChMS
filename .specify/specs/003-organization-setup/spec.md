@@ -89,11 +89,40 @@ CREATE TABLE service_schedules (
 
 ## User Experience Design
 
+### Prototype Design Requirements (TweakCN Theme)
+
+#### Header Component Design
+**⚠️ CRITICAL**: The organization setup must implement the prototype's header component design:
+
+- **3-Line Header Format**:
+  - **Line 1**: Church Acronym + City (e.g., "RCCG Lagos")
+  - **Line 2**: Full Church Name + Campus Badge (e.g., "Redeemed Christian Church of God [Main Campus]")
+  - **Line 3**: Address (e.g., "123 Church Street, Lagos, Nigeria")
+- **Logo Display**: Right side of header
+- **Progress Badge**: Optional, right side (shows setup completion)
+- **Styling**: Match prototype's header styling exactly
+  - Font: Geist, light weight (300) for headings
+  - Colors: OKLCH color system (dark mode)
+  - Spacing: Match prototype's spacing system
+
+#### Form Design
+- **BaseFormCard Component**: Use prototype's card styling
+  - Background: `oklch(0.2046 0 0)` (card background)
+  - Border: `oklch(0.2809 0 0)` (border color)
+  - Border Radius: `0.5rem` (8px)
+- **Input Fields**: Match prototype's input styling
+  - ModernInput component with OKLCH colors
+  - Light font weights for labels
+  - Proper focus states with ring colors
+- **Buttons**: Match prototype's button variants
+  - Primary: `oklch(0.4365 0.1044 156.7556)`
+  - Secondary: `oklch(0.2603 0 0)`
+
 ### User Flow
 1. User opens ChMS for the first time
 2. System detects no organization setup
 3. User is guided through setup wizard
-4. User enters church basic information
+4. User enters church basic information (with prototype header design)
 5. User configures service schedules
 6. User sets up administrator account
 7. Setup completes and user sees dashboard

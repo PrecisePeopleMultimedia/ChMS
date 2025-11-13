@@ -174,6 +174,46 @@ class FamilyAttendanceService {
 - **Screen sizes:** Optimized for mobile devices, portrait orientation
 - **Performance:** Fast QR scanning, instant feedback on check-in
 
+## Prototype Design Requirements (TweakCN Theme)
+
+### Kiosk Mode UI Design
+**⚠️ CRITICAL**: The attendance system must implement the prototype's kiosk mode design:
+
+#### CheckInKiosk Component
+- **Fullscreen Mode**: Full viewport, no browser chrome
+- **Service Card Design**: 
+  - Background: `oklch(0.2046 0 0)` (card background)
+  - Border: `oklch(0.2809 0 0)` (border color)
+  - Green Accent: `oklch(0.4365 0.1044 156.7556)` (primary green)
+  - Typography: Geist font, light weights (300) for headings
+- **Service Selection**: Large, touch-friendly service cards
+- **Family Check-In UI**: Match prototype's family check-in interface
+- **QR Scanner UI**: 
+  - Camera view with overlay
+  - Success/error feedback with OKLCH colors
+  - Touch-optimized for mobile devices
+
+#### Attendance Management Header
+- **3-Line Header Format** (matching organization setup):
+  - Line 1: Church Acronym + City
+  - Line 2: Full Church Name + Campus Badge
+  - Line 3: Address
+- **Service Selector**: Prominent service selection dropdown
+- **Date Display**: Current date with service time
+
+#### Manual Check-In UI
+- **Search Interface**: Match prototype's search design
+- **Member Cards**: Card styling with OKLCH colors
+- **Check-In Button**: Primary green button with proper hover states
+- **Success Feedback**: Toast notifications with prototype styling
+
+### Component Styling Requirements
+- **Colors**: Use OKLCH color system throughout
+- **Typography**: Geist font, light weights for headings
+- **Spacing**: Match prototype's spacing system (4px, 8px, 16px, etc.)
+- **Shadows**: Use prototype's shadow system
+- **Border Radius**: `0.5rem` (8px) base radius
+
 ## Technical Requirements
 
 ### **MVP API ENDPOINTS (Phase 1: Critical Implementation)**

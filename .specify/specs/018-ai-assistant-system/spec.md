@@ -35,6 +35,42 @@ Deploy an intelligent AI assistant for every organization that registers on ChMS
 - **Privacy-First**: All data remains organization-scoped and secure
 - **Africa-Optimized**: Multi-language support, low-bandwidth optimization
 
+## Prototype Design Requirements (TweakCN Theme)
+
+### AI Dashboard Design
+**⚠️ CRITICAL**: The AI assistant system must implement the prototype's AI dashboard design:
+
+#### AI Chat Interface
+- **Chat Container**: Match prototype's chat interface design
+  - Background: `oklch(0.1822 0 0)` (dark background)
+  - Message bubbles: Card background `oklch(0.2046 0 0)`
+  - AI responses: Primary green accent `oklch(0.4365 0.1044 156.7556)`
+- **Input Field**: ModernInput component with OKLCH styling
+- **Send Button**: Primary green button
+- **Suggested Questions**: Card-based suggestions with hover states
+
+#### AI Dashboard Widgets
+- **Widget Cards**: 
+  - Background: `oklch(0.2046 0 0)` (card background)
+  - Border: `oklch(0.2809 0 0)` (border color)
+  - Shadow: Use prototype's shadow system
+- **Insight Cards**: Match prototype's card design
+- **Chart Widgets**: Use ECharts with OKLCH chart colors
+- **Quick Actions**: Primary green buttons
+
+#### AI Insights Display
+- **Insight Cards**: Card styling with OKLCH colors
+- **Churn Predictions UI**: Match prototype's prediction display
+- **Analytics Charts**: Use ECharts with OKLCH colors
+- **Recommendation Cards**: Card design with action buttons
+
+### Component Styling Requirements
+- **Colors**: Use OKLCH color system throughout
+- **Typography**: Geist font, light weights for headings
+- **Spacing**: Match prototype's spacing system
+- **Shadows**: Use prototype's shadow system
+- **Border Radius**: `0.5rem` (8px) base radius
+
 ## Core Features
 
 ### Phase 1: Foundation (Months 4-5)

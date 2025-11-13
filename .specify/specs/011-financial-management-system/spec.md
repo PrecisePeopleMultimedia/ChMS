@@ -90,6 +90,54 @@
   - Transaction history
   - Security and privacy controls
 
+## Prototype Design Requirements (TweakCN Theme)
+
+### Giving Dashboard Design
+**⚠️ CRITICAL**: The financial management system must implement the prototype's giving dashboard design:
+
+#### Giving Dashboard Layout
+- **3-Column Layout**: Match prototype's layout system
+  - Left Sidebar: 280px, navigation menu
+  - Main Content: Flexible width, giving dashboard
+  - Right Sidebar: 320px (optional), quick actions
+- **Dashboard Cards**: 
+  - Background: `oklch(0.2046 0 0)` (card background)
+  - Border: `oklch(0.2809 0 0)` (border color)
+  - Shadow: Use prototype's shadow system
+  - Border Radius: `0.5rem` (8px)
+
+#### Donation Form Design
+- **Form Card**: BaseFormCard component with OKLCH styling
+- **Input Fields**: ModernInput component
+  - Background: `oklch(0.2603 0 0)` (input background)
+  - Focus ring: `oklch(0.8003 0.1821 151.7110)` (ring color)
+- **Amount Input**: Large, touch-friendly input
+- **Payment Method Selection**: Card-based selection with OKLCH colors
+- **Submit Button**: Primary green button with proper hover states
+
+#### Campaign Manager UI
+- **Campaign Cards**: Match prototype's card design
+- **Progress Bars**: Use primary green for progress indicators
+- **Charts**: Use ECharts with OKLCH chart colors
+  - Chart 1: `oklch(0.8003 0.1821 151.7110)` (green)
+  - Chart 2: `oklch(0.7137 0.1434 254.6240)` (purple)
+  - Chart 3: `oklch(0.7090 0.1592 293.5412)` (pink)
+  - Chart 4: `oklch(0.8369 0.1644 84.4286)` (yellow)
+  - Chart 5: `oklch(0.7845 0.1325 181.9120)` (cyan)
+
+#### Financial Reports
+- **Report Cards**: Match prototype's card styling
+- **Data Tables**: Match prototype's table design
+- **Charts**: Use ECharts with OKLCH colors
+- **Export Buttons**: Secondary button styling
+
+### Component Styling Requirements
+- **Colors**: Use OKLCH color system throughout
+- **Typography**: Geist font, light weights for headings
+- **Spacing**: Match prototype's spacing system
+- **Shadows**: Use prototype's shadow system
+- **Border Radius**: `0.5rem` (8px) base radius
+
 ## Technical Requirements
 
 ### API Endpoints

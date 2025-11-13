@@ -90,6 +90,50 @@
   - Resource sharing within groups
   - Group prayer and support networks
 
+## Prototype Design Requirements (TweakCN Theme)
+
+### Chat Interface Design
+**⚠️ CRITICAL**: The communication system must implement the prototype's chat interface design:
+
+#### ChatSidebar Component
+- **Secondary Sidebar**: 320px width, collapsible
+- **Background**: `oklch(0.1822 0 0)` (dark background)
+- **Conversation List**: 
+  - Card styling: `oklch(0.2046 0 0)` (card background)
+  - Border: `oklch(0.2809 0 0)` (border color)
+  - Hover states with OKLCH accent colors
+- **Active Conversation**: Highlighted with primary green
+- **Unread Indicators**: Badge with primary green color
+
+#### MessageList Component
+- **Message Bubbles**: 
+  - Sent messages: Primary green background
+  - Received messages: Card background color
+  - Typography: Geist font, regular weight (400)
+- **Message Timestamps**: Muted foreground color
+- **Message Status**: Read/delivered indicators with OKLCH colors
+
+#### MessageInput Component
+- **Input Field**: Match prototype's input styling
+  - Background: `oklch(0.2603 0 0)` (input background)
+  - Border: `oklch(0.2809 0 0)` (border color)
+  - Focus ring: `oklch(0.8003 0.1821 151.7110)` (ring color)
+- **Send Button**: Primary green button
+- **Emoji Picker**: Match prototype's emoji picker design
+
+#### Chat UI Patterns
+- **Bottom Navigation**: Always visible on mobile (as per prototype)
+- **Chat Tab**: Icon + label design with active state
+- **Notification Badge**: Unread count with primary green
+- **Typing Indicator**: Animated dots with OKLCH colors
+
+### Component Styling Requirements
+- **Colors**: Use OKLCH color system throughout
+- **Typography**: Geist font, light weights for headings, regular for body
+- **Spacing**: Match prototype's spacing system
+- **Shadows**: Use prototype's shadow system for elevation
+- **Border Radius**: `0.5rem` (8px) base radius
+
 ## Technical Requirements
 
 ### API Endpoints

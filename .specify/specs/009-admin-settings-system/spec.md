@@ -183,6 +183,54 @@ Based on comprehensive RockRMS competitive analysis, the following critical feat
   - Performance monitoring
   - System health checks
 
+## Prototype Design Requirements (TweakCN Theme)
+
+### Settings Page Design
+**⚠️ CRITICAL**: The admin settings system must implement the prototype's settings page design:
+
+#### Settings Layout
+- **3-Column Layout**: Match prototype's layout system
+  - Left Sidebar: 280px, navigation menu
+  - Main Content: Flexible width, settings forms
+  - Right Sidebar: 320px (optional), help/contextual info
+- **Settings Navigation**: 
+  - Card-based navigation items
+  - Active state with primary green
+  - Icon + label design
+  - Hover states with OKLCH accent colors
+
+#### Settings Forms
+- **Form Cards**: BaseFormCard component with OKLCH styling
+  - Background: `oklch(0.2046 0 0)` (card background)
+  - Border: `oklch(0.2809 0 0)` (border color)
+  - Border Radius: `0.5rem` (8px)
+- **Input Fields**: ModernInput component
+  - Background: `oklch(0.2603 0 0)` (input background)
+  - Focus ring: `oklch(0.8003 0.1821 151.7110)` (ring color)
+- **Labels**: Geist font, light weight (300)
+- **Help Text**: Muted foreground color
+
+#### Widget Dashboard Design
+- **Dashboard Grid**: Match prototype's grid system
+- **Widget Cards**: 
+  - Background: `oklch(0.2046 0 0)` (card background)
+  - Border: `oklch(0.2809 0 0)` (border color)
+  - Shadow: Use prototype's shadow system
+- **Widget Configuration Panel**: Match prototype's panel design
+- **Drag-and-Drop**: Smooth animations (300ms ease-in-out)
+
+#### Color Palette Component (if exists)
+- **Color Swatches**: Display OKLCH colors with hex fallbacks
+- **Theme Preview**: Live preview of color changes
+- **Save Button**: Primary green button
+
+### Component Styling Requirements
+- **Colors**: Use OKLCH color system throughout
+- **Typography**: Geist font, light weights for headings
+- **Spacing**: Match prototype's spacing system
+- **Shadows**: Use prototype's shadow system
+- **Border Radius**: `0.5rem` (8px) base radius
+
 ## Technical Requirements
 
 ### API Endpoints (Enhanced with Widget Dashboard)
