@@ -76,7 +76,7 @@
         </q-card-section>
       </q-card>
     </div>
-  </q-page>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -151,11 +151,17 @@ const handleForgotPassword = async () => {
 </script>
 
 <style lang="sass" scoped>
+.forgot-password-page
+  min-height: 100vh
+  display: -ms-flexbox
+  display: flex
+  align-items: center
+  justify-content: center
+  padding: 2rem 1rem
+
 .garnet-night-bg
   background: hsl(330, 40%, 10%)
   background-image: radial-gradient(at 0% 0%, hsl(340, 70%, 35%) 0px, transparent 50%), radial-gradient(at 100% 100%, hsl(290, 50%, 30%) 0px, transparent 50%)
-  min-height: 100vh
-  padding: 2rem 1rem
 
 .forgot-password-container
   width: 100%
