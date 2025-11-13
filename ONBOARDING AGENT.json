@@ -1,0 +1,452 @@
+{
+  "name": "ONBOARDING AGENT",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        448,
+        -464
+      ],
+      "id": "1a8832ea-f5aa-46d7-b1ea-23da0265985c",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the transcript array from the Combine node\nconst transcripts = $input.item.json.transcript;\n\n// Function to extract Google Meet transcript with timestamps\nfunction extractTranscriptWithTimestamps(rawText) {\n  // Extract just the transcript section (after \"📖 Transcript\" and before the disclaimer)\n  const transcriptMatch = rawText.match(/📖 Transcript[\\s\\S]*?Transcript\\s+([\\s\\S]*?)(?=This editable transcript|$)/);\n  \n  if (!transcriptMatch) {\n    return null;\n  }\n  \n  let transcriptText = transcriptMatch[1].trim();\n  \n  // Remove only the \"Transcription ended after\" line\n  transcriptText = transcriptText.replace(/Transcription ended after.*$/gm, '');\n  \n  // Clean up excessive whitespace\n  transcriptText = transcriptText.replace(/\\r\\n/g, '\\n');\n  transcriptText = transcriptText.replace(/\\n{3,}/g, '\\n\\n');\n  \n  return transcriptText.trim();\n}\n\n// Process both transcripts\nconst initialSalesCallTranscript = extractTranscriptWithTimestamps(transcripts[0]);\nconst latestClosingCallTranscript = extractTranscriptWithTimestamps(transcripts[1]);\n\n// Return ONE item with both transcripts\nreturn {\n  json: {\n    initial_sales_call_transcript: initialSalesCallTranscript,\n    latest_closing_call_transcript: latestClosingCallTranscript\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1696,
+        -656
+      ],
+      "id": "a5f33b45-48cf-4809-b53f-5dc4ab9322a7",
+      "name": "Clean Up Transcript"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "transcript"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1472,
+        -656
+      ],
+      "id": "a506f598-a4fa-4a1e-9b98-2b6fa80a0962",
+      "name": "Combine All Transcripts"
+    },
+    {
+      "parameters": {
+        "operation": "text",
+        "destinationKey": "transcript",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        1248,
+        -656
+      ],
+      "id": "1f548d5d-c992-4d9a-8d5d-667124bad82c",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.Transcripts }}",
+          "mode": "id"
+        },
+        "options": {
+          "googleFileConversion": {
+            "conversion": {
+              "docsToFormat": "text/plain"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1024,
+        -656
+      ],
+      "id": "fb11778c-5ee1-410c-986b-46bd1d6b9e72",
+      "name": "Download Transcripts",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "bVg1jTTGpTRaLZdF",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "Transcripts",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        800,
+        -656
+      ],
+      "id": "6723723b-7a6e-4fd5-91e2-ea98e87a2b83",
+      "name": "Split IDs for Individual Processing"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "993966c5-150a-4f73-99ef-94b0db7fc93a",
+              "name": "Transcripts",
+              "value": "={{ [$json['Sales Transcript ID '], $json['Latest/Closed Transcript ID']] }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        512,
+        -656
+      ],
+      "id": "12920fc0-fd91-4bde-82d8-7aa45303155d",
+      "name": "Prepare Lead Data Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4762acc5-b297-4667-8971-9ef47e03a87b",
+              "leftValue": "={{ $json['Closed?'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        224,
+        -560
+      ],
+      "id": "78184688-8a8d-446d-adbf-a09d36976bba",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyHour"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1ZD6nYo0Gh7wQaKowLzNMdTI8ERgYr5JUJal22HnY7bw",
+          "mode": "list",
+          "cachedResultName": "CRM - Sales Agent",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZD6nYo0Gh7wQaKowLzNMdTI8ERgYr5JUJal22HnY7bw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZD6nYo0Gh7wQaKowLzNMdTI8ERgYr5JUJal22HnY7bw/edit#gid=0"
+        },
+        "event": "rowUpdate",
+        "options": {
+          "columnsToWatch": [
+            "Closed?"
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -560
+      ],
+      "id": "2aeea41d-a816-4659-ac24-0c5a232d0d63",
+      "name": "Google Sheets Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "OqeBBBlSCGm3AuMU",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "text": "=Initial/Sales Call:{{ $json.initial_sales_call_transcript }}\n              Latest/Closing Call:{{ $json.latest_closing_call_transcript }}\n              If any information contradicts, always use the data mentioned in the closing call.",
+        "attributes": {
+          "attributes": [
+            {
+              "name": "Project Title",
+              "description": "Project Title (keep in mind this is for a contract, so everything should look clean and professional)",
+              "required": true
+            },
+            {
+              "name": "Project.Fee",
+              "description": "Project Fee (keep in mind this is for a contract, so everything should look clean and professional)",
+              "required": true
+            },
+            {
+              "name": "Deposit %, milestone amounts, due dates",
+              "description": "We have two milestones, each with a deposit percentage and a due date. Please structure them clearly, as they will be included in a single line of the contract.",
+              "required": true
+            },
+            {
+              "name": "Start Date",
+              "description": "A week from {{$now}} - we need to specify an **exact date**  for that (no time required).",
+              "required": true
+            },
+            {
+              "name": "Estimated Completion Date",
+              "description": "Estimated completion date - this is usually based on what we discussed during the call at the start of the project. The project start date serves as the official start date.",
+              "required": true
+            },
+            {
+              "name": "Ongoing monthly maintenance",
+              "description": "If a specific monthly cost was mentioned, use that amount from the call extract and label it as monthly ongoing maintenance. If it wasn't mentioned, default to $700 per month.",
+              "required": true
+            },
+            {
+              "name": "Project Scope",
+              "description": "Describe the project scope in a structured and concise way, as it will be placed above the project deliverables in the contract.",
+              "required": true
+            },
+            {
+              "name": "Project Deliverables",
+              "description": "Describe the project deliverables concisely, as they will be listed underneath the project scope.",
+              "required": true
+            },
+            {
+              "name": "Functionality System Must Have",
+              "description": "Describe or state concisely what functionality the system must have. Keep in mind that this will be placed above the \"Functionality to Meet Acceptance Criteria\" field.",
+              "required": true
+            },
+            {
+              "name": "Functionality To Meet Acceptance",
+              "description": "Describe or state concisely what functionality the system must have to meet the acceptance criteria. Keep in mind that this section will be placed underneath the functionality.",
+              "required": true
+            },
+            {
+              "name": "Milestone One",
+              "description": "Since payment is based on milestones and we have two in total, state Milestone One concisely and clearly.",
+              "required": true
+            },
+            {
+              "name": "Milestone one payment percent",
+              "description": "What will be the payment percentage for Milestone One? If nothing is mentioned, default to 50%.",
+              "required": true
+            },
+            {
+              "name": "Milestone One Due Date",
+              "description": "The due date for Milestone One should be based on the conversation. Estimate how long it will take to reach Milestone One and add that duration to the extracted dates.",
+              "required": true
+            },
+            {
+              "name": "Milestone two",
+              "description": "Since payment is based on milestones and we have two in total, state Milestone Two concisely and clearly.",
+              "required": true
+            },
+            {
+              "name": "Milestone Two Payment Percent",
+              "description": "What will be the payment percentage for Milestone Two? If nothing is mentioned, default to 50%.",
+              "required": true
+            },
+            {
+              "name": "Milestone Two Due Date",
+              "description": "The due date for Milestone Two should be based on the conversation. Estimate how long it will take to reach Milestone Two and add that duration to the extracted dates.",
+              "required": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1.2,
+      "position": [
+        1920,
+        -656
+      ],
+      "id": "4d7a7ab5-936e-45c3-9b1b-a5bc517080ff",
+      "name": "Extract information for the contract"
+    },
+    {
+      "parameters": {
+        "model": "anthropic/claude-sonnet-4.5",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        1856,
+        -448
+      ],
+      "id": "c55484ca-9b67-4c68-bc0e-475ae5985a1d",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "9R7ig6nFD1mEQs1t",
+          "name": "OpenRouter account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Clean Up Transcript": {
+      "main": [
+        [
+          {
+            "node": "Extract information for the contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Combine All Transcripts": {
+      "main": [
+        [
+          {
+            "node": "Clean Up Transcript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Combine All Transcripts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Transcripts": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split IDs for Individual Processing": {
+      "main": [
+        [
+          {
+            "node": "Download Transcripts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Lead Data Fields": {
+      "main": [
+        [
+          {
+            "node": "Split IDs for Individual Processing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Prepare Lead Data Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Extract information for the contract",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "9cd439d1-c54c-410f-bbdb-bec0d83b32da",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f8639e41394d2a30eb552d4234c5e800f9dcb437ad5d7689e73f0e26b09ffa0e"
+  },
+  "id": "5ipBs44aBaf5zwvk",
+  "tags": []
+}
