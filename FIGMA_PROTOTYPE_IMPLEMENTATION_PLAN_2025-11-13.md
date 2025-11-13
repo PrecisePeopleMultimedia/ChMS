@@ -870,45 +870,14 @@ After reviewing the prototype against the 18 specifications, the following specs
    - Remove any layout configuration
    - Remove layout switching options
    - Use prototype layout as single source of truth
-**Priority**: P0 (Critical)
-**Estimated Time**: 10-12 hours
 
-**⚠️ IMPORTANT**: This is a COMPLETE REPLACEMENT. Remove current layout and replace with prototype layout.
-
-**Subtasks:**
-1. **Remove Current Layout**
-   - Archive current layout components
-   - Remove current sidebar components
-   - Remove current header components
-   - Document current layout structure (for reference)
-
-2. **Create Prototype 3-Column Layout**
-   - Left sidebar: 280px width (collapsible)
-   - Main content: Flexible (takes remaining space)
-   - Right sidebar: 320px width (collapsible)
-   - Use Quasar's `q-layout` with custom configuration
-   - Match prototype layout exactly
-
-3. **Create Prototype Sidebar Components**
-   - Left sidebar: Navigation menu (match prototype exactly)
-   - Right sidebar: Chat/activity panel (match prototype exactly)
-   - Collapse/expand functionality (smooth animations)
-   - Mobile overlay behavior (match prototype)
-   - Sidebar styling matches prototype
-
-4. **Create Prototype Header Component**
+5. **Create Prototype Header Component**
    - Church branding: Acronym + City (line 1)
    - Full church name + Campus badge (line 2)
    - Address (line 3)
    - Logo display (right side)
    - Progress badge (optional, right side)
    - Match prototype's 3-line header format exactly
-
-5. **Create Prototype Mobile Navigation**
-   - Bottom navigation bar (match prototype)
-   - Overlay sidebars (match prototype)
-   - Touch-optimized spacing (48px minimum)
-   - Match prototype mobile patterns
 
 6. **Replace Layout in Router**
    - Update router to use new layout
@@ -944,9 +913,42 @@ After reviewing the prototype against the 18 specifications, the following specs
 
 ### Phase 2: Core Component Library
 
+**⚠️ Component Library Decision**: Based on performance analysis, we will:
+1. **Primary Strategy**: Adapt Quasar components to match ShadCN styling (better performance, smaller bundle)
+2. **Secondary Strategy**: Create custom ShadCN-style components only where Quasar can't match the design
+3. **Bundle Size Monitoring**: Track bundle size throughout implementation (target: < 500KB)
+
 #### Task 2.1: Create Base UI Components
 **Priority**: P0 (Critical)
-**Estimated Time**: 12-16 hours
+**Estimated Time**: 20-25 hours
+
+**⚠️ Component Library Strategy**: 
+- **Primary**: Adapt Quasar components to match ShadCN styling
+- **Secondary**: Create custom components only where Quasar can't match
+- **Bundle Size**: Monitor bundle size (target: < 500KB initial load)
+
+**Subtasks:**
+1. **Evaluate Quasar Component Adaptability**
+   - Test Quasar Button → ShadCN Button styling
+   - Test Quasar Input → ShadCN Input styling
+   - Test Quasar Card → ShadCN Card styling
+   - Document which components can be adapted vs need custom
+   - Measure bundle size impact of each approach
+
+2. **Adapt Quasar Components (Primary Strategy)**
+   - Style Quasar Button to match ShadCN Button
+   - Style Quasar Input to match ShadCN Input
+   - Style Quasar Card to match ShadCN Card
+   - Style Quasar Badge to match ShadCN Badge
+   - Style Quasar Select to match ShadCN Select
+   - Use Tailwind classes for styling
+   - Maintain Quasar functionality
+
+3. **Create Custom Components (Secondary Strategy - Only Where Needed)**
+   - Create custom components only if Quasar can't match design
+   - Use ShadCN component patterns as reference
+   - Ensure custom components are lightweight
+   - Monitor bundle size impact
 
 **Components to Create/Update:**
 
@@ -1070,17 +1072,12 @@ After reviewing the prototype against the 18 specifications, the following specs
 
 **Subtasks:**
 1. **Install Charting Library**
-   - Install `vue-echarts` and `echarts`
-   - Configure ECharts with OKLCH colors
+   - Install `vue-echarts` and `echarts`: `npm install vue-echarts echarts`
+   - Configure ECharts with OKLCH colors from design system
    - Create chart wrapper components
-   - Test bundle size impact
+   - Test bundle size impact (target: < 500KB total)
 
 2. **Create Dashboard Chart Components**
-**Priority**: P1 (High)
-**Estimated Time**: 15-20 hours
-
-**⚠️ Dashboard Strategy**: Merge prototype design with existing spec requirements:
-- Use prototype as visual design reference
 - Keep all functional requirements from Spec 005
 - Combine best features from both
 
@@ -1277,22 +1274,44 @@ After reviewing the prototype against the 18 specifications, the following specs
 
 ### Phase 4: Integration & Polish
 
-#### Task 4.1: Update Router & Navigation
+#### Task 4.1: Update Router & Navigation (Best Practices)
 **Priority**: P1 (High)
 **Estimated Time**: 4-6 hours
 
+**⚠️ Routing Strategy**: Use best practices for performance, SEO, and UX:
+- Vue Router with nested routes for tab-based navigation
+- Route-based code splitting for performance
+- Meta tags for SEO
+- Proper loading states for UX
+
 **Subtasks:**
-1. Update route definitions
+1. **Update Route Definitions (Nested Routes)**
    - Match prototype's route structure
-   - Add sub-routes for tabs
+   - Add nested routes for tab-based navigation
+   - Use Vue Router nested routes pattern
+   - Implement route-based code splitting (lazy loading)
 
-2. Update navigation logic
+2. **Update Navigation Logic**
    - Match prototype's navigation flow
-   - Tab-based navigation where applicable
+   - Tab-based navigation using nested routes
+   - Active route highlighting
+   - Smooth transitions
 
-3. Add route guards
-   - Protected routes
-   - Role-based access
+3. **Add Route Guards**
+   - Protected routes (authentication)
+   - Role-based access control
+   - Redirect logic
+
+4. **Add SEO Meta Tags**
+   - Route-specific meta tags
+   - Open Graph tags
+   - Twitter Card tags
+   - Dynamic meta updates
+
+5. **Add Loading States**
+   - Route transition loading indicators
+   - Skeleton screens for async routes
+   - Error boundaries for failed routes
 
 **Files to Modify:**
 - `frontend/src/router/index.ts`
