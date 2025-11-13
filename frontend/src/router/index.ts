@@ -88,7 +88,7 @@ const router = createRouter({
         {
           path: '',
           name: 'Dashboard',
-          component: () => import('@/views/QuasarPrimeDashboard.vue'),
+          component: () => import('@/views/DashboardView.vue'),
           meta: {
             requiresAuth: true,
             title: 'Dashboard - ChurchAfrica'

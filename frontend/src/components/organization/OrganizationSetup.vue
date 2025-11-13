@@ -1,352 +1,253 @@
 <template>
-  <div class="organization-setup">
-    <q-card class="setup-card">
-      <q-card-section class="text-center q-pb-none">
-        <div class="text-h4 text-weight-bold q-mb-md">
-          Welcome to ChurchAfrica
-        </div>
-        <div class="text-subtitle1 text-grey-6 q-mb-lg">
-          Let's set up your church profile to get started
-        </div>
-      </q-card-section>
+  <div class="max-w-3xl mx-auto space-y-6">
+    <div>
+      <h2 class="flex items-center gap-2 text-2xl font-light">
+        <q-icon name="church" class="h-6 w-6 text-primary" />
+        Organization Setup
+      </h2>
+      <p class="text-muted-foreground">
+        Set up your church organization in a few simple steps
+      </p>
+    </div>
 
-      <!-- Progress Stepper -->
-      <q-card-section class="q-pt-none">
-        <q-stepper
-          v-model="currentStep"
-          ref="stepper"
-          color="primary"
-          animated
-          flat
-          bordered
-          class="setup-stepper"
+    <!-- Progress -->
+    <div class="space-y-2">
+      <div class="flex justify-between text-sm">
+        <span class="text-muted-foreground">
+          Step {{ currentStep }} of {{ steps.length }}
+        </span>
+        <span class="font-medium">{{ Math.round(progress) }}% Complete</span>
+      </div>
+      <div class="w-full bg-muted rounded-full h-2 overflow-hidden">
+        <div
+          class="h-full bg-primary transition-all"
+          :style="{ width: `${progress}%` }"
+        />
+      </div>
+    </div>
+
+    <!-- Step Indicators -->
+    <div class="flex justify-between">
+      <div
+        v-for="step in steps"
+        :key="step.id"
+        :class="[
+          'flex flex-col items-center gap-2 flex-1',
+          step.id !== steps.length ? 'relative' : ''
+        ]"
+      >
+        <div
+          :class="[
+            'w-10 h-10 rounded-full flex items-center justify-center transition-all',
+            step.id < currentStep ? 'bg-primary text-primary-foreground' : '',
+            step.id === currentStep ? 'bg-primary/20 text-primary border-2 border-primary' : '',
+            step.id > currentStep ? 'bg-accent text-muted-foreground' : ''
+          ]"
         >
-          <!-- Step 1: Church Profile -->
-          <q-step
-            :name="1"
-            title="Church Profile"
-            icon="church"
-            :done="currentStep > 1"
-            :header-nav="currentStep > 1"
-          >
-            <ChurchProfileForm
-              v-model="organizationData"
-              :loading="isLoading"
-              :errors="formErrors"
-              @submit="handleProfileSubmit"
-            />
-          </q-step>
+          <q-icon
+            v-if="step.id < currentStep"
+            name="check_circle"
+            class="h-5 w-5"
+          />
+          <q-icon
+            v-else
+            :name="step.icon"
+            class="h-5 w-5"
+          />
+        </div>
+        <span
+          :class="[
+            'text-xs text-center',
+            step.id === currentStep ? 'font-medium' : 'text-muted-foreground'
+          ]"
+        >
+          {{ step.title }}
+        </span>
 
-          <!-- Step 2: Service Schedules -->
-          <q-step
-            :name="2"
-            title="Service Times"
-            icon="schedule"
-            :done="currentStep > 2"
-            :header-nav="currentStep > 2"
-          >
-            <ServiceScheduleForm
-              v-model="serviceSchedules"
-              :loading="isLoading"
-              :errors="formErrors"
-              @submit="handleScheduleSubmit"
-            />
-          </q-step>
+        <div
+          v-if="step.id !== steps.length"
+          :class="[
+            'absolute top-5 left-1/2 w-full h-0.5 -z-10',
+            step.id < currentStep ? 'bg-primary' : 'bg-accent'
+          ]"
+        />
+      </div>
+    </div>
 
-          <!-- Step 3: Settings & Preferences -->
-          <q-step
-            :name="3"
-            title="Settings"
-            icon="settings"
-            :done="currentStep > 3"
-            :header-nav="currentStep > 3"
-          >
-            <SettingsForm
-              v-model="settingsData"
-              :loading="isLoading"
-              :errors="formErrors"
-              @submit="handleSettingsSubmit"
-            />
-          </q-step>
+    <!-- Form Card -->
+    <ModernCard>
+      <ModernCardHeader>
+        <ModernCardTitle>{{ steps[currentStep - 1].title }}</ModernCardTitle>
+        <ModernCardDescription>{{ steps[currentStep - 1].description }}</ModernCardDescription>
+      </ModernCardHeader>
+      <ModernCardContent>
+        <OrganizationSetupStep1 v-if="currentStep === 1" v-model="formData" />
+        <OrganizationSetupStep2 v-if="currentStep === 2" v-model="formData" />
+        <OrganizationSetupStep3 v-if="currentStep === 3" v-model="formData" />
+        <OrganizationSetupStep4 v-if="currentStep === 4" v-model="formData" />
+      </ModernCardContent>
+      <ModernCardFooter class="flex justify-between">
+        <ModernButton
+          variant="outline"
+          @click="handlePrevious"
+          :disabled="currentStep === 1"
+        >
+          <q-icon name="arrow_back" class="h-4 w-4 mr-2" />
+          Previous
+        </ModernButton>
 
-          <!-- Step 4: Complete -->
-          <q-step
-            :name="4"
-            title="Complete"
-            icon="check_circle"
-            :done="setupComplete"
-          >
-            <div class="text-center q-py-xl">
-              <q-icon
-                name="check_circle"
-                size="4rem"
-                color="positive"
-                class="q-mb-md"
-              />
-              <div class="text-h5 text-weight-bold q-mb-md">
-                Setup Complete!
-              </div>
-              <div class="text-body1 text-grey-6 q-mb-lg">
-                Your church profile has been successfully configured.
-                You can now start using ChurchAfrica to manage your church.
-              </div>
-              <q-btn
-                color="primary"
-                size="lg"
-                label="Go to Dashboard"
-                @click="goToDashboard"
-                :loading="isLoading"
-              />
-            </div>
-          </q-step>
+        <ModernButton
+          v-if="currentStep < steps.length"
+          @click="handleNext"
+        >
+          Next
+          <q-icon name="arrow_forward" class="h-4 w-4 ml-2" />
+        </ModernButton>
+        <ModernButton
+          v-else
+          @click="handleSubmit"
+        >
+          <q-icon name="check_circle" class="h-4 w-4 mr-2" />
+          Complete Setup
+        </ModernButton>
+      </ModernCardFooter>
+    </ModernCard>
 
-          <!-- Navigation -->
-          <template v-slot:navigation>
-            <q-stepper-navigation class="row justify-between">
-              <q-btn
-                v-if="currentStep > 1 && currentStep < 4"
-                flat
-                color="primary"
-                label="Back"
-                @click="previousStep"
-                :disable="isLoading"
-              />
-              <q-space />
-              <q-btn
-                v-if="currentStep < 3"
-                color="primary"
-                label="Next"
-                @click="nextStep"
-                :loading="isLoading"
-                :disable="!canProceed"
-              />
-              <q-btn
-                v-if="currentStep === 3"
-                color="primary"
-                label="Complete Setup"
-                @click="completeSetup"
-                :loading="isLoading"
-              />
-            </q-stepper-navigation>
-          </template>
-        </q-stepper>
-      </q-card-section>
-    </q-card>
-
-    <!-- Offline Notice -->
-    <q-banner
-      v-if="!isOnline"
-      class="bg-warning text-dark q-mt-md"
-      rounded
-    >
-      <template v-slot:avatar>
-        <q-icon name="wifi_off" />
-      </template>
-      You're currently offline. Your setup will be saved locally and synced when you're back online.
-    </q-banner>
-
-    <!-- Error Display -->
-    <q-banner
-      v-if="error"
-      class="bg-negative text-white q-mt-md"
-      rounded
-      dismissible
-      @dismiss="clearError"
-    >
-      <template v-slot:avatar>
-        <q-icon name="error" />
-      </template>
-      {{ error }}
-    </q-banner>
+    <!-- Help Text -->
+    <ModernCard class="bg-accent/50">
+      <ModernCardContent class="pt-6">
+        <h4 class="font-semibold mb-2">💡 What happens next?</h4>
+        <ul class="text-sm text-muted-foreground space-y-1">
+          <li>✓ Your organization will be created</li>
+          <li>✓ A headquarters branch will be set up automatically</li>
+          <li>✓ Default services (Sunday, Midweek) will be created</li>
+          <li>✓ You'll receive admin access to manage everything</li>
+        </ul>
+      </ModernCardContent>
+    </ModernCard>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, h } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import { useOrganizationStore } from '@/stores/organization'
-import { useAuthStore } from '@/stores/auth'
-import ChurchProfileForm from './ChurchProfileForm.vue'
-import ServiceScheduleForm from './ServiceScheduleForm.vue'
-import SettingsForm from './SettingsForm.vue'
+import ModernCard from '@/components/ui/ModernCard.vue'
+import ModernCardHeader from '@/components/ui/ModernCardHeader.vue'
+import ModernCardTitle from '@/components/ui/ModernCardTitle.vue'
+import ModernCardDescription from '@/components/ui/ModernCardDescription.vue'
+import ModernCardContent from '@/components/ui/ModernCardContent.vue'
+import ModernCardFooter from '@/components/ui/ModernCardFooter.vue'
+import ModernButton from '@/components/ui/ModernButton.vue'
+import OrganizationSetupStep1 from './OrganizationSetupStep1.vue'
+import OrganizationSetupStep2 from './OrganizationSetupStep2.vue'
+import OrganizationSetupStep3 from './OrganizationSetupStep3.vue'
+import OrganizationSetupStep4 from './OrganizationSetupStep4.vue'
 
-// Composables
 const router = useRouter()
 const $q = useQuasar()
 const organizationStore = useOrganizationStore()
-const authStore = useAuthStore()
 
-// State
+interface SetupStep {
+  id: number
+  title: string
+  description: string
+  icon: string
+}
+
+const steps: SetupStep[] = [
+  {
+    id: 1,
+    title: 'Organization Details',
+    description: 'Basic information about your church',
+    icon: 'church',
+  },
+  {
+    id: 2,
+    title: 'Location & Contact',
+    description: 'Where is your church located',
+    icon: 'place',
+  },
+  {
+    id: 3,
+    title: 'Admin Account',
+    description: 'Setup your administrator account',
+    icon: 'people',
+  },
+  {
+    id: 4,
+    title: 'Preferences',
+    description: 'Configure your settings',
+    icon: 'settings',
+  },
+]
+
 const currentStep = ref(1)
-const setupComplete = ref(false)
-const formErrors = ref<Record<string, string[]>>({})
-
-// Form data
-const organizationData = ref({
-  name: '',
+const formData = ref({
+  // Step 1
+  orgName: '',
+  orgType: '',
+  denomination: '',
+  // Step 2
+  country: '',
+  city: '',
   address: '',
   phone: '',
   email: '',
-  website: '',
-  description: '',
-  timezone: 'Africa/Lagos'
+  // Step 3
+  adminName: '',
+  adminEmail: '',
+  adminPhone: '',
+  // Step 4
+  timezone: '',
+  currency: '',
+  language: '',
 })
 
-const serviceSchedules = ref([
-  {
-    name: 'Sunday Service',
-    day_of_week: 0,
-    start_time: '09:00',
-    end_time: '11:00',
-    is_active: true
-  }
-])
+const progress = computed(() => (currentStep.value / steps.length) * 100)
 
-const settingsData = ref({
-  welcome_message: '',
-  contact_person: '',
-  emergency_contact: '',
-  social_media_facebook: '',
-  social_media_twitter: '',
-  social_media_instagram: ''
-})
-
-// Computed
-const isLoading = computed(() => organizationStore.isLoading)
-const error = computed(() => organizationStore.error)
-const isOnline = computed(() => navigator.onLine)
-
-const canProceed = computed(() => {
-  switch (currentStep.value) {
-    case 1:
-      return organizationData.value.name.trim().length > 0
-    case 2:
-      return serviceSchedules.value.length > 0
-    case 3:
-      return true
-    default:
-      return false
-  }
-})
-
-// Methods
-const clearError = () => {
-  organizationStore.clearError()
-  formErrors.value = {}
-}
-
-const nextStep = () => {
-  if (canProceed.value && currentStep.value < 4) {
+const handleNext = () => {
+  if (currentStep.value < steps.length) {
     currentStep.value++
   }
 }
 
-const previousStep = () => {
+const handlePrevious = () => {
   if (currentStep.value > 1) {
     currentStep.value--
   }
 }
 
-const handleProfileSubmit = async () => {
+const handleSubmit = async () => {
   try {
-    clearError()
-    await organizationStore.createOrganization(organizationData.value)
-    nextStep()
-  } catch (err: any) {
-    if (err.response?.data?.errors) {
-      formErrors.value = err.response.data.errors
-    }
-  }
-}
+    // Create organization
+    await organizationStore.createOrganization({
+      name: formData.value.orgName,
+      type: formData.value.orgType,
+      denomination: formData.value.denomination,
+      country: formData.value.country,
+      city: formData.value.city,
+      address: formData.value.address,
+      phone: formData.value.phone,
+      email: formData.value.email,
+      timezone: formData.value.timezone,
+      currency: formData.value.currency,
+      language: formData.value.language,
+    })
 
-const handleScheduleSubmit = async () => {
-  try {
-    clearError()
-    // Create service schedules
-    for (const schedule of serviceSchedules.value) {
-      await organizationStore.createServiceSchedule(schedule)
-    }
-    nextStep()
-  } catch (err: any) {
-    if (err.response?.data?.errors) {
-      formErrors.value = err.response.data.errors
-    }
-  }
-}
-
-const handleSettingsSubmit = async () => {
-  try {
-    clearError()
-    await organizationStore.updateSettings(settingsData.value)
-    nextStep()
-  } catch (err: any) {
-    if (err.response?.data?.errors) {
-      formErrors.value = err.response.data.errors
-    }
-  }
-}
-
-const completeSetup = async () => {
-  try {
-    clearError()
-    
-    // Save settings if not already saved
-    if (currentStep.value === 3) {
-      await organizationStore.updateSettings(settingsData.value)
-    }
-    
-    setupComplete.value = true
-    currentStep.value = 4
-    
     $q.notify({
       type: 'positive',
-      message: 'Church setup completed successfully!',
-      position: 'top'
+      message: 'Organization setup complete!',
     })
-  } catch (err: any) {
-    console.error('Setup completion error:', err)
+
+    router.push('/dashboard')
+  } catch (error) {
+    console.error('Setup error:', error)
+    $q.notify({
+      type: 'negative',
+      message: 'Failed to complete setup. Please try again.',
+    })
   }
 }
-
-const goToDashboard = () => {
-  router.push('/dashboard')
-}
-
-// Lifecycle
-onMounted(() => {
-  // Check if organization already exists
-  organizationStore.fetchOrganization().then((org) => {
-    if (org) {
-      // Organization exists, redirect to dashboard
-      router.push('/dashboard')
-    }
-  })
-})
 </script>
-
-<style lang="sass" scoped>
-.organization-setup
-  max-width: 800px
-  margin: 0 auto
-  padding: 2rem 1rem
-
-.setup-card
-  border-radius: 12px
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1)
-
-.setup-stepper
-  .q-stepper__header
-    border-radius: 8px
-
-  .q-stepper__content
-    padding: 2rem 1rem
-
-@media (max-width: 600px)
-  .organization-setup
-    padding: 1rem 0.5rem
-
-  .setup-stepper
-    .q-stepper__content
-      padding: 1rem 0.5rem
-</style>
