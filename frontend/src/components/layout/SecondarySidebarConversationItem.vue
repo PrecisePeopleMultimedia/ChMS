@@ -59,6 +59,7 @@ interface Props {
 
 defineProps<Props>()
 
+const props = defineProps<Props>()
 const router = useRouter()
 
 const handleClick = () => {

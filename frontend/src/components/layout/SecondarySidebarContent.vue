@@ -48,29 +48,25 @@
     <!-- Tab Panels -->
     <q-tab-panels v-model="activeTab" class="flex-1 overflow-hidden">
       <!-- Messages Tab -->
-      <q-tab-panel name="messages" class="p-0">
-        <q-scroll-area class="h-full">
-          <div class="p-2">
-            <ConversationItem
-              v-for="conversation in filteredConversations"
-              :key="conversation.id"
-              :conversation="conversation"
-            />
-          </div>
-        </q-scroll-area>
+      <q-tab-panel name="messages" class="p-0 overflow-y-auto h-full">
+        <div class="p-2">
+          <ConversationItem
+            v-for="conversation in filteredConversations"
+            :key="conversation.id"
+            :conversation="conversation"
+          />
+        </div>
       </q-tab-panel>
 
       <!-- Activity Tab -->
-      <q-tab-panel name="activity" class="p-0">
-        <q-scroll-area class="h-full">
-          <div class="p-4 space-y-4">
-            <ActivityItem
-              v-for="activity in recentActivity"
-              :key="activity.id"
-              :activity="activity"
-            />
-          </div>
-        </q-scroll-area>
+      <q-tab-panel name="activity" class="p-0 overflow-y-auto h-full">
+        <div class="p-4 space-y-4">
+          <ActivityItem
+            v-for="activity in recentActivity"
+            :key="activity.id"
+            :activity="activity"
+          />
+        </div>
       </q-tab-panel>
     </q-tab-panels>
 

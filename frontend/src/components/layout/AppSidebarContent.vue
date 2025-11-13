@@ -89,7 +89,7 @@
           </div>
         </nav>
       </div>
-    </q-scroll-area>
+    </div>
 
     <!-- Footer -->
     <div class="p-4 border-t border-border">
