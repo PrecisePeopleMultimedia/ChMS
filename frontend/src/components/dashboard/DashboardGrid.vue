@@ -98,11 +98,12 @@ const gridStyle = computed(() => {
 
   const { columns, rows } = currentLayout.layoutConfig
   
+  // Note: IE10 requires -ms-grid-columns/-ms-grid-rows but these can't be set via inline styles
+  // The browser will handle grid properties automatically for modern browsers
+  // For IE10 support, consider using a CSS class instead of inline styles
   return {
     display: 'grid' as const,
-    msGridColumns: `repeat(${columns}, 1fr)` as any,
     gridTemplateColumns: `repeat(${columns}, 1fr)`,
-    msGridRows: `repeat(${rows}, ${props.gridSize}px)` as any,
     gridTemplateRows: `repeat(${rows}, ${props.gridSize}px)`,
     gap: `${props.gap}px`,
     minHeight: `${rows * props.gridSize + (rows - 1) * props.gap}px`,
@@ -269,6 +270,9 @@ onUnmounted(() => {
   width: 100%;
   padding: 16px;
   background-color: var(--q-color-background);
+  /* IE10 grid support - inline styles handle modern browsers */
+  display: -ms-grid;
+  display: grid;
   border-radius: 8px;
   position: relative;
   transition: background-color 0.3s ease;
