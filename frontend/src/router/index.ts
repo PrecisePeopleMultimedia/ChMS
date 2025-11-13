@@ -77,10 +77,10 @@ const router = createRouter({
         title: 'Church Setup - ChurchAfrica'
       }
     },
-    // Dashboard routes with Quasar Prime layout
+    // Dashboard routes with new AppLayout
     {
       path: '/dashboard',
-      component: () => import('@/layouts/QuasarPrimeLayout.vue'),
+      component: () => import('@/layouts/AppLayout.vue'),
       meta: {
         requiresAuth: true
       },
