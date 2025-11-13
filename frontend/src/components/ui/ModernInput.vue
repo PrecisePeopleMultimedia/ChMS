@@ -1,8 +1,8 @@
 <template>
   <div class="modern-input-wrapper" :class="wrapperClasses">
     <!-- Label -->
-    <label 
-      v-if="label" 
+    <label
+      v-if="label"
       :for="inputId"
       class="modern-input-label"
       :class="{ 'text-destructive': hasError }"
@@ -11,59 +11,43 @@
       <span v-if="required" class="text-destructive ml-1">*</span>
     </label>
 
-    <!-- Input Container -->
-    <div class="modern-input-container" :class="containerClasses">
-      <!-- Left Icon -->
-      <div v-if="leftIcon || $slots.leftIcon" class="modern-input-icon-left">
-        <slot name="leftIcon">
-          <q-icon v-if="leftIcon" :name="leftIcon" :size="iconSize" />
-        </slot>
-      </div>
+    <!-- Input Field -->
+    <input
+      :id="inputId"
+      :type="inputType"
+      :value="modelValue"
+      :placeholder="placeholder"
+      :disabled="disabled"
+      :readonly="readonly"
+      :required="required"
+      :autocomplete="autocomplete"
+      :aria-invalid="hasError"
+      :class="[
+        'file:text-foreground placeholder:text-muted-foreground',
+        'selection:bg-primary selection:text-primary-foreground',
+        'dark:bg-input/30 border-input',
+        'flex h-9 w-full min-w-0 rounded-md border px-3 py-1',
+        'text-base bg-input-background transition-[color,box-shadow]',
+        'outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent',
+        'file:text-sm file:font-medium',
+        'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
+        'md:text-sm',
+        'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]',
+        'aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive',
+        inputClasses
+      ]"
+      @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+      @focus="handleFocus"
+      @blur="handleBlur"
+      @keydown.enter="$emit('enter')"
+    />
 
-      <!-- Input Field -->
-      <input
-        :id="inputId"
-        :type="inputType"
-        :value="modelValue"
-        :placeholder="placeholder"
-        :disabled="disabled"
-        :readonly="readonly"
-        :required="required"
-        :autocomplete="autocomplete"
-        :class="inputClasses"
-        @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
-        @focus="handleFocus"
-        @blur="handleBlur"
-        @keydown.enter="$emit('enter')"
-      />
-
-      <!-- Right Icon/Button -->
-      <div v-if="rightIcon || $slots.rightIcon || showPasswordToggle" class="modern-input-icon-right">
-        <slot name="rightIcon">
-          <!-- Password Toggle -->
-          <button
-            v-if="showPasswordToggle"
-            type="button"
-            class="modern-input-toggle"
-            @click="togglePassword"
-          >
-            <q-icon 
-              :name="inputType === 'password' ? 'visibility_off' : 'visibility'" 
-              :size="iconSize"
-            />
-          </button>
-          <!-- Custom Right Icon -->
-          <q-icon v-else-if="rightIcon" :name="rightIcon" :size="iconSize" />
-        </slot>
-      </div>
-    </div>
-
-    <!-- Helper Text -->
-    <div v-if="helperText || hasError" class="modern-input-helper">
-      <span v-if="hasError" class="text-destructive">
+    <!-- Helper Text / Error Message -->
+    <div v-if="helperText || hasError" class="modern-input-helper mt-1">
+      <span v-if="hasError" class="text-destructive text-sm">
         {{ errorMessage }}
       </span>
-      <span v-else-if="helperText" class="text-muted-foreground">
+      <span v-else-if="helperText" class="text-muted-foreground text-sm">
         {{ helperText }}
       </span>
     </div>
@@ -71,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, useId } from 'vue'
+import { ref, computed } from 'vue'
 
 interface Props {
   modelValue?: string | number
@@ -80,36 +64,35 @@ interface Props {
   placeholder?: string
   helperText?: string
   errorMessage?: string
-  leftIcon?: string
-  rightIcon?: string
   disabled?: boolean
   readonly?: boolean
   required?: boolean
   autocomplete?: string
   size?: 'sm' | 'md' | 'lg'
-  variant?: 'default' | 'filled' | 'outlined'
+  className?: string
   showPasswordToggle?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   type: 'text',
   size: 'md',
-  variant: 'outlined',
-  showPasswordToggle: false
+  showPasswordToggle: false,
+  className: ''
 })
 
-defineEmits<{
-  'update:modelValue': [value: string]
-  focus: []
-  blur: []
+const emit = defineEmits<{
+  'update:modelValue': [value: string | number]
+  focus: [event: FocusEvent]
+  blur: [event: FocusEvent]
   enter: []
 }>()
 
-// Generate unique ID for accessibility
-const inputId = useId()
+// Generate unique ID for input
+const inputId = `input-${Math.random().toString(36).substr(2, 9)}`
 
-// Password visibility state
 const showPassword = ref(false)
+const isFocused = ref(false)
+
 const inputType = computed(() => {
   if (props.type === 'password' && showPassword.value) {
     return 'text'
@@ -117,62 +100,32 @@ const inputType = computed(() => {
   return props.type
 })
 
-// Focus state
-const isFocused = ref(false)
-
-// Computed classes
-const wrapperClasses = computed(() => [
-  'w-full',
-  props.size === 'sm' && 'space-y-1',
-  props.size === 'md' && 'space-y-2',
-  props.size === 'lg' && 'space-y-3'
-])
-
-const containerClasses = computed(() => [
-  'relative flex items-center',
-  props.size === 'sm' && 'h-8',
-  props.size === 'md' && 'h-10',
-  props.size === 'lg' && 'h-12',
-  isFocused.value && 'ring-2 ring-ring ring-offset-2',
-  hasError.value && 'border-destructive',
-  props.disabled && 'opacity-50 cursor-not-allowed'
-])
-
-const inputClasses = computed(() => [
-  'modern-input',
-  'flex-1 bg-transparent border-0 outline-none',
-  'placeholder:text-muted-foreground',
-  'disabled:cursor-not-allowed disabled:opacity-50',
-  props.size === 'sm' && 'text-sm px-2',
-  props.size === 'md' && 'text-sm px-3',
-  props.size === 'lg' && 'text-base px-4',
-  props.variant === 'filled' && 'bg-muted',
-  props.variant === 'outlined' && 'border border-input',
-  props.variant === 'default' && 'border-b border-input rounded-none'
-])
-
 const hasError = computed(() => !!props.errorMessage)
 
-const iconSize = computed(() => {
-  switch (props.size) {
-    case 'sm': return '16px'
-    case 'md': return '20px'
-    case 'lg': return '24px'
-    default: return '20px'
+const wrapperClasses = computed(() => {
+  return {
+    'has-error': hasError.value,
+    'is-focused': isFocused.value,
+    [`size-${props.size}`]: true
   }
 })
 
-// Methods
+const inputClasses = computed(() => {
+  return props.className
+})
+
+const handleFocus = (event: FocusEvent) => {
+  isFocused.value = true
+  emit('focus', event)
+}
+
+const handleBlur = (event: FocusEvent) => {
+  isFocused.value = false
+  emit('blur', event)
+}
+
 const togglePassword = () => {
   showPassword.value = !showPassword.value
-}
-
-const handleFocus = () => {
-  isFocused.value = true
-}
-
-const handleBlur = () => {
-  isFocused.value = false
 }
 </script>
 
@@ -182,73 +135,15 @@ const handleBlur = () => {
 }
 
 .modern-input-label {
-  @apply block text-sm font-medium text-foreground mb-1;
-}
-
-.modern-input-container {
-  @apply relative flex items-center rounded-md border border-input bg-background;
-  transition: all 0.2s ease-in-out;
-}
-
-.modern-input-container:focus-within {
-  @apply ring-2 ring-ring ring-offset-2 border-ring;
-}
-
-.modern-input-container.error {
-  @apply border-destructive ring-destructive;
-}
-
-.modern-input {
-  @apply flex-1 bg-transparent border-0 outline-none;
-}
-
-.modern-input::placeholder {
-  @apply text-muted-foreground;
-}
-
-.modern-input:focus {
-  @apply outline-none;
-}
-
-.modern-input-icon-left {
-  @apply absolute left-3 flex items-center text-muted-foreground;
-}
-
-.modern-input-icon-right {
-  @apply absolute right-3 flex items-center text-muted-foreground;
-}
-
-.modern-input-toggle {
-  @apply p-1 hover:bg-muted rounded-sm transition-colors;
+  @apply block text-sm font-medium mb-2 text-foreground;
 }
 
 .modern-input-helper {
-  @apply text-xs mt-1;
+  @apply text-xs;
 }
 
-/* Size variants */
-.modern-input-wrapper.size-sm .modern-input-container {
-  @apply h-8;
-}
-
-.modern-input-wrapper.size-md .modern-input-container {
-  @apply h-10;
-}
-
-.modern-input-wrapper.size-lg .modern-input-container {
-  @apply h-12;
-}
-
-/* Variant styles */
-.modern-input-container.variant-filled {
-  @apply bg-muted border-muted;
-}
-
-.modern-input-container.variant-outlined {
-  @apply border-input bg-background;
-}
-
-.modern-input-container.variant-default {
-  @apply border-0 border-b border-input bg-transparent rounded-none;
+/* Focus states */
+.modern-input-wrapper.is-focused .modern-input-label {
+  @apply text-primary;
 }
 </style>
