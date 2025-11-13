@@ -50,6 +50,7 @@
     "@sentry/vue": "^10.18.0",
     "@vueuse/core": "^13.9.0",
     "axios": "^1.12.2",
+    "echarts": "^6.0.0",
     "idb": "^8.0.3",
     "pinia": "^3.0.3",
     "qrcode": "^1.5.4",
@@ -57,6 +58,7 @@
     "vis-network": "^10.0.2",
     "vite-plugin-pwa": "^1.0.3",
     "vue": "^3.5.22",
+    "vue-echarts": "^8.0.1",
     "vue-router": "^4.5.1",
     "workbox-window": "^7.3.0"
   },
