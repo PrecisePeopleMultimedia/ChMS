@@ -60,3 +60,7 @@ frontend/tests/e2e/debug-*.spec.ts
 frontend/debug-*.png
 frontend/**/debug-*.png
 *.debug.*
+
+# OpenSkills - Installed skills (dependencies, not source code)
+.claude/skills/
+.agent/skills/

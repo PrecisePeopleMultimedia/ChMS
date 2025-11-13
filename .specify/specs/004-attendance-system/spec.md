@@ -368,29 +368,105 @@ CREATE TABLE member_qr_codes (
 ```
 
 ### Frontend Components
-- `AttendanceScanner.vue` - QR code scanner component
-- `MemberCheckIn.vue` - Manual member search and check-in
+
+#### Core Check-in Components
+- `AttendanceScanner.vue` - QR code scanner component with detachable popup support
+- `CheckInForm.vue` - Full-page check-in form with QR code and search (main check-in interface)
+- `MemberCheckIn.vue` - Manual member search and check-in (legacy component)
 - `VisitorCheckIn.vue` - Visitor registration and check-in
 - `AttendanceDashboard.vue` - Current service attendance overview
 - `AttendanceReports.vue` - Basic attendance reports
 - `ServiceSelector.vue` - Select current service for attendance
 
+#### Notification and UI Components
+- `CheckInNotification.vue` - Toast-style popup notification for successful check-ins
+- `DetachableQRCode.vue` - Popup window for always-visible QR code display
+- `MemberAutocomplete.vue` - Autocomplete search component for member selection
+- `ServiceHeader.vue` - Service details display component
+- `QuickLinksFooter.vue` - Quick navigation links for check-in page
+
 ## User Experience Design
 
 ### User Flow
-1. Greeter opens attendance system
+
+#### QR Code Check-in Flow
+1. Admin opens attendance system
 2. Selects current service/event
-3. Chooses check-in method (QR scan or manual)
-4. For QR: Scans member QR code, confirms check-in
-5. For manual: Searches member name, selects member, confirms check-in
-6. For visitor: Enters visitor details, records attendance
-7. System provides immediate feedback on successful check-in
+3. Chooses QR code check-in method
+4. QR code scanner becomes available (can be detached/popped out)
+5. Member scans QR code using their phone
+6. **No redirect** - system shows 1-2 second popup notification: "Adewale Ayuba has checked in" with green checkmark
+7. Admin can continue using system while QR code remains active for continuous scanning
+8. Optional member selection/deselection interface appears for corrections if needed
+
+#### Manual Check-in Form Flow (Alternative to QR Code)
+1. Admin navigates to check-in form page
+2. **Header**: Service details displayed prominently
+3. **Left side**: Large QR code displayed for the current service (detachable)
+4. **Right side**: Form field with autocomplete search for member names
+5. Admin types member name, selects from autocomplete suggestions
+6. Admin hits Enter or clicks "Check In" button to confirm
+7. 1-2 second popup notification appears: "Member Name has checked in" with green checkmark
+8. **Footer**: Quick links for common actions (add visitor, view attendance, etc.)
+
+#### Visitor Check-in Flow
+1. Visitor enters details in check-in form
+2. System records visitor attendance
+3. Popup notification confirms successful registration
 
 ### UI Requirements
+
+#### Popup Notifications
+- **Duration**: 1-2 seconds display time, non-obtrusive positioning
+- **Content**: "[Member Name] has checked in" with green checkmark icon
+- **Appearance**: Toast-style notification, fades in/out smoothly
+- **Position**: Top-right corner, doesn't block ongoing work
+- **Behavior**: Auto-dismisss, non-blocking, stackable if multiple check-ins occur
+- **No Redirect**: Never redirects away from current page or disrupts admin workflow
+
+#### Detachable QR Code System
+- **Popup Mode**: QR code can be displayed in a separate popup window
+- **Always-on-Top**: QR code popup stays visible above other browser tabs
+- **Resize Options**: QR code can be enlarged for better scanning distance
+- **Continuous Mode**: QR code remains active for uninterrupted member scanning
+- **Admin Continuity**: Admin can continue working in main system while QR code stays visible
+
+#### Manual Check-in Form Layout
+- **Header Section**: Service details (name, time, date, current attendance count)
+- **Left Panel**: Large QR code display (detachable), service information
+- **Right Panel**: Autocomplete search field with member selection options
+- **Footer Section**: Quick links (Add Visitor, View Attendance, Export, Settings)
+
+#### Check-in Form Page Layout
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                      SERVICE HEADER                             │
+│  Service Name • Sunday Service • Nov 12, 2025 • 10:00 AM         │
+│  Current Attendance: 47/100 people                              │
+├─────────────────────────────────────────────────────────────────┤
+│ ┌─────────────────────┐ │ ┌─────────────────────────────────────┐ │
+│ │                     │ │ │          MEMBER SEARCH              │ │
+│ │   SERVICE QR CODE   │ │ │                                     │ │
+│ │                     │ │ │ [Search for member name...]         │ │
+│ │   [Click to Detach] │ │ │                                     │ │
+│ │                     │ │ │ • Adewale Ayuba                     │ │
+│ │                     │ │ │ • Sarah Johnson                     │ │
+│ │                     │ │ │ • Michael Brown                     │ │
+│ │                     │ │ │                                     │ │
+│ │                     │ │ │ [Check In] [Clear]                  │ │
+│ └─────────────────────┘ │ └─────────────────────────────────────┘ │
+├─────────────────────────────────────────────────────────────────┤
+│                        QUICK LINKS                              │
+│  [Add Visitor]  [View Attendance]  [Export]  [Settings]         │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+#### General Requirements
 - **Layout:** Large buttons for check-in methods, clear service indicator
 - **Interactions:** One-tap check-in, visual feedback on success
 - **Feedback:** Sound/vibration on successful scan, visual confirmation
 - **Accessibility:** High contrast for outdoor use, voice feedback options
+- **Mobile Optimized**: Touch-friendly interface, works on Android devices
 
 ## Acceptance Criteria
 

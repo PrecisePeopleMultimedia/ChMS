@@ -20,7 +20,14 @@
       "Bash(npm run dev:*)",
       "Bash(node_modules.binvite.cmd:*)",
       "WebSearch",
-      "WebFetch(domain:docs.z.ai)"
+      "WebFetch(domain:docs.z.ai)",
+      "Bash(curl:*)",
+      "Bash(docker-compose ps:*)",
+      "Bash(docker-compose exec backend php artisan tinker:*)",
+      "Bash(docker-compose exec:*)",
+      "Bash(git add:*)",
+      "WebFetch(domain:www.figma.com)",
+      "WebFetch(domain:github.com)"
     ],
     "deny": [],
     "ask": []
