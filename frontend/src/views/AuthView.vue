@@ -1,5 +1,5 @@
 <template>
-  <q-page class="auth-page">
+  <div class="auth-page">
     <div class="auth-container">
       <!-- Main Authentication Card -->
       <div class="auth-card">
@@ -77,7 +77,7 @@
         </div>
       </div>
     </div>
-  </q-page>
+  </div>
 </template>
 
 <script setup lang="ts">
