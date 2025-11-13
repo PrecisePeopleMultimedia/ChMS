@@ -1,5 +1,5 @@
 <template>
-  <q-page class="garnet-night-bg flex flex-center">
+  <div class="reset-password-page garnet-night-bg flex flex-center">
     <div class="reset-password-container">
       <!-- Logo/Brand Section -->
       <div class="text-center q-mb-xl">
@@ -248,6 +248,14 @@ const handleResetPassword = async () => {
 </script>
 
 <style lang="sass" scoped>
+.reset-password-page
+  min-height: 100vh
+  display: -ms-flexbox
+  display: flex
+  align-items: center
+  justify-content: center
+  padding: 2rem 1rem
+
 .garnet-night-bg
   background: hsl(330, 40%, 10%)
   background-image: radial-gradient(at 0% 0%, hsl(340, 70%, 35%) 0px, transparent 50%), radial-gradient(at 100% 100%, hsl(290, 50%, 30%) 0px, transparent 50%)

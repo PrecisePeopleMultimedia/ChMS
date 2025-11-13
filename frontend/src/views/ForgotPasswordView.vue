@@ -1,5 +1,5 @@
 <template>
-  <q-page class="garnet-night-bg flex flex-center">
+  <div class="forgot-password-page garnet-night-bg flex flex-center">
     <div class="forgot-password-container">
       <!-- Logo/Brand Section -->
       <div class="text-center q-mb-xl">
