@@ -12,12 +12,7 @@
     <!-- Drag Handle -->
     <div
       v-if="isDraggingEnabled"
-      :class="[
-        'absolute top-2 left-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity',
-        'cursor-grab active:cursor-grabbing',
-        'bg-background/80 backdrop-blur-sm rounded p-1',
-        'border border-border shadow-sm'
-      ]"
+      class="drag-handle absolute top-2 left-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity cursor-grab active:cursor-grabbing bg-background/80 backdrop-blur-sm rounded p-1 border border-border shadow-sm"
     >
       <q-icon name="drag_indicator" class="h-4 w-4 text-muted-foreground" />
     </div>

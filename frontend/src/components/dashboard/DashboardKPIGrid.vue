@@ -73,7 +73,7 @@ const getCardData = (cardId: string): KPICardData => {
 }
 
 const { sortableInstance } = useSortable(gridRef, {
-  handle: '.group .absolute', // Drag handle selector
+  handle: '.drag-handle', // Drag handle selector
   onEnd: (event) => {
     if (event.oldIndex !== undefined && event.newIndex !== undefined) {
       const newOrder = [...props.cardOrder]
