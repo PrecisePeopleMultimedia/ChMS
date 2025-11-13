@@ -239,37 +239,87 @@ class Logger {
 }
 
 // Create singleton instance
-const loggerInstance = new Logger()
+let loggerInstance: Logger | null = null
+
+// Initialize logger instance safely
+try {
+  loggerInstance = new Logger()
+} catch (error) {
+  console.error('Failed to create logger instance:', error)
+  // Create a minimal fallback logger
+  loggerInstance = {
+    debug: () => {},
+    info: () => {},
+    warn: () => {},
+    error: () => {},
+    auth: () => {},
+    authError: () => {},
+    api: () => {},
+    apiError: () => {},
+    navigation: () => {},
+    vue: () => {},
+    vueError: () => {},
+    getLogs: () => [],
+    getRecentLogs: () => [],
+    getErrorLogs: () => [],
+    getAuthLogs: () => [],
+    exportLogs: () => '{}',
+    downloadLogs: () => {},
+    clearLogs: () => {},
+    setEnabled: () => {},
+    getSessionInfo: () => ({ sessionId: '', totalLogs: 0, errorCount: 0, authLogCount: 0 }),
+  } as any
+}
 
 // Make logger available globally for debugging
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined' && loggerInstance) {
   try {
-    (window as any).logger = loggerInstance
+    // Use Object.defineProperty to avoid any assignment issues
+    Object.defineProperty(window, 'logger', {
+      value: loggerInstance,
+      writable: false,
+      configurable: true,
+    })
 
     // Add global debugging methods
-    (window as any).debugInfo = () => {
-      console.log('=== CHMS Debug Info ===')
-      console.log('Session Info:', loggerInstance.getSessionInfo())
-      console.log('Recent Logs:', loggerInstance.getRecentLogs(50))
-      console.log('Error Logs:', loggerInstance.getErrorLogs())
-      console.log('Auth Logs:', loggerInstance.getAuthLogs())
-    }
+    Object.defineProperty(window, 'debugInfo', {
+      value: () => {
+        if (!loggerInstance) return
+        console.log('=== CHMS Debug Info ===')
+        console.log('Session Info:', loggerInstance.getSessionInfo())
+        console.log('Recent Logs:', loggerInstance.getRecentLogs(50))
+        console.log('Error Logs:', loggerInstance.getErrorLogs())
+        console.log('Auth Logs:', loggerInstance.getAuthLogs())
+      },
+      writable: false,
+      configurable: true,
+    })
 
-    (window as any).downloadLogs = () => {
-      loggerInstance.downloadLogs()
-    }
+    Object.defineProperty(window, 'downloadLogs', {
+      value: () => {
+        if (loggerInstance) loggerInstance.downloadLogs()
+      },
+      writable: false,
+      configurable: true,
+    })
 
-    (window as any).clearLogs = () => {
-      loggerInstance.clearLogs()
-      console.log('Logs cleared')
-    }
+    Object.defineProperty(window, 'clearLogs', {
+      value: () => {
+        if (loggerInstance) {
+          loggerInstance.clearLogs()
+          console.log('Logs cleared')
+        }
+      },
+      writable: false,
+      configurable: true,
+    })
   } catch (error) {
     console.error('Failed to initialize global logger:', error)
   }
 }
 
-// Export the logger instance
-export const logger = loggerInstance
+// Export the logger instance (ensure it's never null)
+export const logger = loggerInstance!
 
 // Extend Window interface for type safety
 declare global {
